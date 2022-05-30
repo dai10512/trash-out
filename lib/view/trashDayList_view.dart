@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
-import 'package:trash_out/typeAdapter/trashDay_model.dart';
+import 'package:trash_out/typeAdapter/trashDayList_model.dart';
 import 'package:trash_out/view/trashDayDetail_view.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:uuid/uuid.dart';
@@ -21,40 +21,37 @@ class TrashDayListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    // final List trashDayModel = ref.read(trashDaysProvider);
-    final TrashDayModel trashDayModel = ref.read(trashDayModelProvider);
-    final contentsController = TextEditingController();
-    const uuid = Uuid();
+    final TrashDayListModel trashDayListModel = ref.read(trashDayListModelProvider);
 
     return GestureDetector(
-      // onTap: () => FocusScope.of(context).unfocus(),
+      onTap: () => FocusScope.of(context).unfocus(),
       child: Padding(
         padding: const EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
         child: Column(
           children: [
-            TextField(
-              controller: contentsController,
-              decoration: const InputDecoration(
-                hintText: 'ヒント',
-              ),
-            ),
+            // TextField(
+            //   controller: contentsController,
+            //   decoration: const InputDecoration(
+            //     hintText: 'ヒント',
+            //   ),
+            // ),
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: () => {
-                trashDayModel.addTrashDay(
-                  uuid.v4(),
-                  contentsController.text,
-                  [1],
-                  [1],
-                ),
-                contentsController.text = '',
+              onPressed: () {
+                const bool isNew = true;
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TrashDetailView(null),
+                  ),
+                );
               },
             ),
             ValueListenableBuilder<Box<TrashDay>>(
               valueListenable: Boxes.getTrashDays().listenable(),
               builder: (context, box, _) {
                 List<TrashDay> trashDays = box.values.toList().cast<TrashDay>();
-                return buildContent(trashDays, trashDayModel);
+                return buildContent(trashDays, trashDayListModel);
               },
             ),
           ],
@@ -64,7 +61,6 @@ class TrashDayListView extends ConsumerWidget {
   }
 
   Widget buildContent(List<TrashDay> trashDays, trashDayModel) {
-    print(trashDays);
     if (trashDays.isEmpty) {
       return const Center(
         child: Text(
@@ -92,7 +88,7 @@ class TrashDayListView extends ConsumerWidget {
     context,
     List trashDays,
     TrashDay trashDay,
-    TrashDayModel trashDayModel,
+    TrashDayListModel trashDayListModel,
     int index,
   ) {
     print(trashDays.length);
@@ -102,8 +98,7 @@ class TrashDayListView extends ConsumerWidget {
         motion: const ScrollMotion(),
         dismissible: DismissiblePane(
           onDismissed: () {
-            trashDayModel.deleteTrashDay(trashDay, trashDays, index);
-            print(trashDays.length);
+            trashDayListModel.deleteTrashDay(trashDay, trashDays, index);
 
             // trashDays.moveAt(index);
           },
@@ -111,7 +106,7 @@ class TrashDayListView extends ConsumerWidget {
         children: [
           SlidableAction(
             onPressed: (context) {
-              trashDayModel.deleteTrashDay(trashDay, trashDays, index);
+              trashDayListModel.deleteTrashDay(trashDay, trashDays, index);
             },
             backgroundColor: const Color(0xFFFE4A49),
             foregroundColor: Colors.white,
@@ -125,11 +120,12 @@ class TrashDayListView extends ConsumerWidget {
         subtitle: Text('${ordinalNumberToString(trashDay.ordinalNumbers)}  ${formatDayOfTheWeek(trashDay.daysOfTheWeek)}'),
         trailing: const Icon(Icons.arrow_forward_ios),
         onTap: () {
+          final isNew = false;
           print("taped");
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const TrashDetailView(),
+              builder: (context) => TrashDetailView(trashDay),
             ),
           );
         },

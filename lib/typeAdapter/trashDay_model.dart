@@ -1,43 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
-import 'package:trash_out/main.dart';
-
-final trashDayModelProvider = ChangeNotifierProvider<TrashDayModel>(
-  (ref) => TrashDayModel(),
-);
 
 class TrashDayModel extends ChangeNotifier {
-  TrashDayRepository trashDayRepository = TrashDayRepository();
+  String id = '';
+  String trashType = '';
+  List<int> daysOfTheWeek = [];
+  List<int> ordinalNumbers = [];
 
-  void addTrashDay(id, trashType, daysOfTheWeek, ordinalNumbers) {
-    trashDayRepository.addTrashDayRepository(id, trashType, daysOfTheWeek, ordinalNumbers);
-  }
+  TrashDaydayRepository trashDaydayRepository = TrashDaydayRepository();
 
-  void deleteTrashDay(trashDay, trashDays, index) {
-    trashDayRepository.deleteTrashDayRepository(trashDay, trashDays, index);
-  }
+  // void addTrashDay(id, trashType, daysOfTheWeek, ordinalNumbers) {
+  //   trashDaydayRepository.addTrashDaydayRepository(id, trashType, daysOfTheWeek, ordinalNumbers);
+  // }
+
 }
 
-class TrashDayRepository {
-  Future addTrashDayRepository(id, trashType, daysOfTheWeek, ordinalNumbers) async {
-    final trashDay = TrashDay(
-      id: id,
-      trashType: trashType,
-      daysOfTheWeek: daysOfTheWeek,
-      ordinalNumbers: ordinalNumbers,
-    );
-
-    final box = Boxes.getTrashDays();
-    box.add(trashDay);
-    print('added');
-  }
-
-  void deleteTrashDayRepository(trashDay, List trashDays, index) async {
-    final box = Boxes.getTrashDays();
-    print(box);
-
-    box.deleteAt(index);
-    print('deleted');
-  }
+class TrashDaydayRepository {
+  Future addTrashDaydayRepository(id, trashType, daysOfTheWeek, ordinalNumbers) async {}
 }

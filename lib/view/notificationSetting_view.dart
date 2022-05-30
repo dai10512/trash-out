@@ -58,7 +58,7 @@ class NotificationSwitchListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final int hour = timeState.state.hour;
-    final minute = timeState.state.minute;
+    final int minute = timeState.state.minute;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40.0),
       child: Row(

@@ -2,47 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:trash_out/main.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
+import 'package:trash_out/typeAdapter/trashDayList_model.dart';
+import 'package:trash_out/typeAdapter/trashDay_model.dart';
+import 'package:uuid/uuid.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TrashDetailView extends StatefulWidget {
-  const TrashDetailView({Key? key}) : super(key: key);
+const Uuid uuid = Uuid();
 
-  @override
-  _TrashDetailViewState createState() => _TrashDetailViewState();
-}
-
-class _TrashDetailViewState extends State<TrashDetailView> {
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  void initState() {
-    super.initState();
-    // On page load action.
-    // SchedulerBinding.instance?.addPostFrameCallback((_) async {
-    //   Navigator.pop(context);
-    // });
-  }
-
-  final Map<String, bool> _dayOfTheWeekMap = {
-    '月曜日': false,
-    '火曜日': false,
-    '水曜日': false,
-    '木曜日': false,
-    '金曜日': false,
-    '土曜日': false,
-    '日曜日': false,
-  };
-
-  final Map<String, bool> _ordinalNumberMap = {
-    '1回目': false,
-    '2回目': false,
-    '3回目': false,
-    '4回目': false,
-    '5回目': false,
-  };
-
+class TrashDetailView extends ConsumerWidget {
+  const TrashDetailView(this.trashDay, {Key? key}) : super(key: key);
+  final TrashDay? trashDay;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context, ref) {
+    // final trashDayModelProvider = ChangeNotifierProvider<TrashDayModel>((ref,trashDay) => TrashDayModel(trashDay));
+    // final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+    final TrashDayListModel trashDayListModel = ref.read(trashDayListModelProvider);
+    // final TrashDayModel trashDayModel = ref.read(trashDayModel);
+    final TextEditingController trashTypeController = TextEditingController(text: trashDay?.trashType);
+
+    // final Map<int, bool> ordinalNumberMap = getOrdinalNumberMap(trashDay?.ordinalNumbers);
+
+    final Map<int, Map<String, dynamic>> dayOfTheWeekMap = getDayOfTheWeekMap(trashDay?.daysOfTheWeek);
+    final StateProvider<Map<int, Map<String, dynamic>>> dayOfTheWeekProvider = StateProvider((ref) => dayOfTheWeekMap);
+
+    print(trashDay);
+
     return Scaffold(
       // key: scaffoldKey,
       appBar: AppBar(
@@ -63,12 +48,23 @@ class _TrashDetailViewState extends State<TrashDetailView> {
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _trashType(),
-                  // _spacer(),
-                  // _ordinalNumberCheck(_ordinalNumberMap),
-                  _spacer(),
-                  _dayOfTheWeekCheck(_dayOfTheWeekMap),
-                  _finishButton('燃えるゴミ', [1, 2], [1, 2, 3]),
+                  _trashTypeForm(trashTypeController),
+                  Card(
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    color: const Color(0xFFF5F5F5),
+                    child: Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // _ordinalNumberCheck(ordinalNumberMap),
+                          // _dayOfTheWeekCheck(context, dayOfTheWeekMap),
+                          _dayOfTheWeekCheckList(context, dayOfTheWeekMap),
+                        ],
+                      ),
+                    ),
+                  ),
+                  _finishButton(context, trashDay, trashDayListModel, trashTypeController.text, [1, 2], [1, 2, 3]),
                 ],
               ),
             ),
@@ -87,23 +83,25 @@ Widget _spacer() {
   );
 }
 
-Widget _trashType() {
+Widget _trashTypeForm(TextEditingController trashTypeController) {
+  bool isValue = false;
+
   return Card(
     clipBehavior: Clip.antiAliasWithSaveLayer,
     color: const Color(0xFFF5F5F5),
     child: Padding(
       padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
+      // padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'ゴミの種類',
-          ),
+          const Text('ゴミの種類'),
           Container(
             width: double.infinity,
             height: 10,
           ),
           TextFormField(
+            controller: trashTypeController,
             autofocus: true,
             obscureText: false,
             decoration: const InputDecoration(
@@ -117,93 +115,199 @@ Widget _trashType() {
   );
 }
 
-Widget _ordinalNumberCheck(ordinalNumberMap) {
-  return Card(
-    clipBehavior: Clip.antiAliasWithSaveLayer,
-    color: const Color(0xFFF5F5F5),
-    child: Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
-      child: Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
+// Widget _ordinalNumberCheck(ordinalNumberMap) {
+//   print(ordinalNumberMap);
+//   return Expanded(
+//     flex: 2,
+//     child: Column(
+//       mainAxisSize: MainAxisSize.max,
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         const Text(
+//           '第◯番目',
+//           textAlign: TextAlign.center,
+//         ),
+//         ListView.builder(
+//           shrinkWrap: true,
+//           physics: const NeverScrollableScrollPhysics(),
+//           itemCount: ordinalNumberMap.length,
+//           itemBuilder: (BuildContext context, int index) {
+//             int _key = ordinalNumberMap.keys.elementAt(index);
+//             bool _value = ordinalNumberMap[_key];
+
+//             return CheckboxListTile(
+//               value: _value,
+//               onChanged: (_value) {
+//                 print('checked1');
+
+//                 _value = _value!;
+//                 print('checked2');
+//                 print(_value);
+//               },
+//               title: Text('第${_key}'),
+//             );
+//           },
+//         ),
+//       ],
+//     ),
+//   );
+// }
+
+Widget _dayOfTheWeekCheck(context, dayOfTheWeekMap) {
+  final StateProvider dayOfTheWeekProvider = StateProvider(((ref) => dayOfTheWeekMap));
+
+  return Expanded(
+    flex: 3,
+    child: Column(
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         const Text(
-          '第◯番目',
+          '曜日',
           textAlign: TextAlign.center,
         ),
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: ordinalNumberMap.length,
+          itemCount: dayOfTheWeekMap.length,
           itemBuilder: (BuildContext context, int index) {
-            String _key = ordinalNumberMap.keys.elementAt(index);
-            bool _value = ordinalNumberMap[_key];
-            return CheckboxListTile(
-              value: _value,
-              onChanged: (value) {
-                _value = value!;
-                print('checked');
+            int key = dayOfTheWeekMap.keys.elementAt(index);
+            Map map = dayOfTheWeekMap[key];
+            bool value = map['doNotify'];
+            return ElevatedButton(
+              child: Text(map['label']),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                  (value) ? Colors.blue : Colors.grey,
+                ),
+              ),
+              onPressed: () {
+                print(value);
+                value = !value;
+                print(value);
               },
-              title: Text(_key),
             );
+            // return CheckboxListTile(
+            //   value: value,
+            //   onChanged: (bool? newValue) {
+            //     print('checked1');
+            //     print(value);
+
+            //     value = newValue!;
+            //     print('checked2');
+            //     print(value);
+            //   },
+            //   title: Text(key),
+            // );
           },
         ),
-      ]),
+      ],
     ),
   );
 }
 
-Widget _dayOfTheWeekCheck(_dayOfTheWeekMap) {
-  return Card(
-    clipBehavior: Clip.antiAliasWithSaveLayer,
-    color: const Color(0xFFF5F5F5),
-    child: Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            '曜日',
-            textAlign: TextAlign.center,
-          ),
-          Container(
-            width: double.infinity,
-            height: 10,
-            decoration: const BoxDecoration(),
-          ),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: _dayOfTheWeekMap.length,
-            itemBuilder: (BuildContext context, int index) {
-              String _key = _dayOfTheWeekMap.keys.elementAt(index);
-              bool _value = _dayOfTheWeekMap[_key];
-              return CheckboxListTile(
-                value: _value,
-                onChanged: (_value) {
-                  // _value = _value!;
-                  print('checked');
-                },
-                title: Text(_key),
-              );
-            },
-          ),
-        ],
-      ),
+Widget _dayOfTheWeekCheckList(context, dayOfTheWeekMap) {
+  return Expanded(
+    flex: 3,
+    child: Column(
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          '曜日',
+          textAlign: TextAlign.center,
+        ),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: dayOfTheWeekMap.length,
+          itemBuilder: (BuildContext context, int index) {
+            int key = dayOfTheWeekMap.keys.elementAt(index);
+            Map map = dayOfTheWeekMap[key];
+            bool value = map['doNotify'];
+            return ElevatedButton(
+              child: Text(map['label']),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                  (value) ? Colors.blue : Colors.grey,
+                ),
+              ),
+              onPressed: () {
+                print(value);
+                value = !value;
+                print(value);
+              },
+            );
+            // return CheckboxListTile(
+            //   value: value,
+            //   onChanged: (bool? newValue) {
+            //     print('checked1');
+            //     print(value);
+
+            //     value = newValue!;
+            //     print('checked2');
+            //     print(value);
+            //   },
+            //   title: Text(key),
+            // );
+          },
+        ),
+      ],
     ),
   );
 }
 
-Widget _finishButton(trashType, daysOfTheWeek, ordinalNumbers) {
+Widget _finishButton(context, trashDay, TrashDayListModel trashDayListModel, trashTypeText, daysOfTheWeek, ordinalNumbers) {
   return Container(
     width: double.infinity,
     child: ElevatedButton(
-      child: const Text('Button'),
+      child: const Text('保存する'),
       style: ElevatedButton.styleFrom(
         primary: Colors.orange,
         onPrimary: Colors.white,
       ),
       onPressed: () async {
-        // create(trashType, daysOfTheWeek, ordinalNumbers);
+        // trashDayListModel.addTrashDay(uuid.v4(), trashTypeText, [1], [1]);
+        trashDayListModel.addTrashDay(uuid.v4(), trashDay, [1], [1]);
+        print("taped");
+        Navigator.pop(context);
       },
     ),
   );
+}
+
+Map<int, Map<String, dynamic>> getDayOfTheWeekMap(List? dayOfTheWeek) {
+  final Map<int, Map<String, dynamic>> dayOfTheWeekMap = {
+    1: {'label': '月曜日', 'doNotify': false},
+    2: {'label': '火曜日', 'doNotify': false},
+    3: {'label': '水曜日', 'doNotify': false},
+    4: {'label': '木曜日', 'doNotify': false},
+    5: {'label': '金曜日', 'doNotify': false},
+    6: {'label': '土曜日', 'doNotify': false},
+    7: {'label': '日曜日', 'doNotify': false},
+  };
+
+  if (dayOfTheWeek != null) {
+    print(dayOfTheWeek);
+  }
+
+  return dayOfTheWeekMap;
+}
+
+Map<int, bool> getOrdinalNumberMap(List? ordinalNumbers) {
+  final Map<int, bool> ordinalNumberMap = {
+    1: false,
+    2: false,
+    3: false,
+    4: false,
+    5: false,
+  };
+
+  if (ordinalNumbers != null) {
+    ordinalNumbers.forEach((item) {
+      print(item);
+    });
+  }
+
+  return ordinalNumberMap;
 }
