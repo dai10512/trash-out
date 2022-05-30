@@ -2,20 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
 
+final trashDayModelProvider = ChangeNotifierProvider<TrashDayModel>(
+  (ref) => TrashDayModel(),
+);
+
 class TrashDayModel extends ChangeNotifier {
   String id = '';
   String trashType = '';
   List<int> daysOfTheWeek = [];
   List<int> ordinalNumbers = [];
 
-  TrashDaydayRepository trashDaydayRepository = TrashDaydayRepository();
+  TrashDayRepository trashDayRepository = TrashDayRepository();
 
-  // void addTrashDay(id, trashType, daysOfTheWeek, ordinalNumbers) {
-  //   trashDaydayRepository.addTrashDaydayRepository(id, trashType, daysOfTheWeek, ordinalNumbers);
-  // }
-
+  void loadData(trashDay, id, trashType, daysOfTheWeek, ordinalNumbers) {
+    trashDayRepository.loadDataRepository(trashDay,id, trashType, daysOfTheWeek, ordinalNumbers);
+  }
 }
 
-class TrashDaydayRepository {
-  Future addTrashDaydayRepository(id, trashType, daysOfTheWeek, ordinalNumbers) async {}
+class TrashDayRepository {
+  void loadDataRepository(trashDay, id, trashType, daysOfTheWeek, ordinalNumbers) {
+    if (trashDay != null) {
+      id = trashDay.id;
+      trashType = trashDay.trashType;
+      daysOfTheWeek = trashDay.daysOfTheWeek;
+      ordinalNumbers = trashDay.ordinalNumbers;
+    }
+  }
 }

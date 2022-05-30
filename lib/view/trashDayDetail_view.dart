@@ -15,18 +15,21 @@ class TrashDetailView extends ConsumerWidget {
 
   @override
   Widget build(context, ref) {
-    // final trashDayModelProvider = ChangeNotifierProvider<TrashDayModel>((ref,trashDay) => TrashDayModel(trashDay));
+    final trashDayModelProvider = ChangeNotifierProvider<TrashDayModel>((ref) => TrashDayModel());
     // final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     final TrashDayListModel trashDayListModel = ref.read(trashDayListModelProvider);
-    // final TrashDayModel trashDayModel = ref.read(trashDayModel);
+    final TrashDayModel trashDayModel = ref.read(trashDayModelProvider);
     final TextEditingController trashTypeController = TextEditingController(text: trashDay?.trashType);
 
     // final Map<int, bool> ordinalNumberMap = getOrdinalNumberMap(trashDay?.ordinalNumbers);
-
-    final Map<int, Map<String, dynamic>> dayOfTheWeekMap = getDayOfTheWeekMap(trashDay?.daysOfTheWeek);
-    final StateProvider<Map<int, Map<String, dynamic>>> dayOfTheWeekProvider = StateProvider((ref) => dayOfTheWeekMap);
+    final String trashDayModelid = trashDayModel.id;
+    final String trashDayModelTrashType = trashDayModel.trashType;
+    final List<int> trashDayModeldayOfTheweek = trashDayModel.daysOfTheWeek;
+    final List<int> trashDayModelordinalNumebrs = trashDayModel.ordinalNumbers;
 
     print(trashDay);
+    print(trashDayModelTrashType);
+    print(trashDayModeldayOfTheweek);
 
     return Scaffold(
       // key: scaffoldKey,
@@ -59,7 +62,7 @@ class TrashDetailView extends ConsumerWidget {
                         children: [
                           // _ordinalNumberCheck(ordinalNumberMap),
                           // _dayOfTheWeekCheck(context, dayOfTheWeekMap),
-                          _dayOfTheWeekCheckList(context, dayOfTheWeekMap),
+                          // _dayOfTheWeekCheckList(context, dayOfTheWeekMap),
                         ],
                       ),
                     ),
