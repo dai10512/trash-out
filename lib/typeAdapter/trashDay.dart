@@ -25,7 +25,3 @@ class TrashDay {
     required this.ordinalNumbers,
   });
 }
-
-class Boxes {
-  static Box<TrashDay> getTrashDays() => Hive.box<TrashDay>('TrashDays');
-}

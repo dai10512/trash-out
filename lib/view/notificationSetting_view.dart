@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trash_out/state/notificationSetting_stateController.dart';
-import 'package:trash_out/widget/util.dart';
-import 'package:timezone/timezone.dart' as tz;
 
 class NotificationSettingView extends ConsumerWidget {
   const NotificationSettingView({Key? key}) : super(key: key);

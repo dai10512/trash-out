@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:trash_out/main.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
-import 'package:trash_out/typeAdapter/trashDayList_model.dart';
-import 'package:trash_out/typeAdapter/trashDay_model.dart';
+import 'package:trash_out/model/trashDayList_model.dart';
+import 'package:trash_out/model/trashDay_model.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -258,6 +258,9 @@ Widget _dayOfTheWeekCheckList(context, dayOfTheWeekMap) {
 }
 
 Widget _finishButton(context, trashDay, TrashDayListModel trashDayListModel, trashTypeText, daysOfTheWeek, ordinalNumbers) {
+  print(trashTypeText.runtimeType);
+  print(trashTypeText);
+
   return Container(
     width: double.infinity,
     child: ElevatedButton(
@@ -268,9 +271,10 @@ Widget _finishButton(context, trashDay, TrashDayListModel trashDayListModel, tra
       ),
       onPressed: () async {
         // trashDayListModel.addTrashDay(uuid.v4(), trashTypeText, [1], [1]);
-        trashDayListModel.addTrashDay(uuid.v4(), trashDay, [1], [1]);
+        trashDayListModel.addTrashDay(uuid.v4(), trashTypeText, [1], [1]);
         print("taped");
         Navigator.pop(context);
+        print(trashDay);
       },
     ),
   );
