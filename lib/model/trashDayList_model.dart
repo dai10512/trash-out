@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:trash_out/model/trashDay_model.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
 import 'package:trash_out/main.dart';
 
@@ -15,9 +16,11 @@ final trashDayListModelProvider = ChangeNotifierProvider<TrashDayListModel>(
 class TrashDayListModel extends ChangeNotifier {
   TrashDayListRepository trashDayListRepository = TrashDayListRepository();
 
-  void addTrashDay(trashDayRead) {
-    trashDayListRepository.addTrashDayListRepository(trashDayRead.id, trashDayRead.trashType, trashDayRead.daysOfTheWeek, trashDayRead.ordinalNumbers);
+  void addTrashDay(TrashDayModel trashDayRead) {
+    trashDayListRepository.addTrashDayListRepository(trashDayRead);
   }
+
+  void updateTrashDay() {}
 
   void deleteTrashDay(trashDay, trashDays, index) {
     trashDayListRepository.deleteTrashDayListRepository(trashDay, trashDays, index);
@@ -25,12 +28,12 @@ class TrashDayListModel extends ChangeNotifier {
 }
 
 class TrashDayListRepository {
-  Future addTrashDayListRepository(id, trashType, daysOfTheWeek, ordinalNumbers) async {
+  Future addTrashDayListRepository(TrashDayModel trashDayRead) async {
     final trashDay = TrashDay(
-      id: id,
-      trashType: trashType,
-      daysOfTheWeek: daysOfTheWeek,
-      ordinalNumbers: ordinalNumbers,
+      id: trashDayRead.id,
+      trashType: trashDayRead.trashType,
+      daysOfTheWeek: trashDayRead.daysOfTheWeek,
+      ordinalNumbers: trashDayRead.ordinalNumbers,
     );
     final box = Boxes.getTrashDays();
     box.add(trashDay).then((value) => print('added'));

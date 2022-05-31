@@ -65,7 +65,7 @@ class TrashDetailView extends ConsumerWidget {
                     ),
                   ),
                   // _finishButton(context, trashDay, trashDayListModel, trashTypeController.text, [1, 2], [1, 2, 3]),
-                  _finishButton2(context, trashDayRead, isNew, trashDayListModel),
+                  _finishButton(context, trashDayRead, isNew, trashDayListModel),
                 ],
               ),
             ),
@@ -120,35 +120,37 @@ Widget _trashTypeForm2(ref, TrashDayModel trashDayRead, TrashDayModel trashDayWa
   // final controller = TextEditingController(text: trashDayWatch.trashType);
   final controller = TextEditingController(text: trashDayRead.trashType);
 
-  return Column(
-    children: [
-      Card(
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        color: const Color(0xFFF5F5F5),
-        child: Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(trashDayWatch.trashType),
-              const Text('ゴミの種類'),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: controller,
-                autofocus: true,
-                obscureText: false,
-                decoration: const InputDecoration(hintText: '[例：燃えるゴミ]', filled: true),
-                onChanged: (text) {
-                  trashDayRead.updateParameter(text);
-                  print(trashDayRead.trashType);
-                },
-              ),
-            ],
+  return Consumer(builder: (context, ref, _) {
+    return Column(
+      children: [
+        Card(
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          color: const Color(0xFFF5F5F5),
+          child: Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(trashDayWatch.trashType),
+                const Text('ゴミの種類'),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: controller,
+                  autofocus: true,
+                  obscureText: false,
+                  decoration: const InputDecoration(hintText: '[例：燃えるゴミ]', filled: true),
+                  onChanged: (text) {
+                    trashDayRead.updateParameter(text);
+                    print(trashDayRead.trashType);
+                  },
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    ],
-  );
+      ],
+    );
+  });
 }
 
 // Widget _ordinalNumberCheck(ordinalNumberMap) {
@@ -316,7 +318,7 @@ Widget _dayOfTheWeekCheckList(context, dayOfTheWeekMap) {
 //   );
 // }
 
-Widget _finishButton2(context, trashDayRead, isNew, TrashDayListModel trashDayListModel) {
+Widget _finishButton(context, trashDayRead, isNew, TrashDayListModel trashDayListModel) {
   print(trashDayRead.trashType);
   // print(trashTypeText);
 
@@ -331,7 +333,6 @@ Widget _finishButton2(context, trashDayRead, isNew, TrashDayListModel trashDayLi
       onPressed: () async {
         // trashDayListModel.addTrashDay(uuid.v4(), trashTypeText, [1], [1]);
         if (isNew) {
-          
         } else {
           trashDayListModel.addTrashDay(trashDayRead);
           Navigator.pop(context);
