@@ -17,7 +17,7 @@ class TrashDayListView extends ConsumerWidget {
   TrashDayListView({Key? key}) : super(key: key);
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  int itemCount = 2;
+  bool isNew = true;
 
   @override
   Widget build(BuildContext context, ref) {
@@ -29,20 +29,14 @@ class TrashDayListView extends ConsumerWidget {
         padding: const EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
         child: Column(
           children: [
-            // TextField(
-            //   controller: contentsController,
-            //   decoration: const InputDecoration(
-            //     hintText: 'ヒント',
-            //   ),
-            // ),
             IconButton(
               icon: const Icon(Icons.add),
               onPressed: () {
-                const bool isNew = true;
+                final newTrashDay = TrashDay(id: uuid.v4(), trashType: '', ordinalNumbers: [], daysOfTheWeek: []);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TrashDetailView(null),
+                    builder: (context) => TrashDetailView(true, newTrashDay),
                   ),
                 );
               },
@@ -51,6 +45,7 @@ class TrashDayListView extends ConsumerWidget {
               valueListenable: Boxes.getTrashDays().listenable(),
               builder: (context, box, _) {
                 List<TrashDay> trashDays = box.values.toList().cast<TrashDay>();
+
                 return buildContent(trashDays, trashDayListModel);
               },
             ),
@@ -76,6 +71,8 @@ class TrashDayListView extends ConsumerWidget {
             itemCount: trashDays.length,
             itemBuilder: (BuildContext context, int index) {
               final trashDay = trashDays[index];
+              print('$index:${trashDay.trashType}');
+
               return buildSlidableListTile(context, trashDays, trashDay, trashDayModel, index);
             },
           ),
@@ -91,7 +88,6 @@ class TrashDayListView extends ConsumerWidget {
     TrashDayListModel trashDayListModel,
     int index,
   ) {
-    print(trashDays.length);
     return Slidable(
       key: UniqueKey(),
       endActionPane: ActionPane(
@@ -125,7 +121,7 @@ class TrashDayListView extends ConsumerWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => TrashDetailView(trashDay),
+              builder: (context) => TrashDetailView(false, trashDay),
             ),
           );
         },

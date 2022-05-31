@@ -50,7 +50,7 @@ Future<void> _initializeDB() async {
 }
 
 Future<void> main() async {
-  await WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   await _init();
 
   runApp(

@@ -12,20 +12,18 @@ class TrashDayModel extends ChangeNotifier {
   List<int> daysOfTheWeek = [];
   List<int> ordinalNumbers = [];
 
-  TrashDayRepository trashDayRepository = TrashDayRepository();
-
-  void loadData(trashDay, id, trashType, daysOfTheWeek, ordinalNumbers) {
-    trashDayRepository.loadDataRepository(trashDay,id, trashType, daysOfTheWeek, ordinalNumbers);
-  }
-}
-
-class TrashDayRepository {
-  void loadDataRepository(trashDay, id, trashType, daysOfTheWeek, ordinalNumbers) {
+  void loadData(trashDay) {
     if (trashDay != null) {
       id = trashDay.id;
       trashType = trashDay.trashType;
       daysOfTheWeek = trashDay.daysOfTheWeek;
       ordinalNumbers = trashDay.ordinalNumbers;
+      print(trashType);
     }
+  }
+
+  void updateParameter(value) {
+    trashType = value;
+    print(trashType);
   }
 }

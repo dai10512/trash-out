@@ -15,8 +15,8 @@ final trashDayListModelProvider = ChangeNotifierProvider<TrashDayListModel>(
 class TrashDayListModel extends ChangeNotifier {
   TrashDayListRepository trashDayListRepository = TrashDayListRepository();
 
-  void addTrashDay(id, trashType, daysOfTheWeek, ordinalNumbers) {
-    trashDayListRepository.addTrashDayListRepository(id, trashType, daysOfTheWeek, ordinalNumbers);
+  void addTrashDay(trashDayRead) {
+    trashDayListRepository.addTrashDayListRepository(trashDayRead.id, trashDayRead.trashType, trashDayRead.daysOfTheWeek, trashDayRead.ordinalNumbers);
   }
 
   void deleteTrashDay(trashDay, trashDays, index) {
@@ -32,11 +32,8 @@ class TrashDayListRepository {
       daysOfTheWeek: daysOfTheWeek,
       ordinalNumbers: ordinalNumbers,
     );
-    print('newTrashDay');
     final box = Boxes.getTrashDays();
     box.add(trashDay).then((value) => print('added'));
-    print(trashDay.trashType);
-    print(trashDay.id);
   }
 
   void deleteTrashDayListRepository(trashDay, List trashDays, index) async {
