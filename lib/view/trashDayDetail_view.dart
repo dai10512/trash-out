@@ -56,7 +56,6 @@ class TrashDetailView extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  Text(trashDay!.daysOfTheWeek.toString()),
                   Text(trashDayWatch.daysOfTheWeek.toString()),
                   _finishButton(context, index, trashDayRead),
                 ],
