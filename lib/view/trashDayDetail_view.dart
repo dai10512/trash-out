@@ -65,7 +65,7 @@ class TrashDetailView extends ConsumerWidget {
                     ),
                   ),
                   // _finishButton(context, trashDay, trashDayListModel, trashTypeController.text, [1, 2], [1, 2, 3]),
-                  _finishButton(context, index, trashDayRead, trashDayListModel, trashDay),
+                  _finishButton(context, index, trashDayRead, trashDay),
                 ],
               ),
             ),
@@ -275,28 +275,32 @@ Widget _finishButton(
   BuildContext context,
   int? index,
   TrashDayModel trashDayRead,
-  TrashDayListModel trashDayListModel,
+  // TrashDayListModel trashDayListModel,
   TrashDay trashDay,
 ) {
-  return Container(
-    width: double.infinity,
-    child: ElevatedButton(
-      child: const Text('保存する'),
-      style: ElevatedButton.styleFrom(
-        primary: Colors.orange,
-        onPrimary: Colors.white,
+  return Consumer(builder: (context, ref, child) {
+    final trashDayListModel = ref.read(trashDayListModelProvider);
+
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        child: const Text('保存する'),
+        style: ElevatedButton.styleFrom(
+          primary: Colors.orange,
+          onPrimary: Colors.white,
+        ),
+        onPressed: () async {
+          if (index == null) {
+            trashDayListModel.addTrashDay(trashDayRead);
+            Navigator.pop(context);
+          } else {
+            trashDayListModel.updateTrashDay(index, trashDayRead);
+            Navigator.pop(context);
+          }
+        },
       ),
-      onPressed: () async {
-        if (index == null) {
-          trashDayListModel.addTrashDay(trashDayRead);
-          Navigator.pop(context);
-        } else {
-          trashDayListModel.updateTrashDay(index, trashDayRead);
-          Navigator.pop(context);
-        }
-      },
-    ),
-  );
+    );
+  });
 }
 
 Map<int, Map<String, dynamic>> getDayOfTheWeekMap(List? dayOfTheWeek) {
