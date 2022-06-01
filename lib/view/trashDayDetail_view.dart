@@ -48,7 +48,8 @@ class TrashDetailView extends ConsumerWidget {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // _ordinalNumberCheck(ordinalNumberMap),
+                          _ordinalNumberCheck(),
+                          const SizedBox(width: 20),
                           _dayOfTheWeekCheck(),
                         ],
                       ),
@@ -63,14 +64,6 @@ class TrashDetailView extends ConsumerWidget {
       ),
     );
   }
-}
-
-Widget _spacer() {
-  return Container(
-    width: double.infinity,
-    height: 20,
-    decoration: const BoxDecoration(),
-  );
 }
 
 Widget _trashTypeForm() {
@@ -110,48 +103,53 @@ Widget _trashTypeForm() {
   );
 }
 
-// Widget _ordinalNumberCheck(ordinalNumberMap) {
-//   print(ordinalNumberMap);
-//   return Expanded(
-//     flex: 2,
-//     child: Column(
-//       mainAxisSize: MainAxisSize.max,
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         const Text(
-//           '第◯番目',
-//           textAlign: TextAlign.center,
-//         ),
-//         ListView.builder(
-//           shrinkWrap: true,
-//           physics: const NeverScrollableScrollPhysics(),
-//           itemCount: ordinalNumberMap.length,
-//           itemBuilder: (BuildContext context, int index) {
-//             int _key = ordinalNumberMap.keys.elementAt(index);
-//             bool _value = ordinalNumberMap[_key];
+Widget _ordinalNumberCheck() {
+  return Consumer(
+    builder: (context, ref, _) {
+      final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
+      final TrashDayModel trashDayWatch = ref.read(trashDayModelProvider);
 
-//             return CheckboxListTile(
-//               value: _value,
-//               onChanged: (_value) {
-//                 print('checked1');
-
-//                 _value = _value!;
-//                 print('checked2');
-//                 print(_value);
-//               },
-//               title: Text('第${_key}'),
-//             );
-//           },
-//         ),
-//       ],
-//     ),
-//   );
-// }
+      return Expanded(
+        flex: 2,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '第◯番目',
+              textAlign: TextAlign.center,
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: trashDayRead.ordinalNumbers.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      (trashDayWatch.daysOfTheWeek[index + 1]!) ? Colors.blue : Colors.grey,
+                    ),
+                  ),
+                  onPressed: () {
+                    trashDayRead.updateDaysOfTheWeek(index + 1);
+                    print(trashDayRead.daysOfTheWeek[index + 1]);
+                  },
+                  child: Text('第${index + 1}'),
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
 
 Widget _dayOfTheWeekCheck() {
   return Consumer(
     builder: (context, ref, _) {
       final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
+      final TrashDayModel trashDayWatch = ref.read(trashDayModelProvider);
       return Expanded(
         flex: 3,
         child: Column(
@@ -170,7 +168,7 @@ Widget _dayOfTheWeekCheck() {
                 return ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                      (trashDayRead.daysOfTheWeek[index + 1]!) ? Colors.blue : Colors.grey,
+                      (trashDayWatch.daysOfTheWeek[index + 1]!) ? Colors.blue : Colors.grey,
                     ),
                   ),
                   onPressed: () {
