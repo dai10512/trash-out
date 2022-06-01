@@ -36,7 +36,7 @@ class TrashDayListView extends ConsumerWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TrashDetailView(true, null, newTrashDay),
+                    builder: (context) => TrashDetailView(null, newTrashDay),
                   ),
                 );
               },
@@ -93,13 +93,13 @@ class TrashDayListView extends ConsumerWidget {
         motion: const ScrollMotion(),
         dismissible: DismissiblePane(
           onDismissed: () {
-            trashDayListModel.deleteTrashDay(trashDay, trashDays, index);
+            trashDayListModel.deleteTrashDay(trashDays, index);
           },
         ),
         children: [
           SlidableAction(
             onPressed: (context) {
-              trashDayListModel.deleteTrashDay(trashDay, trashDays, index);
+              trashDayListModel.deleteTrashDay(trashDays, index);
             },
             backgroundColor: const Color(0xFFFE4A49),
             foregroundColor: Colors.white,
@@ -118,7 +118,7 @@ class TrashDayListView extends ConsumerWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => TrashDetailView(false, index, trashDay),
+              builder: (context) => TrashDetailView(index, trashDay),
             ),
           );
         },

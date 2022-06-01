@@ -15,21 +15,34 @@ final trashDayListModelProvider = ChangeNotifierProvider<TrashDayListModel>(
 class TrashDayListModel extends ChangeNotifier {
   TrashDayListRepository trashDayListRepository = TrashDayListRepository();
 
-  void addTrashDay(TrashDayModel trashDayRead) {
+  void addTrashDay(
+    TrashDayModel trashDayRead,
+  ) {
     trashDayListRepository.addTrashDayListRepository(trashDayRead);
   }
 
-  void updateTrashDay(index, trashDayRead) {
-    trashDayListRepository.updateTrashDayListRepository(index, trashDayRead);
+  void updateTrashDay(
+    int index,
+    TrashDayModel trashDayRead,
+  ) {
+    trashDayListRepository.updateTrashDayListRepository(
+      index,
+      trashDayRead,
+    );
   }
 
-  void deleteTrashDay(trashDay, trashDays, index) {
-    trashDayListRepository.deleteTrashDayListRepository(trashDay, trashDays, index);
+  void deleteTrashDay(
+    List trashDays,
+    int index,
+  ) {
+    trashDayListRepository.deleteTrashDayListRepository(trashDays, index);
   }
 }
 
 class TrashDayListRepository {
-  Future addTrashDayListRepository(TrashDayModel trashDayRead) async {
+  Future addTrashDayListRepository(
+    TrashDayModel trashDayRead,
+  ) async {
     final trashDay = TrashDay(
       id: trashDayRead.id,
       trashType: trashDayRead.trashType,
@@ -41,7 +54,10 @@ class TrashDayListRepository {
     print(box.keys);
   }
 
-  Future updateTrashDayListRepository(index, TrashDayModel trashDayRead) async {
+  Future updateTrashDayListRepository(
+    int index,
+    TrashDayModel trashDayRead,
+  ) async {
     final trashDay = TrashDay(
       id: trashDayRead.id,
       trashType: trashDayRead.trashType,
@@ -52,7 +68,10 @@ class TrashDayListRepository {
     box.putAt(index, trashDay);
   }
 
-  void deleteTrashDayListRepository(trashDay, List trashDays, index) async {
+  void deleteTrashDayListRepository(
+    List trashDays,
+    int index,
+  ) async {
     final box = Boxes.getTrashDays();
     box.deleteAt(index).then((value) => print('deleted'));
   }

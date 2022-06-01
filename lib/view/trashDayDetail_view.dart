@@ -10,14 +10,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 const Uuid uuid = Uuid();
 
 class TrashDetailView extends ConsumerWidget {
-  const TrashDetailView(this.isNew, this.index, this.trashDay, {Key? key}) : super(key: key);
+  const TrashDetailView(this.index, this.trashDay, {Key? key}) : super(key: key);
   final int? index;
   final TrashDay trashDay;
-  final bool isNew;
 
   @override
   Widget build(context, ref) {
-    print(isNew);
     // final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     final trashDayListModel = ref.read(trashDayListModelProvider);
 
@@ -67,7 +65,7 @@ class TrashDetailView extends ConsumerWidget {
                     ),
                   ),
                   // _finishButton(context, trashDay, trashDayListModel, trashTypeController.text, [1, 2], [1, 2, 3]),
-                  _finishButton(context, index, trashDayRead, isNew, trashDayListModel, trashDay),
+                  _finishButton(context, index, trashDayRead, trashDayListModel, trashDay),
                 ],
               ),
             ),
@@ -273,7 +271,13 @@ Widget _dayOfTheWeekCheckList(context, dayOfTheWeekMap) {
   );
 }
 
-Widget _finishButton(context, index, trashDayRead, isNew, TrashDayListModel trashDayListModel, trashDay) {
+Widget _finishButton(
+  BuildContext context,
+  int? index,
+  TrashDayModel trashDayRead,
+  TrashDayListModel trashDayListModel,
+  TrashDay trashDay,
+) {
   return Container(
     width: double.infinity,
     child: ElevatedButton(
@@ -283,7 +287,7 @@ Widget _finishButton(context, index, trashDayRead, isNew, TrashDayListModel tras
         onPrimary: Colors.white,
       ),
       onPressed: () async {
-        if (isNew) {
+        if (index == null) {
           trashDayListModel.addTrashDay(trashDayRead);
           Navigator.pop(context);
         } else {
