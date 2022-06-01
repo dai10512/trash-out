@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
+import 'package:trash_out/view/trashDayDetail_view.dart';
 import 'package:trash_out/view/trashDayList_view.dart';
 
 final trashDayModelProvider = ChangeNotifierProvider<TrashDayModel>(
@@ -8,12 +9,12 @@ final trashDayModelProvider = ChangeNotifierProvider<TrashDayModel>(
 );
 
 class TrashDayModel extends ChangeNotifier {
-  String id = '';
+  String id = uuid.v4();
   String trashType = '';
   // List<int> daysOfTheWeek = [];
   // List<int> ordinalNumbers = [];
-  Map<int, bool> daysOfTheWeek = {};
-  Map<int, bool> ordinalNumbers = {};
+  Map<int, bool> daysOfTheWeek = {1: false, 2: false, 3: false, 4: false, 5: false};
+  Map<int, bool> ordinalNumbers = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false};
 
   void loadData(trashDay) {
     if (trashDay != null) {

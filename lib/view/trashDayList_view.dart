@@ -16,12 +16,12 @@ final StateProvider<List> trashDaysProvider = StateProvider((ref) => []);
 class TrashDayListView extends ConsumerWidget {
   TrashDayListView({Key? key}) : super(key: key);
 
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  // final scaffoldKey = GlobalKey<ScaffoldState>();
   bool isNew = true;
 
   @override
   Widget build(BuildContext context, ref) {
-    final TrashDayListModel trashDayListModel = ref.read(trashDayListModelProvider);
+    final TrashDayListModel trashDayListModel = ref.watch(trashDayListModelProvider);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -85,7 +85,7 @@ class TrashDayListView extends ConsumerWidget {
   }
 
   Widget buildSlidableListTile(
-    context,
+    BuildContext context,
     List trashDays,
     TrashDay trashDay,
     TrashDayListModel trashDayListModel,
@@ -131,6 +131,7 @@ class TrashDayListView extends ConsumerWidget {
 }
 
 String formatOrdinalNumber(Map<int, bool> ordinalNumbers) {
+  print(ordinalNumbers);
   String word = '';
   int count = 0;
   for (var i = 1; i <= ordinalNumbers.length; i++) {

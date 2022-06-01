@@ -18,11 +18,13 @@ class TrashDetailView extends ConsumerWidget {
 
     final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
     trashDayRead.loadData(trashDay);
+    print(trashDay.ordinalNumbers);
 
     return Scaffold(
       // key: scaffoldKey,
       appBar: AppBar(
         automaticallyImplyLeading: true,
+
         title: const Text(
           'Page Title',
         ),
