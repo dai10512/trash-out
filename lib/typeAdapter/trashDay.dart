@@ -13,10 +13,10 @@ class TrashDay {
   String trashType;
 
   @HiveField(2)
-  List<int> daysOfTheWeek;
+  Map<int, bool> daysOfTheWeek;
 
   @HiveField(3)
-  List<int> ordinalNumbers;
+  Map<int, bool> ordinalNumbers;
 
   TrashDay({
     required this.id,

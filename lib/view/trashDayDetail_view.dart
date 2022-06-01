@@ -49,7 +49,6 @@ class TrashDetailView extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // _ordinalNumberCheck(ordinalNumberMap),
-                          // _dayOfTheWeekCheck(trashType),
                           _dayOfTheWeekCheck(),
                         ],
                       ),
@@ -78,7 +77,6 @@ Widget _trashTypeForm() {
   return Consumer(
     builder: (context, ref, _) {
       final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
-
       final controller = TextEditingController(text: trashDayRead.trashType);
 
       return Column(
@@ -151,47 +149,43 @@ Widget _trashTypeForm() {
 // }
 
 Widget _dayOfTheWeekCheck() {
-  return Consumer(builder: (context, ref, _) {
-    final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
-    final daysOfTheWeekMap = getDaysOfTheWeekMap(trashDayRead.daysOfTheWeek);
-
-    return Expanded(
-      flex: 3,
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            '曜日',
-            textAlign: TextAlign.center,
-          ),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: daysOfTheWeekMap.length,
-            itemBuilder: (BuildContext context, int index) {
-              // int key = ;
-              // Map map = dayOfTheWeekMap[key];
-              // bool value = map['doNotify'];
-              return ElevatedButton(
-                // child: Text('label'),
-                child: Text(daysOfTheWeekMap[index + 1]!['label']),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    (daysOfTheWeekMap[index + 1]!['doNotify']) ? Colors.blue : Colors.grey,
+  return Consumer(
+    builder: (context, ref, _) {
+      final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
+      return Expanded(
+        flex: 3,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '曜日',
+              textAlign: TextAlign.center,
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: trashDayRead.daysOfTheWeek.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      (trashDayRead.daysOfTheWeek[index + 1]!) ? Colors.blue : Colors.grey,
+                    ),
                   ),
-                ),
-                onPressed: () {
-                  print(index);
-                  print(daysOfTheWeekMap[index + 1]!['doNotify']);
-                },
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  });
+                  onPressed: () {
+                    trashDayRead.updateDaysOfTheWeek(index + 1);
+                    print(trashDayRead.daysOfTheWeek[index + 1]);
+                  },
+                  child: Text(dayOfTheWeekLabelMap[index + 1].toString()),
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }
 
 Widget _finishButton(
@@ -205,7 +199,6 @@ Widget _finishButton(
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        child: const Text('保存する'),
         style: ElevatedButton.styleFrom(
           primary: Colors.orange,
           onPrimary: Colors.white,
@@ -219,46 +212,18 @@ Widget _finishButton(
             Navigator.pop(context);
           }
         },
+        child: const Text('保存する'),
       ),
     );
   });
 }
 
-Map<int, Map<String, dynamic>> getDaysOfTheWeekMap(List daysOfTheWeek) {
-  final Map<int, Map<String, dynamic>> daysOfTheWeekMap = {
-    1: {'label': '月曜日', 'doNotify': false},
-    2: {'label': '火曜日', 'doNotify': false},
-    3: {'label': '水曜日', 'doNotify': false},
-    4: {'label': '木曜日', 'doNotify': false},
-    5: {'label': '金曜日', 'doNotify': false},
-    6: {'label': '土曜日', 'doNotify': false},
-    7: {'label': '日曜日', 'doNotify': false},
-  };
-
-  for (var i = 0; i < daysOfTheWeek.length; i++) {
-    if (daysOfTheWeekMap.containsKey(daysOfTheWeek[i])) {
-      daysOfTheWeekMap[daysOfTheWeek[i]]!['doNotify'] == true;
-    }
-  }
-  print(daysOfTheWeekMap);
-
-  return daysOfTheWeekMap;
-}
-
-Map<int, bool> getOrdinalNumberMap(List? ordinalNumbers) {
-  final Map<int, bool> ordinalNumberMap = {
-    1: false,
-    2: false,
-    3: false,
-    4: false,
-    5: false,
-  };
-
-  if (ordinalNumbers != null) {
-    ordinalNumbers.forEach((item) {
-      print(item);
-    });
-  }
-
-  return ordinalNumberMap;
-}
+final dayOfTheWeekLabelMap = {
+  1: '月曜日',
+  2: '火曜日',
+  3: '水曜日',
+  4: '木曜日',
+  5: '金曜日',
+  6: '土曜日',
+  7: '日曜日',
+};

@@ -19,8 +19,8 @@ class TrashDayAdapter extends TypeAdapter<TrashDay> {
     return TrashDay(
       id: fields[0] as String,
       trashType: fields[1] as String,
-      daysOfTheWeek: (fields[2] as List).cast<int>(),
-      ordinalNumbers: (fields[3] as List).cast<int>(),
+      daysOfTheWeek: (fields[2] as Map).cast<int, bool>(),
+      ordinalNumbers: (fields[3] as Map).cast<int, bool>(),
     );
   }
 

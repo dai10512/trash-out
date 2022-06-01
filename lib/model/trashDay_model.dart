@@ -10,8 +10,10 @@ final trashDayModelProvider = ChangeNotifierProvider<TrashDayModel>(
 class TrashDayModel extends ChangeNotifier {
   String id = '';
   String trashType = '';
-  List<int> daysOfTheWeek = [];
-  List<int> ordinalNumbers = [];
+  // List<int> daysOfTheWeek = [];
+  // List<int> ordinalNumbers = [];
+  Map<int, bool> daysOfTheWeek = {};
+  Map<int, bool> ordinalNumbers = {};
 
   void loadData(trashDay) {
     if (trashDay != null) {
@@ -26,11 +28,11 @@ class TrashDayModel extends ChangeNotifier {
     trashType = value;
   }
 
-  void updateDaysOfTheWeek(value) {
-    daysOfTheWeek.add(value);
+  void updateDaysOfTheWeek(int index) {
+    daysOfTheWeek[index] = !daysOfTheWeek[index]!;
   }
 
-  void updateOrdinalNumbers(value) {
-    ordinalNumbers.add(value);
+  void updateOrdinalNumbers(int index) {
+    ordinalNumbers[index] = !ordinalNumbers[index]!;
   }
 }

@@ -32,7 +32,11 @@ class TrashDayListView extends ConsumerWidget {
             IconButton(
               icon: const Icon(Icons.add),
               onPressed: () {
-                final newTrashDay = TrashDay(id: uuid.v4(), trashType: '', ordinalNumbers: [], daysOfTheWeek: []);
+                final newTrashDay = TrashDay(
+                    id: uuid.v4(),
+                    trashType: '',
+                    ordinalNumbers: {1: false, 2: false, 3: false, 4: false, 5: false},
+                    daysOfTheWeek: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false});
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -110,7 +114,8 @@ class TrashDayListView extends ConsumerWidget {
       ),
       child: ListTile(
         title: Text(trashDay.trashType),
-        subtitle: Text('${ordinalNumberToString(trashDay.ordinalNumbers)}  ${formatDayOfTheWeek(trashDay.daysOfTheWeek)}'),
+        subtitle: Text('${formatOrdinalNumber(trashDay.ordinalNumbers)}'),
+        // subtitle: Text('${formatOrdinalNumber(trashDay.ordinalNumbers)}  ${formatDayOfTheWeek(trashDay.daysOfTheWeek.keys)}'),
         trailing: const Icon(Icons.arrow_forward_ios),
         onTap: () {
           final isNew = false;
@@ -127,22 +132,24 @@ class TrashDayListView extends ConsumerWidget {
   }
 }
 
-String ordinalNumberToString(List<int> ordinalNumbers) {
-  String ordinalWord = '';
-  for (var i = 0; i < ordinalNumbers.length; i++) {
-    ordinalWord += '第${ordinalNumbers[i]},';
+String formatOrdinalNumber(Map<int, bool> ordinalNumbers) {
+  String word = '';
+  for (var i = 1; i <= ordinalNumbers.length; i++) {
+    if (ordinalNumbers[i]!) {
+      word += '第${ordinalNumbers[i]}';
+    }
   }
-  return ordinalWord;
+  return word;
 }
 
-String formatDayOfTheWeek(List<int> dayOfTheWeek) {
-  String dayOfTheWeekWord = '';
-  for (var i = 0; i < dayOfTheWeek.length; i++) {
-    final dayOfTheWeekInt = dayOfTheWeek[i];
-    dayOfTheWeekWord = dayOfTheWeekMap[dayOfTheWeekInt]!;
-    // dayOfTheWeekWord += 1.toString();
+String formatDayOfTheWeek(Map<int, bool> daysOfTheWeek) {
+  String word = '';
+  for (var i = 1; i <= daysOfTheWeek.length; i++) {
+    if (daysOfTheWeek[i]!) {
+      word += '第${dayOfTheWeekMap[i]}';
+    }
   }
-  return dayOfTheWeekWord;
+  return word;
 }
 
 Map<int, String> dayOfTheWeekMap = {
