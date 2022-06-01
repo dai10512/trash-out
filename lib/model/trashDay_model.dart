@@ -25,13 +25,16 @@ class TrashDayModel extends ChangeNotifier {
 
   void updateTrashType(String text) {
     trashType = text;
+    notifyListeners();
   }
 
   void updateDaysOfTheWeek(int index) {
     daysOfTheWeek[index] = !daysOfTheWeek[index]!;
+    notifyListeners();
   }
 
   void updateOrdinalNumbers(int index) {
     ordinalNumbers[index] = !ordinalNumbers[index]!;
+    notifyListeners();
   }
 }

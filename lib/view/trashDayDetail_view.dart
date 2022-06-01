@@ -20,6 +20,8 @@ class TrashDetailView extends ConsumerWidget {
     trashDayRead.loadData(trashDay);
     print(trashDay.ordinalNumbers);
 
+    final counterWatch = ref.watch(counterProvider);
+
     return Scaffold(
       // key: scaffoldKey,
       appBar: AppBar(

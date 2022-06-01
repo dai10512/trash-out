@@ -8,9 +8,7 @@ class Boxes {
   static Box<TrashDay> getTrashDays() => Hive.box<TrashDay>('TrashDays');
 }
 
-final trashDayListModelProvider = ChangeNotifierProvider<TrashDayListModel>(
-  (ref) => TrashDayListModel(),
-);
+final trashDayListModelProvider = ChangeNotifierProvider<TrashDayListModel>((ref) => TrashDayListModel());
 
 class TrashDayListModel extends ChangeNotifier {
   TrashDayListRepository trashDayListRepository = TrashDayListRepository();
@@ -25,10 +23,7 @@ class TrashDayListModel extends ChangeNotifier {
     int index,
     TrashDayModel trashDayRead,
   ) {
-    trashDayListRepository.updateTrashDayListRepository(
-      index,
-      trashDayRead,
-    );
+    trashDayListRepository.updateTrashDayListRepository(index, trashDayRead);
   }
 
   void deleteTrashDay(
@@ -73,5 +68,16 @@ class TrashDayListRepository {
   ) async {
     final box = Boxes.getTrashDays();
     box.deleteAt(index).then((value) => print('deleted'));
+  }
+}
+
+final counterProvider = ChangeNotifierProvider<CounterModel>((ref) => CounterModel());
+
+class CounterModel extends ChangeNotifier {
+  int _counter = 0;
+  get counter => _counter;
+  void increase() {
+    _counter++;
+    notifyListeners();
   }
 }
