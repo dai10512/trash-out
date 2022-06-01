@@ -114,8 +114,7 @@ class TrashDayListView extends ConsumerWidget {
       ),
       child: ListTile(
         title: Text(trashDay.trashType),
-        subtitle: Text('${formatOrdinalNumber(trashDay.ordinalNumbers)}'),
-        // subtitle: Text('${formatOrdinalNumber(trashDay.ordinalNumbers)}  ${formatDayOfTheWeek(trashDay.daysOfTheWeek.keys)}'),
+        subtitle: Text('${formatOrdinalNumber(trashDay.ordinalNumbers)}  ${formatDayOfTheWeek(trashDay.daysOfTheWeek)}'),
         trailing: const Icon(Icons.arrow_forward_ios),
         onTap: () {
           final isNew = false;
@@ -146,9 +145,11 @@ String formatDayOfTheWeek(Map<int, bool> daysOfTheWeek) {
   String word = '';
   for (var i = 1; i <= daysOfTheWeek.length; i++) {
     if (daysOfTheWeek[i]!) {
-      word += '第${dayOfTheWeekMap[i]}';
+      word += '${dayOfTheWeekMap[i]}、';
     }
   }
+
+  word = word.substring(0, word.length - 1);
   return word;
 }
 
