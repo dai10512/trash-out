@@ -32,15 +32,10 @@ class TrashDayListView extends ConsumerWidget {
             IconButton(
               icon: const Icon(Icons.add),
               onPressed: () {
-                final newTrashDay = TrashDay(
-                    id: uuid.v4(),
-                    trashType: '',
-                    ordinalNumbers: {1: false, 2: false, 3: false, 4: false, 5: false},
-                    daysOfTheWeek: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false});
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TrashDetailView(null, newTrashDay),
+                    builder: (context) => TrashDetailView(null, null),
                   ),
                 );
               },

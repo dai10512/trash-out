@@ -5,22 +5,19 @@ import 'package:trash_out/model/trashDay_model.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-const Uuid uuid = Uuid();
-
 class TrashDetailView extends ConsumerWidget {
   const TrashDetailView(this.index, this.trashDay, {Key? key}) : super(key: key);
   final int? index;
-  final TrashDay trashDay;
+  final TrashDay? trashDay;
 
   @override
   Widget build(context, ref) {
     // final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
+    final TrashDayModel trashDayWatch = ref.watch(trashDayModelProvider);
     trashDayRead.loadData(trashDay);
-    print(trashDay.ordinalNumbers);
-
-    final counterWatch = ref.watch(counterProvider);
+    // print(trashDay.ordinalNumbers);
 
     return Scaffold(
       // key: scaffoldKey,
@@ -59,6 +56,8 @@ class TrashDetailView extends ConsumerWidget {
                       ),
                     ),
                   ),
+                  Text(trashDay!.daysOfTheWeek.toString()),
+                  Text(trashDayWatch.daysOfTheWeek.toString()),
                   _finishButton(context, index, trashDayRead),
                 ],
               ),
