@@ -109,7 +109,7 @@ Widget _ordinalNumberCheck() {
   return Consumer(
     builder: (context, ref, _) {
       final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
-      final TrashDayModel trashDayWatch = ref.read(trashDayModelProvider);
+      final TrashDayModel trashDayWatch = ref.watch(trashDayModelProvider);
 
       return Expanded(
         flex: 2,
@@ -150,7 +150,7 @@ Widget _dayOfTheWeekCheck() {
   return Consumer(
     builder: (context, ref, _) {
       final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
-      final TrashDayModel trashDayWatch = ref.read(trashDayModelProvider);
+      final TrashDayModel trashDayWatch = ref.watch(trashDayModelProvider);
       return Expanded(
         flex: 3,
         child: Column(
