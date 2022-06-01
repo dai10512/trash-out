@@ -36,7 +36,7 @@ class TrashDayListView extends ConsumerWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TrashDetailView(true, newTrashDay),
+                    builder: (context) => TrashDetailView(true, null, newTrashDay),
                   ),
                 );
               },
@@ -71,7 +71,6 @@ class TrashDayListView extends ConsumerWidget {
             itemCount: trashDays.length,
             itemBuilder: (BuildContext context, int index) {
               final trashDay = trashDays[index];
-              print('$index:${trashDay.trashType}');
 
               return buildSlidableListTile(context, trashDays, trashDay, trashDayModel, index);
             },
@@ -95,8 +94,6 @@ class TrashDayListView extends ConsumerWidget {
         dismissible: DismissiblePane(
           onDismissed: () {
             trashDayListModel.deleteTrashDay(trashDay, trashDays, index);
-
-            // trashDays.moveAt(index);
           },
         ),
         children: [
@@ -121,7 +118,7 @@ class TrashDayListView extends ConsumerWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => TrashDetailView(false, trashDay),
+              builder: (context) => TrashDetailView(false, index, trashDay),
             ),
           );
         },

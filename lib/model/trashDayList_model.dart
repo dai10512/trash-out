@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:trash_out/model/trashDay_model.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
-import 'package:trash_out/main.dart';
 
 class Boxes {
   static Box<TrashDay> getTrashDays() => Hive.box<TrashDay>('TrashDays');
@@ -20,7 +19,9 @@ class TrashDayListModel extends ChangeNotifier {
     trashDayListRepository.addTrashDayListRepository(trashDayRead);
   }
 
-  void updateTrashDay() {}
+  void updateTrashDay(index, trashDayRead) {
+    trashDayListRepository.updateTrashDayListRepository(index, trashDayRead);
+  }
 
   void deleteTrashDay(trashDay, trashDays, index) {
     trashDayListRepository.deleteTrashDayListRepository(trashDay, trashDays, index);
@@ -37,6 +38,18 @@ class TrashDayListRepository {
     );
     final box = Boxes.getTrashDays();
     box.add(trashDay).then((value) => print('added'));
+    print(box.keys);
+  }
+
+  Future updateTrashDayListRepository(index, TrashDayModel trashDayRead) async {
+    final trashDay = TrashDay(
+      id: trashDayRead.id,
+      trashType: trashDayRead.trashType,
+      daysOfTheWeek: trashDayRead.daysOfTheWeek,
+      ordinalNumbers: trashDayRead.ordinalNumbers,
+    );
+    final box = Boxes.getTrashDays();
+    box.putAt(index, trashDay);
   }
 
   void deleteTrashDayListRepository(trashDay, List trashDays, index) async {

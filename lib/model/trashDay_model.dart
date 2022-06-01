@@ -18,12 +18,10 @@ class TrashDayModel extends ChangeNotifier {
       trashType = trashDay.trashType;
       daysOfTheWeek = trashDay.daysOfTheWeek;
       ordinalNumbers = trashDay.ordinalNumbers;
-      print(trashType);
     }
   }
 
   void updateParameter(value) {
     trashType = value;
-    print(trashType);
   }
 }

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/material.dart';
 import 'package:trash_out/main.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
 import 'package:trash_out/model/trashDayList_model.dart';
@@ -10,12 +10,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 const Uuid uuid = Uuid();
 
 class TrashDetailView extends ConsumerWidget {
-  const TrashDetailView(this.isNew, this.trashDay, {Key? key}) : super(key: key);
+  const TrashDetailView(this.isNew, this.index, this.trashDay, {Key? key}) : super(key: key);
+  final int? index;
   final TrashDay trashDay;
   final bool isNew;
 
   @override
   Widget build(context, ref) {
+    print(isNew);
     // final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     final trashDayListModel = ref.read(trashDayListModelProvider);
 
@@ -65,7 +67,7 @@ class TrashDetailView extends ConsumerWidget {
                     ),
                   ),
                   // _finishButton(context, trashDay, trashDayListModel, trashTypeController.text, [1, 2], [1, 2, 3]),
-                  _finishButton(context, trashDayRead, isNew, trashDayListModel),
+                  _finishButton(context, index, trashDayRead, isNew, trashDayListModel, trashDay),
                 ],
               ),
             ),
@@ -225,18 +227,6 @@ Widget _dayOfTheWeekCheck(context, dayOfTheWeekMap) {
                 print(value);
               },
             );
-            // return CheckboxListTile(
-            //   value: value,
-            //   onChanged: (bool? newValue) {
-            //     print('checked1');
-            //     print(value);
-
-            //     value = newValue!;
-            //     print('checked2');
-            //     print(value);
-            //   },
-            //   title: Text(key),
-            // );
           },
         ),
       ],
@@ -276,18 +266,6 @@ Widget _dayOfTheWeekCheckList(context, dayOfTheWeekMap) {
                 print(value);
               },
             );
-            // return CheckboxListTile(
-            //   value: value,
-            //   onChanged: (bool? newValue) {
-            //     print('checked1');
-            //     print(value);
-
-            //     value = newValue!;
-            //     print('checked2');
-            //     print(value);
-            //   },
-            //   title: Text(key),
-            // );
           },
         ),
       ],
@@ -295,33 +273,7 @@ Widget _dayOfTheWeekCheckList(context, dayOfTheWeekMap) {
   );
 }
 
-// Widget _finishButton(context, trashDay, TrashDayListModel trashDayListModel, trashTypeText, daysOfTheWeek, ordinalNumbers) {
-//   print(trashTypeText.runtimeType);
-//   print(trashTypeText);
-
-//   return Container(
-//     width: double.infinity,
-//     child: ElevatedButton(
-//       child: const Text('保存する'),
-//       style: ElevatedButton.styleFrom(
-//         primary: Colors.orange,
-//         onPrimary: Colors.white,
-//       ),
-//       onPressed: () async {
-//         // trashDayListModel.addTrashDay(uuid.v4(), trashTypeText, [1], [1]);
-//         trashDayListModel.addTrashDay(uuid.v4(), trashTypeText, [1], [1]);
-//         print("taped");
-//         Navigator.pop(context);
-//         print(trashDay);
-//       },
-//     ),
-//   );
-// }
-
-Widget _finishButton(context, trashDayRead, isNew, TrashDayListModel trashDayListModel) {
-  print(trashDayRead.trashType);
-  // print(trashTypeText);
-
+Widget _finishButton(context, index, trashDayRead, isNew, TrashDayListModel trashDayListModel, trashDay) {
   return Container(
     width: double.infinity,
     child: ElevatedButton(
@@ -331,10 +283,11 @@ Widget _finishButton(context, trashDayRead, isNew, TrashDayListModel trashDayLis
         onPrimary: Colors.white,
       ),
       onPressed: () async {
-        // trashDayListModel.addTrashDay(uuid.v4(), trashTypeText, [1], [1]);
         if (isNew) {
-        } else {
           trashDayListModel.addTrashDay(trashDayRead);
+          Navigator.pop(context);
+        } else {
+          trashDayListModel.updateTrashDay(index, trashDayRead);
           Navigator.pop(context);
         }
       },

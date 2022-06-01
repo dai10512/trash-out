@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
 import 'package:trash_out/view/home_view.dart';
-import 'package:trash_out/view/notificationSetting_view.dart';
-import 'package:trash_out/view/trashDayList_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 
