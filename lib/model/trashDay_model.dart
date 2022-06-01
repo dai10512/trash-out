@@ -14,7 +14,7 @@ class TrashDayModel extends ChangeNotifier {
   Map<int, bool> daysOfTheWeek = {1: false, 2: false, 3: false, 4: false, 5: false};
   Map<int, bool> ordinalNumbers = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false};
 
-  void loadData(trashDay) {
+  void loadData(TrashDay trashDay) {
     if (trashDay != null) {
       id = trashDay.id;
       trashType = trashDay.trashType;
@@ -23,8 +23,8 @@ class TrashDayModel extends ChangeNotifier {
     }
   }
 
-  void updateTrashType(value) {
-    trashType = value;
+  void updateTrashType(String text) {
+    trashType = text;
   }
 
   void updateDaysOfTheWeek(int index) {
