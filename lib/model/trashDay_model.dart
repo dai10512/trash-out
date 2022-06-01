@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
+import 'package:trash_out/view/trashDayList_view.dart';
 
 final trashDayModelProvider = ChangeNotifierProvider<TrashDayModel>(
   (ref) => TrashDayModel(),
@@ -21,7 +22,15 @@ class TrashDayModel extends ChangeNotifier {
     }
   }
 
-  void updateParameter(value) {
+  void updateTrashType(value) {
     trashType = value;
+  }
+
+  void updateDaysOfTheWeek(value) {
+    daysOfTheWeek.add(value);
+  }
+
+  void updateOrdinalNumbers(value) {
+    ordinalNumbers.add(value);
   }
 }

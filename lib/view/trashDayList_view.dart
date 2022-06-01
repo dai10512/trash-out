@@ -69,7 +69,7 @@ class TrashDayListView extends ConsumerWidget {
             shrinkWrap: true,
             // physics: NeverScrollableScrollPhysics(),
             itemCount: trashDays.length,
-            itemBuilder: (BuildContext context, int index) {
+            itemBuilder: (BuildContext context, index) {
               final trashDay = trashDays[index];
 
               return buildSlidableListTile(context, trashDays, trashDay, trashDayModel, index);

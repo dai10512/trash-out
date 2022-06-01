@@ -51,7 +51,6 @@ class TrashDayListRepository {
     );
     final box = Boxes.getTrashDays();
     box.add(trashDay).then((value) => print('added'));
-    print(box.keys);
   }
 
   Future updateTrashDayListRepository(
@@ -65,7 +64,7 @@ class TrashDayListRepository {
       ordinalNumbers: trashDayRead.ordinalNumbers,
     );
     final box = Boxes.getTrashDays();
-    box.putAt(index, trashDay);
+    box.putAt(index, trashDay).then((value) => print('updated'));
   }
 
   void deleteTrashDayListRepository(
