@@ -127,12 +127,11 @@ Widget _ordinalNumberCheck() {
                 return ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                      (trashDayWatch.daysOfTheWeek[index + 1]!) ? Colors.blue : Colors.grey,
+                      (trashDayWatch.ordinalNumbers[index + 1]!) ? Colors.blue : Colors.grey,
                     ),
                   ),
                   onPressed: () {
-                    trashDayRead.updateDaysOfTheWeek(index + 1);
-                    print(trashDayRead.daysOfTheWeek[index + 1]);
+                    trashDayRead.updateOrdinalNumbers(index + 1);
                   },
                   child: Text('第${index + 1}'),
                 );
@@ -173,7 +172,6 @@ Widget _dayOfTheWeekCheck() {
                   ),
                   onPressed: () {
                     trashDayRead.updateDaysOfTheWeek(index + 1);
-                    print(trashDayRead.daysOfTheWeek[index + 1]);
                   },
                   child: Text(dayOfTheWeekLabelMap[index + 1].toString()),
                 );

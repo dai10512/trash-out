@@ -117,7 +117,6 @@ class TrashDayListView extends ConsumerWidget {
         subtitle: Text('${formatOrdinalNumber(trashDay.ordinalNumbers)}  ${formatDayOfTheWeek(trashDay.daysOfTheWeek)}'),
         trailing: const Icon(Icons.arrow_forward_ios),
         onTap: () {
-          final isNew = false;
           print("taped");
           Navigator.push(
             context,
@@ -133,23 +132,38 @@ class TrashDayListView extends ConsumerWidget {
 
 String formatOrdinalNumber(Map<int, bool> ordinalNumbers) {
   String word = '';
+  int count = 0;
   for (var i = 1; i <= ordinalNumbers.length; i++) {
     if (ordinalNumbers[i]!) {
-      word += '第${ordinalNumbers[i]}';
+      word += '第$i、';
+      count++;
     }
+  }
+  if (count == 0) {
+    word = '週が未登録です';
+  } else if (count == 5) {
+    word = '毎週';
+  } else {
+    word = word.substring(0, word.length - 1);
   }
   return word;
 }
 
 String formatDayOfTheWeek(Map<int, bool> daysOfTheWeek) {
   String word = '';
+  int count = 0;
   for (var i = 1; i <= daysOfTheWeek.length; i++) {
     if (daysOfTheWeek[i]!) {
       word += '${dayOfTheWeekMap[i]}、';
+      count++;
     }
   }
 
-  word = word.substring(0, word.length - 1);
+  if (count == 0) {
+    word = '曜日が未登録です';
+  } else {
+    word = word.substring(0, word.length - 1);
+  }
   return word;
 }
 
