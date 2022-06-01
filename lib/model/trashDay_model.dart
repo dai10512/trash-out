@@ -11,8 +11,6 @@ final trashDayModelProvider = ChangeNotifierProvider<TrashDayModel>(
 class TrashDayModel extends ChangeNotifier {
   String id = uuid.v4();
   String trashType = '';
-  // List<int> daysOfTheWeek = [];
-  // List<int> ordinalNumbers = [];
   Map<int, bool> daysOfTheWeek = {1: false, 2: false, 3: false, 4: false, 5: false};
   Map<int, bool> ordinalNumbers = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false};
 
