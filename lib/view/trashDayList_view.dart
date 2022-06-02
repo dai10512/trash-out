@@ -9,13 +9,9 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:uuid/uuid.dart';
 
 final StateProvider<List> trashDaysProvider = StateProvider((ref) => []);
-// final StateProvider<String> trashDayIdProvider = StateProvider((ref) => '');
-// final StateProvider<String> trashTypeProvider = StateProvider((ref) => '');
-// final StateProvider<List<int>> daysOfWeekProvider = StateProvider((ref) => []);
-// final StateProvider<List<int>> ordinalNumbersProvider = StateProvider((ref) => []);
 
 class TrashDayListView extends ConsumerWidget {
-  TrashDayListView({Key? key}) : super(key: key);
+  const TrashDayListView({Key? key}) : super(key: key);
 
   // final scaffoldKey = GlobalKey<ScaffoldState>();
 
