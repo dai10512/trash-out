@@ -9,13 +9,6 @@ final trashDayModelProvider = ChangeNotifierProvider<TrashDayModel>(
 
 Uuid uuid = const Uuid();
 
-final defaultTrashDay = TrashDay(
-  id: uuid.v4(),
-  trashType: '',
-  daysOfTheWeek: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false},
-  ordinalNumbers: {1: false, 2: false, 3: false, 4: false, 5: false},
-);
-
 class TrashDayModel extends ChangeNotifier {
   String id = '';
   String trashType = '';
@@ -25,6 +18,12 @@ class TrashDayModel extends ChangeNotifier {
   // listから選んだ場合は、DBのkeyからloadedTrashDayを引数に。ない場合に上記DefaultTrashDayの値をModelのパラメーターに充てて更新している。
   // 詳細ページに移る時は常にこれらが呼び出されて、フレッシュなデータになる想定である。
   // しかし、実際のところは、loadedTrashDayやdefaultTrashDayの中身ごと更新されてしまっている。
+  TrashDay defaultTrashDay = TrashDay(
+    id: uuid.v4(),
+    trashType: '',
+    daysOfTheWeek: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false},
+    ordinalNumbers: {1: false, 2: false, 3: false, 4: false, 5: false},
+  );
 
   void loadData(TrashDay? loadedTrashDay) {
     final TrashDay model;
@@ -44,15 +43,26 @@ class TrashDayModel extends ChangeNotifier {
     print('loaded');
   }
 
-  void reset() {
-    id = uuid.v4();
-    trashType = '';
-    daysOfTheWeek = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false};
-    ordinalNumbers = {1: false, 2: false, 3: false, 4: false, 5: false};
-    print('reset');
-    print(ordinalNumbers);
-  }
   // こちらはビルドするタイミングなのでnotifyLisnerは不要とのこと
+
+  void resetDefaultTrashDay() {
+    defaultTrashDay = TrashDay(
+      id: uuid.v4(),
+      trashType: '',
+      daysOfTheWeek: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false},
+      ordinalNumbers: {1: false, 2: false, 3: false, 4: false, 5: false},
+    );
+    notifyListeners();
+  }
+
+  void resetLoadedTrashDay(TrashDay loadedTrashDay) {
+    loadedTrashDay = TrashDay(
+      id: loadedTrashDay.id,
+      trashType: loadedTrashDay.trashType,
+      daysOfTheWeek: loadedTrashDay.daysOfTheWeek,
+      ordinalNumbers: loadedTrashDay.ordinalNumbers,
+    );
+  }
 
   void updateTrashType(String text) {
     trashType = text;
