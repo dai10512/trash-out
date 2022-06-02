@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:trash_out/model/trashDay_model.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
 import 'package:trash_out/model/trashDayList_model.dart';
 import 'package:trash_out/view/trashDayDetail_view.dart';
@@ -25,7 +24,7 @@ class TrashDayListView extends ConsumerWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TrashDetailView(null),
+                    builder: (context) => const TrashDetailView(null),
                   ),
                 );
               },

@@ -5,7 +5,9 @@ import 'package:trash_out/model/trashDay_model.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
 
 class Boxes {
-  static Box<TrashDay> getTrashDays() => Hive.box<TrashDay>('TrashDays');
+  static Box<TrashDay> getTrashDays() {
+    return Hive.box<TrashDay>('TrashDays');
+  }
 }
 
 final trashDayListModelProvider = ChangeNotifierProvider<TrashDayListModel>((ref) => TrashDayListModel());
@@ -15,7 +17,6 @@ class TrashDayListModel extends ChangeNotifier {
 
   TrashDay? loadTrashDay(dynamic hiveKey) {
     final loadedData = trashDayListRepository.loadTrashDayListRepository(hiveKey);
-    print('loaded from hive');
     return loadedData;
   }
 
@@ -39,6 +40,7 @@ class TrashDayListRepository {
     final TrashDay? loadedTrashDay = box.get(hiveKey);
     return loadedTrashDay;
   }
+
 
   void addTrashDayListRepository(TrashDayModel trashDayRead) {
     final trashDay = TrashDay(

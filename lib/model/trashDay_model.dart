@@ -22,22 +22,41 @@ class TrashDayModel extends ChangeNotifier {
   Map<int, bool> daysOfTheWeek = {};
   Map<int, bool> ordinalNumbers = {};
 
+  // listから選んだ場合は、DBのkeyからloadedTrashDayを引数に。ない場合に上記DefaultTrashDayの値をModelのパラメーターに充てて更新している。
+  // 詳細ページに移る時は常にこれらが呼び出されて、フレッシュなデータになる想定である。
+  // しかし、実際のところは、loadedTrashDayやdefaultTrashDayの中身ごと更新されてしまっている。
+
   void loadData(TrashDay? loadedTrashDay) {
     final TrashDay model;
     if (loadedTrashDay != null) {
       model = loadedTrashDay;
+      print('load form hive');
+      print(loadedTrashDay.ordinalNumbers);
     } else {
       model = defaultTrashDay;
+      print('load from defaultTrashDay');
+      print(defaultTrashDay.ordinalNumbers);
     }
     id = model.id;
     trashType = model.trashType;
     daysOfTheWeek = model.daysOfTheWeek;
     ordinalNumbers = model.ordinalNumbers;
+    print('loaded');
+  }
+
+  void reset() {
+    id = uuid.v4();
+    trashType = '';
+    daysOfTheWeek = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false};
+    ordinalNumbers = {1: false, 2: false, 3: false, 4: false, 5: false};
+    print('reset');
+    print(ordinalNumbers);
   }
   // こちらはビルドするタイミングなのでnotifyLisnerは不要とのこと
 
   void updateTrashType(String text) {
     trashType = text;
+    notifyListeners();
     // controllerで反映されるからnotifyLisnerは不要と思われる
   }
 

@@ -36,20 +36,58 @@ class TrashDetailView extends ConsumerWidget {
                   _trashTypeForm(),
                   _notificationDateForm(),
                   _finishButton(hiveKey, trashDayRead),
-                  Text(ref.watch(trashDayModelProvider).daysOfTheWeek.toString()),
+                  Text('ordinalNumbers'),
+                  Text(ref.watch(trashDayModelProvider).ordinalNumbers.toString()),
                   TextButton(
                     onPressed: () {
-                      final dynamic loadedTrashDay = trashDayListRead.loadTrashDay(hiveKey);
-                      trashDayRead.loadData(loadedTrashDay);
+                      trashDayRead.reset();
                     },
-                    child: Text('reload'),
-                  )
+                    child: Text('reset'),
+                  ),
                 ],
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _trashTypeForm() {
+    return Consumer(
+      builder: (context, ref, _) {
+        final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
+        final controller = TextEditingController(text: trashDayRead.trashType);
+
+        return Column(
+          children: [
+            Card(
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              color: const Color(0xFFF5F5F5),
+              child: Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('ゴミの種類'),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: controller,
+                      autofocus: true,
+                      obscureText: false,
+                      decoration: const InputDecoration(hintText: '[例：燃えるゴミ]', filled: true),
+                      onChanged: (text) {
+                        print(text);
+                        trashDayRead.updateTrashType(text);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -70,43 +108,6 @@ class TrashDetailView extends ConsumerWidget {
       ),
     );
   }
-}
-
-Widget _trashTypeForm() {
-  return Consumer(
-    builder: (context, ref, _) {
-      final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
-      final controller = TextEditingController(text: trashDayRead.trashType);
-
-      return Column(
-        children: [
-          Card(
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            color: const Color(0xFFF5F5F5),
-            child: Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('ゴミの種類'),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: controller,
-                    autofocus: true,
-                    obscureText: false,
-                    decoration: const InputDecoration(hintText: '[例：燃えるゴミ]', filled: true),
-                    onChanged: (text) {
-                      trashDayRead.updateTrashType(text);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      );
-    },
-  );
 }
 
 Widget _ordinalNumberCheck() {
