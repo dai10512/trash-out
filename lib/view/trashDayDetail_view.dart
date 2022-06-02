@@ -15,7 +15,7 @@ class TrashDetailView extends ConsumerWidget {
     final TrashDayListModel trashDayListRead = ref.read(trashDayListModelProvider);
 
     final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
-    final TrashDayModel trashDayWatch = ref.watch(trashDayModelProvider);
+
     final dynamic loadedTrashDay = trashDayListRead.loadTrashDay(hiveKey);
     trashDayRead.loadData(loadedTrashDay);
 
@@ -25,10 +25,7 @@ class TrashDetailView extends ConsumerWidget {
       // key: scaffoldKey,
       appBar: AppBar(
         automaticallyImplyLeading: true,
-
-        title: const Text(
-          'Page Title',
-        ),
+        title: const Text('Page Title'),
         centerTitle: true,
         // elevation: 2,
       ),
@@ -43,27 +40,38 @@ class TrashDetailView extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _trashTypeForm(),
-                  Card(
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    color: const Color(0xFFF5F5F5),
-                    child: Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _ordinalNumberCheck(),
-                          const SizedBox(width: 20),
-                          _dayOfTheWeekCheck(),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Text(trashDayWatch.daysOfTheWeek.toString()),
+                  _notificationDateForm(),
                   _finishButton(context, hiveKey, trashDayRead),
+                  Text(ref.watch(trashDayModelProvider).daysOfTheWeek.toString()),
+                  TextButton(
+                    onPressed: () {
+                      final dynamic loadedTrashDay = trashDayListRead.loadTrashDay(hiveKey);
+                      trashDayRead.loadData(loadedTrashDay);
+                    },
+                    child: Text('reload'),
+                  )
                 ],
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _notificationDateForm() {
+    return Card(
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      color: const Color(0xFFF5F5F5),
+      child: Padding(
+        padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _ordinalNumberCheck(),
+            const SizedBox(width: 20),
+            _dayOfTheWeekCheck(),
+          ],
         ),
       ),
     );

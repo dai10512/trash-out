@@ -23,7 +23,7 @@ class TrashDayListModel extends ChangeNotifier {
     dynamic hiveKey,
   ) {
     final loadedData = trashDayListRepository.loadTrashDayListRepository(hiveKey);
-    print('loaded');
+    print('loaded from hive');
     return loadedData;
   }
 
@@ -40,6 +40,9 @@ class TrashDayListModel extends ChangeNotifier {
     trashDayListRepository.deleteTrashDayListRepository(hiveKey);
   }
 }
+
+
+
 
 class TrashDayListRepository {
   void addTrashDayListRepository(
