@@ -28,7 +28,7 @@ class TrashDayListModel extends ChangeNotifier {
   }
 
   void deleteTrashDay(
-    int hiveKey,
+    dynamic hiveKey,
   ) {
     trashDayListRepository.deleteTrashDayListRepository(hiveKey);
   }
@@ -52,7 +52,7 @@ class TrashDayListRepository {
     return loadedTrashDay;
   }
 
-  void updateTrashDayListRepository(int hiveKey, TrashDayModel trashDayRead) {
+  void updateTrashDayListRepository(dynamic hiveKey, TrashDayModel trashDayRead) {
     final trashDay = TrashDay(
       id: trashDayRead.id,
       trashType: trashDayRead.trashType,
