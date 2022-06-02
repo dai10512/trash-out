@@ -8,8 +8,6 @@ import 'package:trash_out/view/trashDayDetail_view.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:uuid/uuid.dart';
 
-final StateProvider<List> trashDaysProvider = StateProvider((ref) => []);
-
 class TrashDayListView extends ConsumerWidget {
   const TrashDayListView({Key? key}) : super(key: key);
   // final scaffoldKey = GlobalKey<ScaffoldState>();
