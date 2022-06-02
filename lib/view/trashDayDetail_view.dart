@@ -3,7 +3,6 @@ import 'package:trash_out/model/trashDayList_model.dart';
 import 'package:trash_out/model/trashDay_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 class TrashDetailView extends ConsumerWidget {
   const TrashDetailView(this.hiveKey, {Key? key}) : super(key: key);
   final dynamic hiveKey;
@@ -15,6 +14,7 @@ class TrashDetailView extends ConsumerWidget {
     final TrashDayListModel trashDayListRead = ref.read(trashDayListModelProvider);
     final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
     final dynamic loadedTrashDay = trashDayListRead.loadTrashDay(hiveKey);
+
     trashDayRead.loadData(loadedTrashDay);
 
     return Scaffold(
