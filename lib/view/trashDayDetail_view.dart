@@ -16,7 +16,6 @@ class TrashDetailView extends ConsumerWidget {
     final dynamic loadedTrashDay = trashDayListRead.loadTrashDay(hiveKey);
     trashDayRead.loadData(loadedTrashDay);
 
-
     return Scaffold(
       // key: scaffoldKey,
       appBar: AppBar(
@@ -36,7 +35,7 @@ class TrashDetailView extends ConsumerWidget {
                 children: [
                   _trashTypeForm(),
                   _notificationDateForm(),
-                  _finishButton(context, hiveKey, trashDayRead),
+                  _finishButton(hiveKey, trashDayRead),
                   Text(ref.watch(trashDayModelProvider).daysOfTheWeek.toString()),
                   TextButton(
                     onPressed: () {
@@ -191,11 +190,7 @@ Widget _dayOfTheWeekCheck() {
   );
 }
 
-Widget _finishButton(
-  BuildContext context,
-  dynamic hiveKey,
-  TrashDayModel trashDayRead,
-) {
+Widget _finishButton(dynamic hiveKey, TrashDayModel trashDayRead) {
   return Consumer(
     builder: (context, ref, child) {
       final trashDayListModel = ref.read(trashDayListModelProvider);
