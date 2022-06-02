@@ -2,14 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:trash_out/model/trashDayList_model.dart';
 import 'package:trash_out/model/trashDay_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trash_out/typeAdapter/trashDay.dart';
 
-final defaultTrashDay = TrashDay(
-  id: uuid.v4(),
-  trashType: '',
-  daysOfTheWeek: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false},
-  ordinalNumbers: {1: false, 2: false, 3: false, 4: false, 5: false},
-);
 
 class TrashDetailView extends ConsumerWidget {
   const TrashDetailView(this.hiveKey, {Key? key}) : super(key: key);
@@ -48,13 +41,13 @@ class TrashDetailView extends ConsumerWidget {
                   Text(ref.watch(trashDayModelProvider).ordinalNumbers.toString()),
                   TextButton(
                     onPressed: () {
-                      trashDayRead.resetDefaultTrashDay();
+                      trashDayRead.initializeDefaultTrashDay();
                     },
                     child: Text('reset DefaultTrashday'),
                   ),
                   TextButton(
                     onPressed: () {
-                      trashDayRead.resetLoadedTrashDay();
+                      // trashDayRead.initializeLoadedTrashDay();
                     },
                     child: Text('reset loadedTrashday'),
                   ),

@@ -45,7 +45,7 @@ class TrashDayModel extends ChangeNotifier {
 
   // こちらはビルドするタイミングなのでnotifyLisnerは不要とのこと
 
-  void resetDefaultTrashDay() {
+  void initializeDefaultTrashDay() {
     defaultTrashDay = TrashDay(
       id: uuid.v4(),
       trashType: '',
@@ -55,7 +55,7 @@ class TrashDayModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void resetLoadedTrashDay(TrashDay loadedTrashDay) {
+  void initializeLoadedTrashDay(TrashDay loadedTrashDay) {
     loadedTrashDay = TrashDay(
       id: loadedTrashDay.id,
       trashType: loadedTrashDay.trashType,
