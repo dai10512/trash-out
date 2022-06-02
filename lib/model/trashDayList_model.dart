@@ -70,14 +70,3 @@ class TrashDayListRepository {
     box.deleteAt(index).then((value) => print('deleted'));
   }
 }
-
-final counterProvider = ChangeNotifierProvider<CounterModel>((ref) => CounterModel());
-
-class CounterModel extends ChangeNotifier {
-  int _counter = 0;
-  get counter => _counter;
-  void increase() {
-    _counter++;
-    notifyListeners();
-  }
-}

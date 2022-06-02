@@ -12,7 +12,6 @@ final StateProvider<List> trashDaysProvider = StateProvider((ref) => []);
 
 class TrashDayListView extends ConsumerWidget {
   const TrashDayListView({Key? key}) : super(key: key);
-
   // final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -46,7 +45,6 @@ class TrashDayListView extends ConsumerWidget {
               valueListenable: Boxes.getTrashDays().listenable(),
               builder: (context, box, _) {
                 List<TrashDay> trashDays = box.values.toList().cast<TrashDay>();
-
                 return buildContent(trashDays, trashDayListModel);
               },
             ),
