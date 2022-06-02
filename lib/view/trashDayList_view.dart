@@ -18,6 +18,12 @@ class TrashDayListView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final TrashDayListModel trashDayListModel = ref.watch(trashDayListModelProvider);
+    final newTrashDay = TrashDay(
+      id: uuid.v4(),
+      trashType: '',
+      daysOfTheWeek: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false},
+      ordinalNumbers: {1: false, 2: false, 3: false, 4: false, 5: false},
+    );
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -28,12 +34,6 @@ class TrashDayListView extends ConsumerWidget {
             IconButton(
               icon: const Icon(Icons.add),
               onPressed: () {
-                final newTrashDay = TrashDay(
-                  id: uuid.v4(),
-                  trashType: '',
-                  daysOfTheWeek: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false},
-                  ordinalNumbers: {1: false, 2: false, 3: false, 4: false, 5: false},
-                );
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -61,11 +61,7 @@ class TrashDayListView extends ConsumerWidget {
     TrashDayListModel trashDayListModel,
   ) {
     if (trashDays.isEmpty) {
-      return const Center(
-        child: Text(
-          'データがありません',
-        ),
-      );
+      return const Center(child: Text('データがありません'));
     } else {
       return Expanded(
         child: SlidableAutoCloseBehavior(
@@ -132,7 +128,6 @@ class TrashDayListView extends ConsumerWidget {
 String formatOrdinalNumber(
   Map<int, bool> ordinalNumbers,
 ) {
-  print(ordinalNumbers);
   String word = '';
   int count = 0;
   for (var i = 1; i <= ordinalNumbers.length; i++) {
