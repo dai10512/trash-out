@@ -18,24 +18,12 @@ class TrashDayModel extends ChangeNotifier {
   Map<int, bool> daysOfTheWeek = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false};
   Map<int, bool> ordinalNumbers = {1: false, 2: false, 3: false, 4: false, 5: false};
 
-  // void loadData(TrashDay? trashDay) {
-  //   if (trashDay != null) {
-  //     id = trashDay.id;
-  //     trashType = trashDay.trashType;
-  //     daysOfTheWeek = trashDay.daysOfTheWeek;
-  //     ordinalNumbers = trashDay.ordinalNumbers;
-  //   }
-  //   // こちらはビルドするタイミングなのでnotifyLisnerは不要とのこと
-  // }
-
-  void loadData(dynamic hiveKey) {
-    if (hiveKey != null) {
-      final box = Boxes.getTrashDays();
-      box.watch();
-      // id = trashDay.id;
-      // trashType = trashDay.trashType;
-      // daysOfTheWeek = trashDay.daysOfTheWeek;
-      // ordinalNumbers = trashDay.ordinalNumbers;
+  void loadData(dynamic loadedTrashDay) {
+    if (loadedTrashDay != null) {
+      id = loadedTrashDay.id;
+      trashType = loadedTrashDay.trashType;
+      daysOfTheWeek = loadedTrashDay.daysOfTheWeek;
+      ordinalNumbers = loadedTrashDay.ordinalNumbers;
     }
     // こちらはビルドするタイミングなのでnotifyLisnerは不要とのこと
   }

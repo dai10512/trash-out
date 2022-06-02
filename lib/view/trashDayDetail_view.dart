@@ -16,8 +16,9 @@ class TrashDetailView extends ConsumerWidget {
 
     final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
     final TrashDayModel trashDayWatch = ref.watch(trashDayModelProvider);
-    final loadedTrashDay = trashDayListRead.loadTrashDay(hiveKey);
-    
+    final dynamic loadedTrashDay = trashDayListRead.loadTrashDay(hiveKey);
+    trashDayRead.loadData(loadedTrashDay);
+
     // print(trashDay.ordinalNumbers);
 
     return Scaffold(
