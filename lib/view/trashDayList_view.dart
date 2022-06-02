@@ -18,7 +18,6 @@ class TrashDayListView extends ConsumerWidget {
   TrashDayListView({Key? key}) : super(key: key);
 
   // final scaffoldKey = GlobalKey<ScaffoldState>();
-  bool isNew = true;
 
   @override
   Widget build(BuildContext context, ref) {

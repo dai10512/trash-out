@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
 import 'package:trash_out/model/trashDayList_model.dart';
 import 'package:trash_out/model/trashDay_model.dart';
-import 'package:uuid/uuid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TrashDetailView extends ConsumerWidget {
@@ -124,7 +123,7 @@ Widget _ordinalNumberCheck() {
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: trashDayRead.ordinalNumbers.length,
+              itemCount: trashDayWatch.ordinalNumbers.length,
               itemBuilder: (BuildContext context, int index) {
                 return ElevatedButton(
                   style: ButtonStyle(
