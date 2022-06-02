@@ -56,7 +56,10 @@ class TrashDayListView extends ConsumerWidget {
     );
   }
 
-  Widget buildContent(List<TrashDay> trashDays, trashDayModel) {
+  Widget buildContent(
+    List<TrashDay> trashDays,
+    TrashDayListModel trashDayListModel,
+  ) {
     if (trashDays.isEmpty) {
       return const Center(
         child: Text(
@@ -73,7 +76,7 @@ class TrashDayListView extends ConsumerWidget {
             itemBuilder: (BuildContext context, index) {
               final trashDay = trashDays[index];
 
-              return buildSlidableListTile(context, trashDays, trashDay, trashDayModel, index);
+              return buildSlidableListTile(context, trashDays, trashDay, trashDayListModel, index);
             },
           ),
         ),
@@ -114,13 +117,6 @@ class TrashDayListView extends ConsumerWidget {
         subtitle: Text('${formatOrdinalNumber(trashDay.ordinalNumbers)}  ${formatDayOfTheWeek(trashDay.daysOfTheWeek)}'),
         trailing: const Icon(Icons.arrow_forward_ios),
         onTap: () {
-          // print("taped");
-          // print("temp");
-          // var tempTrashDay = trashDay;
-          // print(tempTrashDay.ordinalNumbers);
-          // print("originalTrashDay");
-          // print(trashDay.ordinalNumbers);
-
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -133,7 +129,9 @@ class TrashDayListView extends ConsumerWidget {
   }
 }
 
-String formatOrdinalNumber(Map<int, bool> ordinalNumbers) {
+String formatOrdinalNumber(
+  Map<int, bool> ordinalNumbers,
+) {
   print(ordinalNumbers);
   String word = '';
   int count = 0;
@@ -153,7 +151,9 @@ String formatOrdinalNumber(Map<int, bool> ordinalNumbers) {
   return word;
 }
 
-String formatDayOfTheWeek(Map<int, bool> daysOfTheWeek) {
+String formatDayOfTheWeek(
+  Map<int, bool> daysOfTheWeek,
+) {
   String word = '';
   int count = 0;
   for (var i = 1; i <= daysOfTheWeek.length; i++) {
