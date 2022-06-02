@@ -41,10 +41,9 @@ class TrashDayListModel extends ChangeNotifier {
   }
 }
 
-
-
-
 class TrashDayListRepository {
+  final box = Boxes.getTrashDays();
+
   void addTrashDayListRepository(
     TrashDayModel trashDayRead,
   ) {
@@ -54,14 +53,12 @@ class TrashDayListRepository {
       daysOfTheWeek: trashDayRead.daysOfTheWeek,
       ordinalNumbers: trashDayRead.ordinalNumbers,
     );
-    final box = Boxes.getTrashDays();
     box.add(trashDay).then((value) => print('added'));
   }
 
   TrashDay? loadTrashDayListRepository(
     dynamic hiveKey,
   ) {
-    final box = Boxes.getTrashDays();
     final TrashDay? loadedTrashDay = box.get(hiveKey);
     return loadedTrashDay;
   }
@@ -76,14 +73,12 @@ class TrashDayListRepository {
       daysOfTheWeek: trashDayRead.daysOfTheWeek,
       ordinalNumbers: trashDayRead.ordinalNumbers,
     );
-    final box = Boxes.getTrashDays();
     box.put(hiveKey, trashDay).then((value) => print('updated'));
   }
 
   void deleteTrashDayListRepository(
     dynamic hiveKey,
   ) {
-    final box = Boxes.getTrashDays();
     box.delete(hiveKey).then((value) => print('deleted'));
   }
 }

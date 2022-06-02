@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:trash_out/typeAdapter/trashDay.dart';
 import 'package:trash_out/model/trashDayList_model.dart';
 import 'package:trash_out/model/trashDay_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,13 +12,10 @@ class TrashDetailView extends ConsumerWidget {
     // final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     final TrashDayListModel trashDayListRead = ref.read(trashDayListModelProvider);
-
     final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
-
     final dynamic loadedTrashDay = trashDayListRead.loadTrashDay(hiveKey);
     trashDayRead.loadData(loadedTrashDay);
 
-    // print(trashDay.ordinalNumbers);
 
     return Scaffold(
       // key: scaffoldKey,
@@ -27,7 +23,6 @@ class TrashDetailView extends ConsumerWidget {
         automaticallyImplyLeading: true,
         title: const Text('Page Title'),
         centerTitle: true,
-        // elevation: 2,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
