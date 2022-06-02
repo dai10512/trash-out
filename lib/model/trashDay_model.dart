@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:trash_out/model/trashDayList_model.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
 import 'package:trash_out/view/trashDayDetail_view.dart';
 import 'package:trash_out/view/trashDayList_view.dart';
@@ -12,20 +14,31 @@ final trashDayModelProvider = ChangeNotifierProvider<TrashDayModel>(
 Uuid uuid = const Uuid();
 
 class TrashDayModel extends ChangeNotifier {
-  String id = uuid.v4();
+  String id = '';
   String trashType = '';
-  Map<int, bool> daysOfTheWeek = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false};
-  Map<int, bool> ordinalNumbers = {1: false, 2: false, 3: false, 4: false, 5: false};
+  Map<int, bool> daysOfTheWeek = {};
+  Map<int, bool> ordinalNumbers = {};
 
-  void loadData(TrashDay? trashDay) {
-    if (trashDay != null) {
-      id = trashDay.id;
-      trashType = trashDay.trashType;
-      daysOfTheWeek = trashDay.daysOfTheWeek;
-      ordinalNumbers = trashDay.ordinalNumbers;
+  final defaultTrashDay = TrashDay(
+    id: uuid.v4(),
+    trashType: '',
+    daysOfTheWeek: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false},
+    ordinalNumbers: {1: false, 2: false, 3: false, 4: false, 5: false},
+  );
+
+  void loadData(TrashDay? loadedTrashDay) {
+    final TrashDay model;
+    if (loadedTrashDay != null) {
+      model = loadedTrashDay;
+    } else {
+      model = defaultTrashDay;
     }
-    // こちらはビルドするタイミングなのでnotifyLisnerは不要とのこと
+    id = model.id;
+    trashType = model.trashType;
+    daysOfTheWeek = model.daysOfTheWeek;
+    ordinalNumbers = model.ordinalNumbers;
   }
+  // こちらはビルドするタイミングなのでnotifyLisnerは不要とのこと
 
   void updateTrashType(String text) {
     trashType = text;

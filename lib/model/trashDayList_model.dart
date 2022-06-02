@@ -19,6 +19,14 @@ class TrashDayListModel extends ChangeNotifier {
     trashDayListRepository.addTrashDayListRepository(trashDayRead);
   }
 
+  TrashDay? loadTrashDay(
+    dynamic hiveKey,
+  ) {
+    final loadedData = trashDayListRepository.loadTrashDayListRepository(hiveKey);
+    print('loaded');
+    return loadedData;
+  }
+
   void updateTrashDay(
     int index,
     TrashDayModel trashDayRead,
@@ -35,9 +43,9 @@ class TrashDayListModel extends ChangeNotifier {
 }
 
 class TrashDayListRepository {
-  Future addTrashDayListRepository(
+  void addTrashDayListRepository(
     TrashDayModel trashDayRead,
-  ) async {
+  ) {
     final trashDay = TrashDay(
       id: trashDayRead.id,
       trashType: trashDayRead.trashType,
@@ -48,10 +56,18 @@ class TrashDayListRepository {
     box.add(trashDay).then((value) => print('added'));
   }
 
-  Future updateTrashDayListRepository(
+  TrashDay? loadTrashDayListRepository(
+    dynamic hiveKey,
+  ) {
+    final box = Boxes.getTrashDays();
+    final TrashDay? loadedTrashDay = box.get(hiveKey);
+    return loadedTrashDay;
+  }
+
+  void updateTrashDayListRepository(
     int index,
     TrashDayModel trashDayRead,
-  ) async {
+  ) {
     final trashDay = TrashDay(
       id: trashDayRead.id,
       trashType: trashDayRead.trashType,
@@ -65,7 +81,7 @@ class TrashDayListRepository {
   void deleteTrashDayListRepository(
     List trashDays,
     int index,
-  ) async {
+  ) {
     final box = Boxes.getTrashDays();
     box.deleteAt(index).then((value) => print('deleted'));
   }
