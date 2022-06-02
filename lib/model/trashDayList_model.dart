@@ -13,24 +13,17 @@ final trashDayListModelProvider = ChangeNotifierProvider<TrashDayListModel>((ref
 class TrashDayListModel extends ChangeNotifier {
   TrashDayListRepository trashDayListRepository = TrashDayListRepository();
 
-  void addTrashDay(
-    TrashDayModel trashDayRead,
-  ) {
+  void addTrashDay(TrashDayModel trashDayRead) {
     trashDayListRepository.addTrashDayListRepository(trashDayRead);
   }
 
-  TrashDay? loadTrashDay(
-    dynamic hiveKey,
-  ) {
+  TrashDay? loadTrashDay(dynamic hiveKey) {
     final loadedData = trashDayListRepository.loadTrashDayListRepository(hiveKey);
     print('loaded from hive');
     return loadedData;
   }
 
-  void updateTrashDay(
-    dynamic hiveKey,
-    TrashDayModel trashDayRead,
-  ) {
+  void updateTrashDay(dynamic hiveKey, TrashDayModel trashDayRead) {
     trashDayListRepository.updateTrashDayListRepository(hiveKey, trashDayRead);
   }
 
@@ -44,9 +37,7 @@ class TrashDayListModel extends ChangeNotifier {
 class TrashDayListRepository {
   final box = Boxes.getTrashDays();
 
-  void addTrashDayListRepository(
-    TrashDayModel trashDayRead,
-  ) {
+  void addTrashDayListRepository(TrashDayModel trashDayRead) {
     final trashDay = TrashDay(
       id: trashDayRead.id,
       trashType: trashDayRead.trashType,
@@ -56,17 +47,12 @@ class TrashDayListRepository {
     box.add(trashDay).then((value) => print('added'));
   }
 
-  TrashDay? loadTrashDayListRepository(
-    dynamic hiveKey,
-  ) {
+  TrashDay? loadTrashDayListRepository(dynamic hiveKey) {
     final TrashDay? loadedTrashDay = box.get(hiveKey);
     return loadedTrashDay;
   }
 
-  void updateTrashDayListRepository(
-    int hiveKey,
-    TrashDayModel trashDayRead,
-  ) {
+  void updateTrashDayListRepository(int hiveKey, TrashDayModel trashDayRead) {
     final trashDay = TrashDay(
       id: trashDayRead.id,
       trashType: trashDayRead.trashType,
@@ -76,9 +62,7 @@ class TrashDayListRepository {
     box.put(hiveKey, trashDay).then((value) => print('updated'));
   }
 
-  void deleteTrashDayListRepository(
-    dynamic hiveKey,
-  ) {
+  void deleteTrashDayListRepository(dynamic hiveKey) {
     box.delete(hiveKey).then((value) => print('deleted'));
   }
 }
