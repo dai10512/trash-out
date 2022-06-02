@@ -59,7 +59,7 @@ class TrashDetailView extends ConsumerWidget {
                     ),
                   ),
                   Text(trashDayWatch.daysOfTheWeek.toString()),
-                  // _finishButton(context, index, trashDayRead),
+                  _finishButton(context, hiveKey, trashDayRead),
                 ],
               ),
             ),
@@ -190,32 +190,33 @@ Widget _dayOfTheWeekCheck() {
 
 Widget _finishButton(
   BuildContext context,
-  int? index,
+  dynamic hiveKey,
   TrashDayModel trashDayRead,
 ) {
-  return Consumer(builder: (context, ref, child) {
-    final trashDayListModel = ref.read(trashDayListModelProvider);
-
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          primary: Colors.orange,
-          onPrimary: Colors.white,
+  return Consumer(
+    builder: (context, ref, child) {
+      final trashDayListModel = ref.read(trashDayListModelProvider);
+      return SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.orange,
+            onPrimary: Colors.white,
+          ),
+          onPressed: () async {
+            if (hiveKey == null) {
+              trashDayListModel.addTrashDay(trashDayRead);
+              Navigator.pop(context);
+            } else {
+              trashDayListModel.updateTrashDay(hiveKey, trashDayRead);
+              Navigator.pop(context);
+            }
+          },
+          child: const Text('保存する'),
         ),
-        onPressed: () async {
-          if (index == null) {
-            trashDayListModel.addTrashDay(trashDayRead);
-            Navigator.pop(context);
-          } else {
-            trashDayListModel.updateTrashDay(index, trashDayRead);
-            Navigator.pop(context);
-          }
-        },
-        child: const Text('保存する'),
-      ),
-    );
-  });
+      );
+    },
+  );
 }
 
 final dayOfTheWeekLabelMap = {

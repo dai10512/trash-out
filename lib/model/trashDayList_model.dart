@@ -28,17 +28,16 @@ class TrashDayListModel extends ChangeNotifier {
   }
 
   void updateTrashDay(
-    int index,
+    dynamic hiveKey,
     TrashDayModel trashDayRead,
   ) {
-    trashDayListRepository.updateTrashDayListRepository(index, trashDayRead);
+    trashDayListRepository.updateTrashDayListRepository(hiveKey, trashDayRead);
   }
 
   void deleteTrashDay(
-    List trashDays,
-    int index,
+    int hiveKey,
   ) {
-    trashDayListRepository.deleteTrashDayListRepository(trashDays, index);
+    trashDayListRepository.deleteTrashDayListRepository(hiveKey);
   }
 }
 
@@ -65,7 +64,7 @@ class TrashDayListRepository {
   }
 
   void updateTrashDayListRepository(
-    int index,
+    int hiveKey,
     TrashDayModel trashDayRead,
   ) {
     final trashDay = TrashDay(
@@ -75,14 +74,13 @@ class TrashDayListRepository {
       ordinalNumbers: trashDayRead.ordinalNumbers,
     );
     final box = Boxes.getTrashDays();
-    box.putAt(index, trashDay).then((value) => print('updated'));
+    box.put(hiveKey, trashDay).then((value) => print('updated'));
   }
 
   void deleteTrashDayListRepository(
-    List trashDays,
-    int index,
+    dynamic hiveKey,
   ) {
     final box = Boxes.getTrashDays();
-    box.deleteAt(index).then((value) => print('deleted'));
+    box.delete(hiveKey).then((value) => print('deleted'));
   }
 }

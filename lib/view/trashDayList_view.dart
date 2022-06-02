@@ -91,13 +91,13 @@ class TrashDayListView extends ConsumerWidget {
         motion: const ScrollMotion(),
         dismissible: DismissiblePane(
           onDismissed: () {
-            trashDayListModel.deleteTrashDay(trashDays, index);
+            trashDayListModel.deleteTrashDay(hiveKey);
           },
         ),
         children: [
           SlidableAction(
             onPressed: (context) {
-              trashDayListModel.deleteTrashDay(trashDays, index);
+              trashDayListModel.deleteTrashDay(hiveKey);
             },
             backgroundColor: const Color(0xFFFE4A49),
             foregroundColor: Colors.white,
