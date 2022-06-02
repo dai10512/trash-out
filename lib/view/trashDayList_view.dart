@@ -6,7 +6,6 @@ import 'package:trash_out/typeAdapter/trashDay.dart';
 import 'package:trash_out/model/trashDayList_model.dart';
 import 'package:trash_out/view/trashDayDetail_view.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:uuid/uuid.dart';
 
 class TrashDayListView extends ConsumerWidget {
   const TrashDayListView({Key? key}) : super(key: key);
@@ -34,7 +33,7 @@ class TrashDayListView extends ConsumerWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TrashDetailView(null, newTrashDay),
+                    builder: (context) => TrashDetailView(null),
                   ),
                 );
               },
@@ -43,6 +42,7 @@ class TrashDayListView extends ConsumerWidget {
               valueListenable: Boxes.getTrashDays().listenable(),
               builder: (context, box, _) {
                 List<TrashDay> trashDays = box.values.toList().cast<TrashDay>();
+
                 return buildContent(trashDays, trashDayListModel);
               },
             ),
@@ -83,6 +83,8 @@ class TrashDayListView extends ConsumerWidget {
     TrashDayListModel trashDayListModel,
     int index,
   ) {
+    final box = Boxes.getTrashDays();
+    final hiveKey = box.keyAt(index);
     return Slidable(
       key: UniqueKey(),
       endActionPane: ActionPane(
@@ -105,14 +107,14 @@ class TrashDayListView extends ConsumerWidget {
         ],
       ),
       child: ListTile(
-        title: Text(trashDay.trashType),
+        title: Text(hiveKey.toString() + trashDay.trashType),
         subtitle: Text('${formatOrdinalNumber(trashDay.ordinalNumbers)}  ${formatDayOfTheWeek(trashDay.daysOfTheWeek)}'),
         trailing: const Icon(Icons.arrow_forward_ios),
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => TrashDetailView(index, trashDay),
+              builder: (context) => TrashDetailView(hiveKey),
             ),
           );
         },

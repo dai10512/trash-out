@@ -19,6 +19,12 @@ class TrashDayListModel extends ChangeNotifier {
     trashDayListRepository.addTrashDayListRepository(trashDayRead);
   }
 
+  void loadTrashDay(
+    dynamic hiveKey,
+  ) {
+    trashDayListRepository.loadTrashDayListRepository(hiveKey);
+  }
+
   void updateTrashDay(
     int index,
     TrashDayModel trashDayRead,
@@ -46,6 +52,14 @@ class TrashDayListRepository {
     );
     final box = Boxes.getTrashDays();
     box.add(trashDay).then((value) => print('added'));
+  }
+
+  Future loadTrashDayListRepository(
+    dynamic hiveKey,
+  ) async {
+    final box = Boxes.getTrashDays();
+    final loadedTrashDay = box.get(hiveKey);
+    return loadedTrashDay;
   }
 
   Future updateTrashDayListRepository(

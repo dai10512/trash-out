@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trash_out/model/trashDayList_model.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
 import 'package:trash_out/view/trashDayDetail_view.dart';
 import 'package:trash_out/view/trashDayList_view.dart';
@@ -17,12 +18,24 @@ class TrashDayModel extends ChangeNotifier {
   Map<int, bool> daysOfTheWeek = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false};
   Map<int, bool> ordinalNumbers = {1: false, 2: false, 3: false, 4: false, 5: false};
 
-  void loadData(TrashDay? trashDay) {
-    if (trashDay != null) {
-      id = trashDay.id;
-      trashType = trashDay.trashType;
-      daysOfTheWeek = trashDay.daysOfTheWeek;
-      ordinalNumbers = trashDay.ordinalNumbers;
+  // void loadData(TrashDay? trashDay) {
+  //   if (trashDay != null) {
+  //     id = trashDay.id;
+  //     trashType = trashDay.trashType;
+  //     daysOfTheWeek = trashDay.daysOfTheWeek;
+  //     ordinalNumbers = trashDay.ordinalNumbers;
+  //   }
+  //   // こちらはビルドするタイミングなのでnotifyLisnerは不要とのこと
+  // }
+
+  void loadData(dynamic hiveKey) {
+    if (hiveKey != null) {
+      final box = Boxes.getTrashDays();
+      box.watch();
+      // id = trashDay.id;
+      // trashType = trashDay.trashType;
+      // daysOfTheWeek = trashDay.daysOfTheWeek;
+      // ordinalNumbers = trashDay.ordinalNumbers;
     }
     // こちらはビルドするタイミングなのでnotifyLisnerは不要とのこと
   }
