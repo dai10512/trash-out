@@ -5,73 +5,64 @@ import 'package:trash_out/model/trashDay_model.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
 
 class Boxes {
-  static Box<TrashDay> getTrashDays() => Hive.box<TrashDay>('TrashDays');
+  static Box<TrashDay> getTrashDays() {
+    return Hive.box<TrashDay>('TrashDays');
+  }
 }
 
-final trashDayListModelProvider = ChangeNotifierProvider<TrashDayListModel>(
-  (ref) => TrashDayListModel(),
-);
+final trashDayListModelProvider = ChangeNotifierProvider<TrashDayListModel>((ref) => TrashDayListModel());
 
 class TrashDayListModel extends ChangeNotifier {
   TrashDayListRepository trashDayListRepository = TrashDayListRepository();
 
-  void addTrashDay(
-    TrashDayModel trashDayRead,
-  ) {
+  TrashDay? loadTrashDay(dynamic hiveKey) {
+    final loadedData = trashDayListRepository.loadTrashDayListRepository(hiveKey);
+    return loadedData;
+  }
+
+  void addTrashDay(TrashDayModel trashDayRead) {
     trashDayListRepository.addTrashDayListRepository(trashDayRead);
   }
 
-  void updateTrashDay(
-    int index,
-    TrashDayModel trashDayRead,
-  ) {
-    trashDayListRepository.updateTrashDayListRepository(
-      index,
-      trashDayRead,
-    );
+  void updateTrashDay(dynamic hiveKey, TrashDayModel trashDayRead) {
+    trashDayListRepository.updateTrashDayListRepository(hiveKey, trashDayRead);
   }
 
-  void deleteTrashDay(
-    List trashDays,
-    int index,
-  ) {
-    trashDayListRepository.deleteTrashDayListRepository(trashDays, index);
+  void deleteTrashDay(dynamic hiveKey) {
+    trashDayListRepository.deleteTrashDayListRepository(hiveKey);
   }
 }
 
 class TrashDayListRepository {
-  Future addTrashDayListRepository(
-    TrashDayModel trashDayRead,
-  ) async {
+  final box = Boxes.getTrashDays();
+
+  TrashDay? loadTrashDayListRepository(dynamic hiveKey) {
+    final TrashDay? loadedTrashDay = box.get(hiveKey);
+    return loadedTrashDay;
+  }
+
+
+  void addTrashDayListRepository(TrashDayModel trashDayRead) {
     final trashDay = TrashDay(
       id: trashDayRead.id,
       trashType: trashDayRead.trashType,
       daysOfTheWeek: trashDayRead.daysOfTheWeek,
       ordinalNumbers: trashDayRead.ordinalNumbers,
     );
-    final box = Boxes.getTrashDays();
     box.add(trashDay).then((value) => print('added'));
   }
 
-  Future updateTrashDayListRepository(
-    int index,
-    TrashDayModel trashDayRead,
-  ) async {
+  void updateTrashDayListRepository(dynamic hiveKey, TrashDayModel trashDayRead) {
     final trashDay = TrashDay(
       id: trashDayRead.id,
       trashType: trashDayRead.trashType,
       daysOfTheWeek: trashDayRead.daysOfTheWeek,
       ordinalNumbers: trashDayRead.ordinalNumbers,
     );
-    final box = Boxes.getTrashDays();
-    box.putAt(index, trashDay).then((value) => print('updated'));
+    box.put(hiveKey, trashDay).then((value) => print('updated'));
   }
 
-  void deleteTrashDayListRepository(
-    List trashDays,
-    int index,
-  ) async {
-    final box = Boxes.getTrashDays();
-    box.deleteAt(index).then((value) => print('deleted'));
+  void deleteTrashDayListRepository(dynamic hiveKey) {
+    box.delete(hiveKey).then((value) => print('deleted'));
   }
 }

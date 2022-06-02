@@ -43,7 +43,7 @@ Future<void> _initializeNotification() async {
 Future<void> _initializeDB() async {
   await Hive.initFlutter();
   Hive.registerAdapter(TrashDayAdapter());
-  box = await Hive.openBox<TrashDay>('trashDays');
+  await Hive.openBox<TrashDay>('trashDays');
 }
 
 Future<void> main() async {

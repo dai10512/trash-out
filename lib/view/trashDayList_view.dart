@@ -5,24 +5,13 @@ import 'package:trash_out/typeAdapter/trashDay.dart';
 import 'package:trash_out/model/trashDayList_model.dart';
 import 'package:trash_out/view/trashDayDetail_view.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:uuid/uuid.dart';
-
-final StateProvider<List> trashDaysProvider = StateProvider((ref) => []);
-// final StateProvider<String> trashDayIdProvider = StateProvider((ref) => '');
-// final StateProvider<String> trashTypeProvider = StateProvider((ref) => '');
-// final StateProvider<List<int>> daysOfWeekProvider = StateProvider((ref) => []);
-// final StateProvider<List<int>> ordinalNumbersProvider = StateProvider((ref) => []);
 
 class TrashDayListView extends ConsumerWidget {
-  TrashDayListView({Key? key}) : super(key: key);
-
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-  bool isNew = true;
+  const TrashDayListView({Key? key}) : super(key: key);
+  // final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context, ref) {
-    final TrashDayListModel trashDayListModel = ref.read(trashDayListModelProvider);
-
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Padding(
@@ -32,15 +21,10 @@ class TrashDayListView extends ConsumerWidget {
             IconButton(
               icon: const Icon(Icons.add),
               onPressed: () {
-                final newTrashDay = TrashDay(
-                    id: uuid.v4(),
-                    trashType: '',
-                    ordinalNumbers: {1: false, 2: false, 3: false, 4: false, 5: false},
-                    daysOfTheWeek: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false});
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TrashDetailView(null, newTrashDay),
+                    builder: (context) => const TrashDetailView(null),
                   ),
                 );
               },
@@ -49,8 +33,7 @@ class TrashDayListView extends ConsumerWidget {
               valueListenable: Boxes.getTrashDays().listenable(),
               builder: (context, box, _) {
                 List<TrashDay> trashDays = box.values.toList().cast<TrashDay>();
-
-                return buildContent(trashDays, trashDayListModel);
+                return buildContent(trashDays);
               },
             ),
           ],
@@ -59,13 +42,9 @@ class TrashDayListView extends ConsumerWidget {
     );
   }
 
-  Widget buildContent(List<TrashDay> trashDays, trashDayModel) {
+  Widget buildContent(List<TrashDay> trashDays) {
     if (trashDays.isEmpty) {
-      return const Center(
-        child: Text(
-          'データがありません',
-        ),
-      );
+      return const Center(child: Text('データがありません'));
     } else {
       return Expanded(
         child: SlidableAutoCloseBehavior(
@@ -73,10 +52,12 @@ class TrashDayListView extends ConsumerWidget {
             shrinkWrap: true,
             // physics: NeverScrollableScrollPhysics(),
             itemCount: trashDays.length,
-            itemBuilder: (BuildContext context, index) {
+            itemBuilder: (BuildContext context, int index) {
               final trashDay = trashDays[index];
+              final box = Boxes.getTrashDays();
+              final hiveKey = box.keyAt(index);
 
-              return buildSlidableListTile(context, trashDays, trashDay, trashDayModel, index);
+              return buildSlidableListTile(trashDay, hiveKey);
             },
           ),
         ),
@@ -84,53 +65,53 @@ class TrashDayListView extends ConsumerWidget {
     }
   }
 
-  Widget buildSlidableListTile(
-    context,
-    List trashDays,
-    TrashDay trashDay,
-    TrashDayListModel trashDayListModel,
-    int index,
-  ) {
-    return Slidable(
-      key: UniqueKey(),
-      endActionPane: ActionPane(
-        motion: const ScrollMotion(),
-        dismissible: DismissiblePane(
-          onDismissed: () {
-            trashDayListModel.deleteTrashDay(trashDays, index);
-          },
-        ),
-        children: [
-          SlidableAction(
-            onPressed: (context) {
-              trashDayListModel.deleteTrashDay(trashDays, index);
-            },
-            backgroundColor: const Color(0xFFFE4A49),
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
-            label: 'Delete',
-          ),
-        ],
-      ),
-      child: ListTile(
-        title: Text(trashDay.trashType),
-        subtitle: Text('${formatOrdinalNumber(trashDay.ordinalNumbers)}  ${formatDayOfTheWeek(trashDay.daysOfTheWeek)}'),
-        trailing: const Icon(Icons.arrow_forward_ios),
-        onTap: () {
-          print("taped");
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TrashDetailView(index, trashDay),
+  Widget buildSlidableListTile(TrashDay trashDay, dynamic hiveKey) {
+    return Consumer(
+      builder: (context, ref, child) {
+        final TrashDayListModel trashDayListModel = ref.watch(trashDayListModelProvider);
+        return Slidable(
+          key: UniqueKey(),
+          endActionPane: ActionPane(
+            motion: const ScrollMotion(),
+            dismissible: DismissiblePane(
+              onDismissed: () {
+                trashDayListModel.deleteTrashDay(hiveKey);
+              },
             ),
-          );
-        },
-      ),
+            children: [
+              SlidableAction(
+                onPressed: (context) {
+                  trashDayListModel.deleteTrashDay(hiveKey);
+                },
+                backgroundColor: const Color(0xFFFE4A49),
+                foregroundColor: Colors.white,
+                icon: Icons.delete,
+                label: 'Delete',
+              ),
+            ],
+          ),
+          child: ListTile(
+            title: Text(hiveKey.toString() + trashDay.trashType),
+            subtitle: Text('${formatOrdinalNumber(trashDay.ordinalNumbers)}  ${formatDayOfTheWeek(trashDay.daysOfTheWeek)}'),
+            trailing: const Icon(Icons.arrow_forward_ios),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TrashDetailView(hiveKey),
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }
 
-String formatOrdinalNumber(Map<int, bool> ordinalNumbers) {
+String formatOrdinalNumber(
+  Map<int, bool> ordinalNumbers,
+) {
   String word = '';
   int count = 0;
   for (var i = 1; i <= ordinalNumbers.length; i++) {
@@ -149,7 +130,9 @@ String formatOrdinalNumber(Map<int, bool> ordinalNumbers) {
   return word;
 }
 
-String formatDayOfTheWeek(Map<int, bool> daysOfTheWeek) {
+String formatDayOfTheWeek(
+  Map<int, bool> daysOfTheWeek,
+) {
   String word = '';
   int count = 0;
   for (var i = 1; i <= daysOfTheWeek.length; i++) {

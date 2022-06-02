@@ -1,33 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:trash_out/typeAdapter/trashDay.dart';
 import 'package:trash_out/model/trashDayList_model.dart';
 import 'package:trash_out/model/trashDay_model.dart';
-import 'package:uuid/uuid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-const Uuid uuid = Uuid();
-
 class TrashDetailView extends ConsumerWidget {
-  const TrashDetailView(this.index, this.trashDay, {Key? key}) : super(key: key);
-  final int? index;
-  final TrashDay trashDay;
+  const TrashDetailView(this.hiveKey, {Key? key}) : super(key: key);
+  final dynamic hiveKey;
 
   @override
   Widget build(context, ref) {
     // final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
+    final TrashDayListModel trashDayListRead = ref.read(trashDayListModelProvider);
     final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
-    trashDayRead.loadData(trashDay);
+    final dynamic loadedTrashDay = trashDayListRead.loadTrashDay(hiveKey);
+
+    trashDayRead.loadData(loadedTrashDay);
 
     return Scaffold(
       // key: scaffoldKey,
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        title: const Text(
-          'Page Title',
-        ),
+        title: const Text('Page Title'),
         centerTitle: true,
-        // elevation: 2,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -40,22 +35,22 @@ class TrashDetailView extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _trashTypeForm(),
-                  Card(
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    color: const Color(0xFFF5F5F5),
-                    child: Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _ordinalNumberCheck(),
-                          const SizedBox(width: 20),
-                          _dayOfTheWeekCheck(),
-                        ],
-                      ),
-                    ),
+                  _notificationDateForm(),
+                  _finishButton(hiveKey, trashDayRead),
+                  Text('ordinalNumbers'),
+                  Text(ref.watch(trashDayModelProvider).ordinalNumbers.toString()),
+                  TextButton(
+                    onPressed: () {
+                      trashDayRead.initializeDefaultTrashDay();
+                    },
+                    child: Text('reset DefaultTrashday'),
                   ),
-                  _finishButton(context, index, trashDayRead),
+                  TextButton(
+                    onPressed: () {
+                      // trashDayRead.initializeLoadedTrashDay();
+                    },
+                    child: Text('reset loadedTrashday'),
+                  ),
                 ],
               ),
             ),
@@ -64,50 +59,69 @@ class TrashDetailView extends ConsumerWidget {
       ),
     );
   }
-}
 
-Widget _trashTypeForm() {
-  return Consumer(
-    builder: (context, ref, _) {
-      final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
-      final controller = TextEditingController(text: trashDayRead.trashType);
+  Widget _trashTypeForm() {
+    return Consumer(
+      builder: (context, ref, _) {
+        final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
+        final controller = TextEditingController(text: trashDayRead.trashType);
 
-      return Column(
-        children: [
-          Card(
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            color: const Color(0xFFF5F5F5),
-            child: Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('ゴミの種類'),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: controller,
-                    autofocus: true,
-                    obscureText: false,
-                    decoration: const InputDecoration(hintText: '[例：燃えるゴミ]', filled: true),
-                    onChanged: (text) {
-                      trashDayRead.updateTrashType(text);
-                    },
-                  ),
-                ],
+        return Column(
+          children: [
+            Card(
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              color: const Color(0xFFF5F5F5),
+              child: Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('ゴミの種類'),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: controller,
+                      autofocus: true,
+                      obscureText: false,
+                      decoration: const InputDecoration(hintText: '[例：燃えるゴミ]', filled: true),
+                      onChanged: (text) {
+                        print(text);
+                        trashDayRead.updateTrashType(text);
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
-      );
-    },
-  );
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _notificationDateForm() {
+    return Card(
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      color: const Color(0xFFF5F5F5),
+      child: Padding(
+        padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _ordinalNumberCheck(),
+            const SizedBox(width: 20),
+            _dayOfTheWeekCheck(),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 Widget _ordinalNumberCheck() {
   return Consumer(
     builder: (context, ref, _) {
       final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
-      final TrashDayModel trashDayWatch = ref.read(trashDayModelProvider);
+      final TrashDayModel trashDayWatch = ref.watch(trashDayModelProvider);
 
       return Expanded(
         flex: 2,
@@ -122,7 +136,7 @@ Widget _ordinalNumberCheck() {
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: trashDayRead.ordinalNumbers.length,
+              itemCount: trashDayWatch.ordinalNumbers.length,
               itemBuilder: (BuildContext context, int index) {
                 return ElevatedButton(
                   style: ButtonStyle(
@@ -148,7 +162,7 @@ Widget _dayOfTheWeekCheck() {
   return Consumer(
     builder: (context, ref, _) {
       final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
-      final TrashDayModel trashDayWatch = ref.read(trashDayModelProvider);
+      final TrashDayModel trashDayWatch = ref.watch(trashDayModelProvider);
       return Expanded(
         flex: 3,
         child: Column(
@@ -184,34 +198,31 @@ Widget _dayOfTheWeekCheck() {
   );
 }
 
-Widget _finishButton(
-  BuildContext context,
-  int? index,
-  TrashDayModel trashDayRead,
-) {
-  return Consumer(builder: (context, ref, child) {
-    final trashDayListModel = ref.read(trashDayListModelProvider);
-
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          primary: Colors.orange,
-          onPrimary: Colors.white,
+Widget _finishButton(dynamic hiveKey, TrashDayModel trashDayRead) {
+  return Consumer(
+    builder: (context, ref, child) {
+      final trashDayListModel = ref.read(trashDayListModelProvider);
+      return SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.orange,
+            onPrimary: Colors.white,
+          ),
+          onPressed: () async {
+            if (hiveKey == null) {
+              trashDayListModel.addTrashDay(trashDayRead);
+              Navigator.pop(context);
+            } else {
+              trashDayListModel.updateTrashDay(hiveKey, trashDayRead);
+              Navigator.pop(context);
+            }
+          },
+          child: const Text('保存する'),
         ),
-        onPressed: () async {
-          if (index == null) {
-            trashDayListModel.addTrashDay(trashDayRead);
-            Navigator.pop(context);
-          } else {
-            trashDayListModel.updateTrashDay(index, trashDayRead);
-            Navigator.pop(context);
-          }
-        },
-        child: const Text('保存する'),
-      ),
-    );
-  });
+      );
+    },
+  );
 }
 
 final dayOfTheWeekLabelMap = {
