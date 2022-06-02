@@ -18,7 +18,7 @@ class TrashDayModel extends ChangeNotifier {
   Map<int, bool> daysOfTheWeek = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false};
   Map<int, bool> ordinalNumbers = {1: false, 2: false, 3: false, 4: false, 5: false};
 
-  void loadData(dynamic loadedTrashDay) {
+  void loadData(TrashDay? loadedTrashDay) {
     if (loadedTrashDay != null) {
       id = loadedTrashDay.id;
       trashType = loadedTrashDay.trashType;
