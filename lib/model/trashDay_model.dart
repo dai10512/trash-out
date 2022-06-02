@@ -29,7 +29,7 @@ class TrashDayModel extends ChangeNotifier {
 
   void updateTrashType(String text) {
     trashType = text;
-    notifyListeners();
+    // controllerで反映されるからnotifyLisnerは不要と思われる
   }
 
   void updateDaysOfTheWeek(int index) {

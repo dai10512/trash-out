@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:trash_out/model/trashDay_model.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
 import 'package:trash_out/model/trashDayList_model.dart';
 import 'package:trash_out/view/trashDayDetail_view.dart';
@@ -32,10 +33,16 @@ class TrashDayListView extends ConsumerWidget {
             IconButton(
               icon: const Icon(Icons.add),
               onPressed: () {
+                final initTrashDay = TrashDay(
+                  id: uuid.v4(),
+                  trashType: '',
+                  daysOfTheWeek: {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false},
+                  ordinalNumbers: {1: false, 2: false, 3: false, 4: false, 5: false},
+                );
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => TrashDetailView(null, null),
+                    builder: (context) => TrashDetailView(null, initTrashDay),
                   ),
                 );
               },
@@ -112,7 +119,13 @@ class TrashDayListView extends ConsumerWidget {
         subtitle: Text('${formatOrdinalNumber(trashDay.ordinalNumbers)}  ${formatDayOfTheWeek(trashDay.daysOfTheWeek)}'),
         trailing: const Icon(Icons.arrow_forward_ios),
         onTap: () {
-          print("taped");
+          // print("taped");
+          // print("temp");
+          // var tempTrashDay = trashDay;
+          // print(tempTrashDay.ordinalNumbers);
+          // print("originalTrashDay");
+          // print(trashDay.ordinalNumbers);
+
           Navigator.push(
             context,
             MaterialPageRoute(
