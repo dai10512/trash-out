@@ -13,29 +13,32 @@ final trashDayListModelProvider = ChangeNotifierProvider<TrashDayListModel>((ref
 class TrashDayListModel extends ChangeNotifier {
   TrashDayListRepository trashDayListRepository = TrashDayListRepository();
 
-  void addTrashDay(TrashDayModel trashDayRead) {
-    trashDayListRepository.addTrashDayListRepository(trashDayRead);
-  }
-
   TrashDay? loadTrashDay(dynamic hiveKey) {
     final loadedData = trashDayListRepository.loadTrashDayListRepository(hiveKey);
     print('loaded from hive');
     return loadedData;
   }
 
+  void addTrashDay(TrashDayModel trashDayRead) {
+    trashDayListRepository.addTrashDayListRepository(trashDayRead);
+  }
+
   void updateTrashDay(dynamic hiveKey, TrashDayModel trashDayRead) {
     trashDayListRepository.updateTrashDayListRepository(hiveKey, trashDayRead);
   }
 
-  void deleteTrashDay(
-    dynamic hiveKey,
-  ) {
+  void deleteTrashDay(dynamic hiveKey) {
     trashDayListRepository.deleteTrashDayListRepository(hiveKey);
   }
 }
 
 class TrashDayListRepository {
   final box = Boxes.getTrashDays();
+
+  TrashDay? loadTrashDayListRepository(dynamic hiveKey) {
+    final TrashDay? loadedTrashDay = box.get(hiveKey);
+    return loadedTrashDay;
+  }
 
   void addTrashDayListRepository(TrashDayModel trashDayRead) {
     final trashDay = TrashDay(
@@ -45,11 +48,6 @@ class TrashDayListRepository {
       ordinalNumbers: trashDayRead.ordinalNumbers,
     );
     box.add(trashDay).then((value) => print('added'));
-  }
-
-  TrashDay? loadTrashDayListRepository(dynamic hiveKey) {
-    final TrashDay? loadedTrashDay = box.get(hiveKey);
-    return loadedTrashDay;
   }
 
   void updateTrashDayListRepository(dynamic hiveKey, TrashDayModel trashDayRead) {
