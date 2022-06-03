@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:trash_out/newModel/trashDayList_model2.dart';
+import 'package:trash_out/repository/boxRepository.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
-import 'package:trash_out/model/trashDayList_model.dart';
 import 'package:trash_out/view/trashDayDetail_view.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -29,8 +30,8 @@ class TrashDayListView extends ConsumerWidget {
                 );
               },
             ),
-            ValueListenableBuilder<Box<TrashDay>>(
-              valueListenable: Boxes.getTrashDays().listenable(),
+            ValueListenableBuilder<Box<dynamic>>(
+              valueListenable: boxRepository.box.listenable(),
               builder: (context, box, _) {
                 List<TrashDay> trashDays = box.values.toList().cast<TrashDay>();
                 return buildContent(trashDays);
@@ -54,8 +55,7 @@ class TrashDayListView extends ConsumerWidget {
             itemCount: trashDays.length,
             itemBuilder: (BuildContext context, int index) {
               final trashDay = trashDays[index];
-              final box = Boxes.getTrashDays();
-              final hiveKey = box.keyAt(index);
+              final hiveKey = boxRepository.box.keyAt(index);
 
               return buildSlidableListTile(trashDay, hiveKey);
             },
@@ -91,7 +91,7 @@ class TrashDayListView extends ConsumerWidget {
             ],
           ),
           child: ListTile(
-            title: Text(hiveKey.toString() + trashDay.trashType),
+            title: Text(trashDay.trashType),
             subtitle: Text('${formatOrdinalNumber(trashDay.ordinalNumbers)}  ${formatDayOfTheWeek(trashDay.daysOfTheWeek)}'),
             trailing: const Icon(Icons.arrow_forward_ios),
             onTap: () {
@@ -109,9 +109,7 @@ class TrashDayListView extends ConsumerWidget {
   }
 }
 
-String formatOrdinalNumber(
-  Map<int, bool> ordinalNumbers,
-) {
+String formatOrdinalNumber(Map<int, bool> ordinalNumbers) {
   String word = '';
   int count = 0;
   for (var i = 1; i <= ordinalNumbers.length; i++) {
@@ -130,9 +128,7 @@ String formatOrdinalNumber(
   return word;
 }
 
-String formatDayOfTheWeek(
-  Map<int, bool> daysOfTheWeek,
-) {
+String formatDayOfTheWeek(Map<int, bool> daysOfTheWeek) {
   String word = '';
   int count = 0;
   for (var i = 1; i <= daysOfTheWeek.length; i++) {

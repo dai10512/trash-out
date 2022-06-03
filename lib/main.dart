@@ -11,7 +11,6 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:hive_flutter/hive_flutter.dart';
 
 final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-var box;
 
 Future<void> _init() async {
   await _configureLocalTimeZone();

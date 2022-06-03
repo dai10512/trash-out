@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:trash_out/model/trashDayList_model.dart';
-import 'package:trash_out/model/trashDay_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trash_out/newModel/trashDayEditModel.dart';
+import 'package:trash_out/newModel/trashDayList_model2.dart';
 
 class TrashDetailView extends ConsumerWidget {
   const TrashDetailView(this.hiveKey, {Key? key}) : super(key: key);
@@ -11,11 +11,11 @@ class TrashDetailView extends ConsumerWidget {
   Widget build(context, ref) {
     // final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-    final TrashDayListModel trashDayListRead = ref.read(trashDayListModelProvider);
-    final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
-    final dynamic loadedTrashDay = trashDayListRead.loadTrashDay(hiveKey);
+    // final TrashDayListModel trashDayListRead = ref.read(trashDayListModelProvider);
+    // final List<TrashDay> trashDays = trashDayListRead.getTrashDays();
 
-    trashDayRead.loadData(loadedTrashDay);
+    final TrashDayModel trashDayRead = ref.read(trashDayModelProvider(hiveKey));
+    // trashDayRead.loadData(hiveKey);
 
     return Scaffold(
       // key: scaffoldKey,
@@ -36,21 +36,7 @@ class TrashDetailView extends ConsumerWidget {
                 children: [
                   _trashTypeForm(),
                   _notificationDateForm(),
-                  _finishButton(hiveKey, trashDayRead),
-                  Text('ordinalNumbers'),
-                  Text(ref.watch(trashDayModelProvider).ordinalNumbers.toString()),
-                  TextButton(
-                    onPressed: () {
-                      trashDayRead.initializeDefaultTrashDay();
-                    },
-                    child: Text('reset DefaultTrashday'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      // trashDayRead.initializeLoadedTrashDay();
-                    },
-                    child: Text('reset loadedTrashday'),
-                  ),
+                  _savehButton(hiveKey, trashDayRead),
                 ],
               ),
             ),
@@ -63,7 +49,7 @@ class TrashDetailView extends ConsumerWidget {
   Widget _trashTypeForm() {
     return Consumer(
       builder: (context, ref, _) {
-        final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
+        final TrashDayModel trashDayRead = ref.read(trashDayModelProvider(hiveKey));
         final controller = TextEditingController(text: trashDayRead.trashType);
 
         return Column(
@@ -85,7 +71,7 @@ class TrashDetailView extends ConsumerWidget {
                       decoration: const InputDecoration(hintText: '[例：燃えるゴミ]', filled: true),
                       onChanged: (text) {
                         print(text);
-                        trashDayRead.updateTrashType(text);
+                        trashDayRead.writeTrashType(text);
                       },
                     ),
                   ],
@@ -107,9 +93,9 @@ class TrashDetailView extends ConsumerWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _ordinalNumberCheck(),
+            _ordinalNumberCheck(hiveKey),
             const SizedBox(width: 20),
-            _dayOfTheWeekCheck(),
+            _dayOfTheWeekCheck(hiveKey),
           ],
         ),
       ),
@@ -117,11 +103,11 @@ class TrashDetailView extends ConsumerWidget {
   }
 }
 
-Widget _ordinalNumberCheck() {
+Widget _ordinalNumberCheck(dynamic hiveKey) {
   return Consumer(
     builder: (context, ref, _) {
-      final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
-      final TrashDayModel trashDayWatch = ref.watch(trashDayModelProvider);
+      final TrashDayModel trashDayRead = ref.read(trashDayModelProvider(hiveKey));
+      final TrashDayModel trashDayWatch = ref.watch(trashDayModelProvider(hiveKey));
 
       return Expanded(
         flex: 2,
@@ -145,7 +131,7 @@ Widget _ordinalNumberCheck() {
                     ),
                   ),
                   onPressed: () {
-                    trashDayRead.updateOrdinalNumbers(index + 1);
+                    trashDayRead.writeOrdinalNumbers(index + 1);
                   },
                   child: Text('第${index + 1}'),
                 );
@@ -158,11 +144,11 @@ Widget _ordinalNumberCheck() {
   );
 }
 
-Widget _dayOfTheWeekCheck() {
+Widget _dayOfTheWeekCheck(dynamic hiveKey) {
   return Consumer(
     builder: (context, ref, _) {
-      final TrashDayModel trashDayRead = ref.read(trashDayModelProvider);
-      final TrashDayModel trashDayWatch = ref.watch(trashDayModelProvider);
+      final TrashDayModel trashDayRead = ref.read(trashDayModelProvider(hiveKey));
+      final TrashDayModel trashDayWatch = ref.watch(trashDayModelProvider(hiveKey));
       return Expanded(
         flex: 3,
         child: Column(
@@ -185,7 +171,7 @@ Widget _dayOfTheWeekCheck() {
                     ),
                   ),
                   onPressed: () {
-                    trashDayRead.updateDaysOfTheWeek(index + 1);
+                    trashDayRead.writeDaysOfTheWeek(index + 1);
                   },
                   child: Text(dayOfTheWeekLabelMap[index + 1].toString()),
                 );
@@ -198,7 +184,7 @@ Widget _dayOfTheWeekCheck() {
   );
 }
 
-Widget _finishButton(dynamic hiveKey, TrashDayModel trashDayRead) {
+Widget _savehButton(dynamic hiveKey, TrashDayModel trashDayRead) {
   return Consumer(
     builder: (context, ref, child) {
       final trashDayListModel = ref.read(trashDayListModelProvider);
@@ -210,13 +196,8 @@ Widget _finishButton(dynamic hiveKey, TrashDayModel trashDayRead) {
             onPrimary: Colors.white,
           ),
           onPressed: () async {
-            if (hiveKey == null) {
-              trashDayListModel.addTrashDay(trashDayRead);
-              Navigator.pop(context);
-            } else {
-              trashDayListModel.updateTrashDay(hiveKey, trashDayRead);
-              Navigator.pop(context);
-            }
+            trashDayRead.saveTrashDay(hiveKey, trashDayRead);
+            Navigator.pop(context);
           },
           child: const Text('保存する'),
         ),
