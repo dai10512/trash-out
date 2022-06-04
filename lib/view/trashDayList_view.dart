@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:trash_out/newModel/trashDayList_model2.dart';
+import 'package:trash_out/newModel/trashDayList_model.dart';
 import 'package:trash_out/repository/boxRepository.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
 import 'package:trash_out/view/trashDayDetail_view.dart';

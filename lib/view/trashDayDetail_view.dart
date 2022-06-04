@@ -1,7 +1,9 @@
+// import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trash_out/newModel/trashDayEditModel.dart';
-import 'package:trash_out/newModel/trashDayList_model2.dart';
+import 'package:trash_out/newModel/trashDay_Model.dart';
+import 'package:trash_out/newModel/trashDayList_model.dart';
 
 class TrashDetailView extends ConsumerWidget {
   const TrashDetailView(this.hiveKey, {Key? key}) : super(key: key);
@@ -133,7 +135,12 @@ Widget _ordinalNumberCheck(dynamic hiveKey) {
                   onPressed: () {
                     trashDayRead.writeOrdinalNumbers(index + 1);
                   },
-                  child: Text('第${index + 1}'),
+                  child: Text(
+                    '第${index + 1}',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                 );
               },
             ),
@@ -173,7 +180,12 @@ Widget _dayOfTheWeekCheck(dynamic hiveKey) {
                   onPressed: () {
                     trashDayRead.writeDaysOfTheWeek(index + 1);
                   },
-                  child: Text(dayOfTheWeekLabelMap[index + 1].toString()),
+                  child: Text(
+                    dayOfTheWeekLabelMap[index + 1].toString(),
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                 );
               },
             ),
