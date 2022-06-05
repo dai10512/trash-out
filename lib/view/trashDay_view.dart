@@ -1,9 +1,7 @@
-// import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trash_out/newModel/trashDay_Model.dart';
-import 'package:trash_out/newModel/trashDayList_model.dart';
+import 'package:trash_out/model/trashDay_model.dart';
+import 'package:trash_out/model/trashDays_model.dart';
 
 class TrashDetailView extends ConsumerWidget {
   const TrashDetailView(this.hiveKey, {Key? key}) : super(key: key);
@@ -11,37 +9,32 @@ class TrashDetailView extends ConsumerWidget {
 
   @override
   Widget build(context, ref) {
-    // final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
-    // final TrashDayListModel trashDayListRead = ref.read(trashDayListModelProvider);
-    // final List<TrashDay> trashDays = trashDayListRead.getTrashDays();
-
     final TrashDayModel trashDayRead = ref.read(trashDayModelProvider(hiveKey));
-    // trashDayRead.loadData(hiveKey);
 
     return Scaffold(
-      // key: scaffoldKey,
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        title: const Text('Page Title'),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: GestureDetector(
-            onTap: () => FocusScope.of(context).unfocus(),
-            child: Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 20, 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _trashTypeForm(),
-                  _notificationDateForm(),
-                  _savehButton(hiveKey, trashDayRead),
-                ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: SafeArea(
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              SingleChildScrollView(
+                child: GestureDetector(
+                  onTap: () => FocusScope.of(context).unfocus(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _trashTypeForm(),
+                      const SizedBox(height: 10),
+                      _notificationDateForm(),
+                      const SizedBox(height: 10),
+                      _savedButton(hiveKey, trashDayRead),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),
@@ -52,20 +45,17 @@ class TrashDetailView extends ConsumerWidget {
     return Consumer(
       builder: (context, ref, _) {
         final TrashDayModel trashDayRead = ref.read(trashDayModelProvider(hiveKey));
-        final controller = TextEditingController(text: trashDayRead.trashType);
-
+        final TextEditingController controller = TextEditingController(text: trashDayRead.trashType);
         return Column(
           children: [
             Card(
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              color: const Color(0xFFF5F5F5),
               child: Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text('ゴミの種類'),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 15),
                     TextFormField(
                       controller: controller,
                       autofocus: true,
@@ -88,8 +78,6 @@ class TrashDetailView extends ConsumerWidget {
 
   Widget _notificationDateForm() {
     return Card(
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      color: const Color(0xFFF5F5F5),
       child: Padding(
         padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
         child: Row(
@@ -117,29 +105,25 @@ Widget _ordinalNumberCheck(dynamic hiveKey) {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              '第◯番目',
-              textAlign: TextAlign.center,
-            ),
+            const Text('週', textAlign: TextAlign.center),
+            const SizedBox(height: 10),
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: trashDayWatch.ordinalNumbers.length,
+              itemCount: trashDayWatch.weeks.length,
               itemBuilder: (BuildContext context, int index) {
                 return ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                      (trashDayWatch.ordinalNumbers[index + 1]!) ? Colors.blue : Colors.grey,
+                      (trashDayWatch.weeks[index + 1]!) ? Colors.blue : Colors.grey,
                     ),
                   ),
                   onPressed: () {
-                    trashDayRead.writeOrdinalNumbers(index + 1);
+                    trashDayRead.writeWeeks(index + 1);
                   },
                   child: Text(
-                    '第${index + 1}',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
+                    '第${index + 1}週',
+                    style: const TextStyle(color: Colors.white),
                   ),
                 );
               },
@@ -166,23 +150,24 @@ Widget _dayOfTheWeekCheck(dynamic hiveKey) {
               '曜日',
               textAlign: TextAlign.center,
             ),
+            const SizedBox(height: 10),
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: trashDayRead.daysOfTheWeek.length,
+              itemCount: trashDayRead.weekdays.length,
               itemBuilder: (BuildContext context, int index) {
                 return ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                      (trashDayWatch.daysOfTheWeek[index + 1]!) ? Colors.blue : Colors.grey,
+                      (trashDayWatch.weekdays[index + 1]!) ? Colors.blue : Colors.grey,
                     ),
                   ),
                   onPressed: () {
-                    trashDayRead.writeDaysOfTheWeek(index + 1);
+                    trashDayRead.writeWeekdays(index + 1);
                   },
                   child: Text(
                     dayOfTheWeekLabelMap[index + 1].toString(),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),
@@ -196,7 +181,7 @@ Widget _dayOfTheWeekCheck(dynamic hiveKey) {
   );
 }
 
-Widget _savehButton(dynamic hiveKey, TrashDayModel trashDayRead) {
+Widget _savedButton(dynamic hiveKey, TrashDayModel trashDayRead) {
   return Consumer(
     builder: (context, ref, child) {
       final trashDayListModel = ref.read(trashDayListModelProvider);
@@ -211,7 +196,7 @@ Widget _savehButton(dynamic hiveKey, TrashDayModel trashDayRead) {
             trashDayRead.saveTrashDay(hiveKey, trashDayRead);
             Navigator.pop(context);
           },
-          child: const Text('保存する'),
+          child: Text((hiveKey == null) ? '新規登録する' : '更新する'),
         ),
       );
     },

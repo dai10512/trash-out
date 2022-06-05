@@ -1,18 +1,12 @@
 import 'package:trash_out/typeAdapter/trashDay.dart';
 
-// enum whichDay{
-//   today(1),
-//   tomorrow()
-// }
-
-class Notification {
+class LocalNotification {
   DateTime currentTime = DateTime.now();
-  Enum whichDay;
-  // int currentWeekday = currentTime.weekday;
+  int whichDay;
   String messageTrashType = '';
   String notifyMessage = '';
 
-  Notification(this.whichDay) {}
+  LocalNotification(this.whichDay) {}
 
   String createNotifyMessage(List<TrashDay> trashDays) {
     String notifyMessage = '';
@@ -29,7 +23,7 @@ class Notification {
     messageTrashType = '';
     for (var i = 0; i < trashDays.length; i++) {
       final trashDay = trashDays[i];
-      if (justifyOrdinalNumbers(trashDay)) {
+      if (justifyWeeks(trashDay)) {
         if (justifyWeekDay(trashDay)) {
           messageTrashType += trashDay.trashType;
         }
@@ -38,11 +32,11 @@ class Notification {
     return messageTrashType;
   }
 
-  bool justifyOrdinalNumbers(TrashDay trashDay) {
-    List ordinalNumbersList = mapToList(trashDay.ordinalNumbers);
+  bool justifyWeeks(TrashDay trashDay) {
+    List weeksList = mapToList(trashDay.weeks);
     bool result = false;
-    for (var i = 0; i < ordinalNumbersList.length; i++) {
-      if (currentTime.day / 7 == trashDay.ordinalNumbers[i]) {
+    for (var i = 0; i < weeksList.length; i++) {
+      if (currentTime.day / 7 == trashDay.weeks[i]) {
         result = true;
         break;
       }
@@ -51,10 +45,10 @@ class Notification {
   }
 
   bool justifyWeekDay(TrashDay trashDay) {
-    List weekdayList = mapToList(trashDay.daysOfTheWeek);
+    List weekdayList = mapToList(trashDay.weekdays);
     bool result = false;
     for (var i = 0; i < weekdayList.length; i++) {
-      if (currentTime.weekday == trashDay.daysOfTheWeek[i]) {
+      if (currentTime.weekday == trashDay.weekdays[i]) {
         result = true;
         break;
       }

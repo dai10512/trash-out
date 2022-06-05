@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:trash_out/repository/trashDayNotifications_boxRepository.dart';
+import 'package:trash_out/typeAdapter/trashDayNotification.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
 import 'package:trash_out/view/home_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,8 +10,6 @@ import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
-
-import 'package:hive_flutter/hive_flutter.dart';
 
 final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -41,8 +42,12 @@ Future<void> _initializeNotification() async {
 
 Future<void> _initializeDB() async {
   await Hive.initFlutter();
+  Hive.registerAdapter(TimeOfDayAdapter());
   Hive.registerAdapter(TrashDayAdapter());
+  Hive.registerAdapter(TrashDayNotificationAdapter());
   await Hive.openBox<TrashDay>('trashDays');
+  await Hive.openBox<TrashDayNotification>('notifications');
+  trashDayNotificationsBoxRepository.isFirst();
 }
 
 Future<void> main() async {
@@ -63,7 +68,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+        iconTheme: const IconThemeData.fallback().copyWith(color: Colors.grey[700]),
         useMaterial3: true,
+        primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(),
     );
