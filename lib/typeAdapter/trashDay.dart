@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 part 'trashDay.g.dart';
@@ -13,15 +11,15 @@ class TrashDay {
   String trashType;
 
   @HiveField(2)
-  Map<int, bool> daysOfTheWeek;
+  Map<int, bool> weekdays;
 
   @HiveField(3)
-  Map<int, bool> ordinalNumbers;
+  Map<int, bool> weeks;
 
   TrashDay({
     required this.id,
     required this.trashType,
-    required this.daysOfTheWeek,
-    required this.ordinalNumbers,
+    required this.weekdays,
+    required this.weeks,
   });
 }

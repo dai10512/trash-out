@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trash_out/repository/boxRepository.dart';
+import 'package:trash_out/repository/trashDaysBox_repository.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
 import 'package:uuid/uuid.dart';
 
@@ -9,23 +9,22 @@ final trashDayModelProvider = ChangeNotifierProvider.family.autoDispose<TrashDay
 Uuid uuid = const Uuid();
 
 class TrashDayModel extends ChangeNotifier {
-  // String id = uuid.v4();
   String id = uuid.v4();
   String trashType = '';
-  Map<int, bool> daysOfTheWeek = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false};
-  Map<int, bool> ordinalNumbers = {1: true, 2: true, 3: true, 4: true, 5: true};
+  Map<int, bool> weekdays = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false};
+  Map<int, bool> weeks = {1: true, 2: true, 3: true, 4: true, 5: true};
 
   TrashDayModel(dynamic hiveKey) {
     loadData(hiveKey);
   }
 
   void loadData(dynamic hiveKey) {
-    final TrashDay? loadedData = boxRepository.getTrashDay(hiveKey);
+    final TrashDay? loadedData = trashDaysBoxRepository.getTrashDay(hiveKey);
     if (loadedData != null) {
       id = loadedData.id;
       trashType = loadedData.trashType;
-      daysOfTheWeek = {...loadedData.daysOfTheWeek};
-      ordinalNumbers = {...loadedData.ordinalNumbers};
+      weekdays = {...loadedData.weekdays};
+      weeks = {...loadedData.weeks};
     }
     print('loaded');
   }
@@ -34,13 +33,13 @@ class TrashDayModel extends ChangeNotifier {
     final tempTrashDay = TrashDay(
       id: trashDayModel.id,
       trashType: trashDayModel.trashType,
-      daysOfTheWeek: trashDayModel.daysOfTheWeek,
-      ordinalNumbers: trashDayModel.ordinalNumbers,
+      weekdays: trashDayModel.weekdays,
+      weeks: trashDayModel.weeks,
     );
     if (hiveKey == null) {
-      boxRepository.addTrashDay(tempTrashDay);
+      trashDaysBoxRepository.addTrashDay(tempTrashDay);
     } else {
-      boxRepository.updateTrashType(hiveKey, tempTrashDay);
+      trashDaysBoxRepository.updateTrashType(hiveKey, tempTrashDay);
     }
   }
 
@@ -48,13 +47,13 @@ class TrashDayModel extends ChangeNotifier {
     trashType = text;
   }
 
-  void writeDaysOfTheWeek(int index) {
-    daysOfTheWeek[index] = !daysOfTheWeek[index]!;
+  void writeWeekdays(int index) {
+    weekdays[index] = !weekdays[index]!;
     notifyListeners();
   }
 
-  void writeOrdinalNumbers(int index) {
-    ordinalNumbers[index] = !ordinalNumbers[index]!;
+  void writeWeeks(int index) {
+    weeks[index] = !weeks[index]!;
     notifyListeners();
   }
 }

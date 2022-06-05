@@ -1,9 +1,9 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
 
-BoxRepository boxRepository = BoxRepository();
+TrashDaysBoxRepository trashDaysBoxRepository = TrashDaysBoxRepository();
 
-class BoxRepository {
+class TrashDaysBoxRepository {
   Box<dynamic> box = Hive.box<TrashDay>('TrashDays');
 
   List<TrashDay> getTrashDays() {
