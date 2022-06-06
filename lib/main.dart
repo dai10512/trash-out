@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:trash_out/localNotification.dart';
 import 'package:trash_out/repository/trashDayNotifications_boxRepository.dart';
 import 'package:trash_out/typeAdapter/trashDayNotification.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
@@ -10,45 +11,6 @@ import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
-
-final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-Future<void> _init() async {
-  await _configureLocalTimeZone();
-  await _initializeNotification();
-  await _initializeDB();
-}
-
-Future<void> _configureLocalTimeZone() async {
-  tz.initializeTimeZones();
-  final String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
-  tz.setLocalLocation(tz.getLocation(timeZoneName));
-}
-
-Future<void> _initializeNotification() async {
-  const IOSInitializationSettings initializationSettingsIOS = IOSInitializationSettings(
-    requestAlertPermission: false,
-    requestBadgePermission: false,
-    requestSoundPermission: false,
-  );
-  const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('ic_notification');
-
-  const InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-    iOS: initializationSettingsIOS,
-  );
-  await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
-}
-
-Future<void> _initializeDB() async {
-  await Hive.initFlutter();
-  Hive.registerAdapter(TimeOfDayAdapter());
-  Hive.registerAdapter(TrashDayAdapter());
-  Hive.registerAdapter(TrashDayNotificationAdapter());
-  await Hive.openBox<TrashDay>('trashDays');
-  await Hive.openBox<TrashDayNotification>('notifications');
-  trashDayNotificationsBoxRepository.isFirst();
-}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -75,4 +37,42 @@ class MyApp extends StatelessWidget {
       home: const MyHomePage(),
     );
   }
+}
+
+Future<void> _init() async {
+  await _configureLocalTimeZone();
+  await _initializeNotification();
+  await _initializeDB();
+  localNotification.setNotifications();
+}
+
+Future<void> _configureLocalTimeZone() async {
+  tz.initializeTimeZones();
+  final String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
+  tz.setLocalLocation(tz.getLocation(timeZoneName));
+}
+
+Future<void> _initializeNotification() async {
+  const IOSInitializationSettings initializationSettingsIOS = IOSInitializationSettings(
+    requestAlertPermission: false,
+    requestBadgePermission: false,
+    requestSoundPermission: false,
+  );
+  const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('ic_notification');
+
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+    iOS: initializationSettingsIOS,
+  );
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+}
+
+Future<void> _initializeDB() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(TimeOfDayAdapter());
+  Hive.registerAdapter(TrashDayAdapter());
+  Hive.registerAdapter(TrashDayNotificationAdapter());
+  await Hive.openBox<TrashDay>('trashDays');
+  await Hive.openBox<TrashDayNotification>('notifications');
+  trashDayNotificationsBoxRepository.isFirst();
 }

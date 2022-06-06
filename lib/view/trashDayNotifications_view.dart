@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:trash_out/localNotification.dart';
 import 'package:trash_out/model/TRashDayNotifications_model.dart';
 import 'package:trash_out/model/trashDayNotification_model.dart';
 import 'package:trash_out/repository/trashDayNotifications_boxRepository.dart';
@@ -42,7 +42,7 @@ class NotificationSettingView extends ConsumerWidget {
                     padding: EdgeInsets.zero,
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: trashDaysNotificationsModelRead.trashDayNotifications.length,
                     itemBuilder: (BuildContext context, int index) {
                       return notificationListTile(context, index);
@@ -50,6 +50,18 @@ class NotificationSettingView extends ConsumerWidget {
                   );
                 },
               ),
+            ),
+            TextButton(
+              child: Text('cancel'),
+              onPressed: () async {
+                localNotification.cancelAllNotifications();
+              },
+            ),
+            TextButton(
+              child: Text('everyMinute'),
+              onPressed: () async {
+                localNotification.everyMinuteNotification();
+              },
             ),
           ],
         ),
@@ -91,7 +103,8 @@ Widget notificationListTile(BuildContext context, int index) {
                     ),
                     Switch(
                       value: trashDayNotificationModelWatch.doNotify,
-                      onChanged: (value) {
+                      onChanged: (value) async {
+                        await localNotification.requestPermissions();
                         trashDayNotificationModelRead.writeDoNotify(index);
                       },
                     ),

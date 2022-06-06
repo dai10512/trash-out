@@ -14,13 +14,13 @@ class TrashDetailView extends ConsumerWidget {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: SafeArea(
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-              SingleChildScrollView(
-                child: GestureDetector(
-                  onTap: () => FocusScope.of(context).unfocus(),
+        child: SingleChildScrollView(
+          child: SafeArea(
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                GestureDetector(
+                  // onTap: () => FocusScope.of(context).unfocus(),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,8 +33,8 @@ class TrashDetailView extends ConsumerWidget {
                     ],
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
