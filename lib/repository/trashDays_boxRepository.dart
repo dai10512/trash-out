@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:trash_out/model/localNotification.dart';
+import 'package:trash_out/model/trashNotification.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
 
 TrashDaysBoxRepository trashDaysBoxRepository = TrashDaysBoxRepository();
@@ -14,7 +14,7 @@ class TrashDaysBoxRepository {
     final controller = StreamController();
     controller.stream.listen(
       (box) {
-        localNotification.judgeSetNotification();
+        trashNotification.judgeSetNotification();
       },
     );
   }

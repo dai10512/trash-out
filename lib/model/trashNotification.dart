@@ -10,12 +10,12 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:trash_out/util/util.dart';
 
-final LocalNotification localNotification = LocalNotification();
+final TrashNotification trashNotification = TrashNotification();
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 // class TrashDayNotificationController{
-class LocalNotification {
-  
+class TrashNotification {
+
   List<TrashDay> trashDays = [];
   List<NotificationSetting> notificationSettings = [];
   String notificationTitle = 'ゴミ出しの案内';
@@ -42,8 +42,8 @@ class LocalNotification {
     trashDays = trashDaysBoxRepository.getTrashDays();
     notificationSettings = notificationSettingsBoxRepository.getNotificationSettings();
     print('got Data');
-    print(localNotification.trashDays);
-    print(localNotification.notificationSettings);
+    print(trashNotification.trashDays);
+    print(trashNotification.notificationSettings);
   }
 
   Future<void> cancelAllNotifications() async {

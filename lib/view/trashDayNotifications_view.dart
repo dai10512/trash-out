@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:trash_out/model/localNotification.dart';
+import 'package:trash_out/model/trashNotification.dart';
 import 'package:trash_out/model/NotificationSetting_model.dart';
 import 'package:trash_out/repository/notificationSettings_boxRepository.dart';
 import 'package:trash_out/typeAdapter/notificationSetting.dart';
@@ -39,13 +39,13 @@ class NotificationSettingView extends ConsumerWidget {
             TextButton(
               child: Text('cancel'),
               onPressed: () async {
-                localNotification.cancelAllNotifications();
+                trashNotification.cancelAllNotifications();
               },
             ),
             TextButton(
               child: Text('awesomeNotificaion'),
               onPressed: () async {
-                localNotification.judgeSetNotification();
+                trashNotification.judgeSetNotification();
               },
             ),
           ],
@@ -58,8 +58,8 @@ class NotificationSettingView extends ConsumerWidget {
 Widget notificationListTile(BuildContext context, int index) {
   return Consumer(
     builder: (context, ref, _) {
-      final NotificationSettingModel trashDayNotificationModelRead = ref.read(notificationSettingModelProvider(index));
-      final NotificationSettingModel trashDayNotificationModelWatch = ref.watch(notificationSettingModelProvider(index));
+      final NotificationSettingModel notificationSettingModelRead = ref.read(notificationSettingModelProvider(index));
+      final NotificationSettingModel notificationSettingModelWatch = ref.watch(notificationSettingModelProvider(index));
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Card(
@@ -68,9 +68,9 @@ Widget notificationListTile(BuildContext context, int index) {
             child: Column(
               children: [
                 Text(
-                  '${formatWhichDay(trashDayNotificationModelWatch.whichDay)}のゴミ出しの通知時間',
+                  '${formatWhichDay(notificationSettingModelWatch.whichDay)}のゴミ出しの通知時間',
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: (trashDayNotificationModelRead.doNotify) ? Theme.of(context).primaryColor : Colors.grey,
+                        color: (notificationSettingModelRead.doNotify) ? Theme.of(context).primaryColor : Colors.grey,
                       ),
                 ),
                 const SizedBox(height: 10),
@@ -79,20 +79,20 @@ Widget notificationListTile(BuildContext context, int index) {
                   children: <Widget>[
                     MaterialButton(
                       child: Text(
-                        trashDayNotificationModelWatch.formatTime(trashDayNotificationModelWatch.time),
+                        notificationSettingModelWatch.formatTime(notificationSettingModelWatch.time),
                         style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                              color: (trashDayNotificationModelRead.doNotify) ? Theme.of(context).primaryColor : Colors.grey,
+                              color: (notificationSettingModelRead.doNotify) ? Theme.of(context).primaryColor : Colors.grey,
                             ),
                       ),
-                      onPressed: () async => await trashDayNotificationModelRead.writeTime(context, index, trashDayNotificationModelRead.time),
+                      onPressed: () async => await notificationSettingModelRead.writeTime(context, index, notificationSettingModelRead.time),
                     ),
                     Switch(
-                      value: trashDayNotificationModelWatch.doNotify,
+                      value: notificationSettingModelWatch.doNotify,
                       onChanged: (value) async {
-                        await localNotification.requestPermissions();
-                        trashDayNotificationModelRead.writeDoNotify(index);
-                        await localNotification.cancelAllNotifications();
-                        localNotification.judgeSetNotification();
+                        await trashNotification.requestPermissions();
+                        notificationSettingModelRead.writeDoNotify(index);
+                        await trashNotification.cancelAllNotifications();
+                        trashNotification.judgeSetNotification();
                       },
                     ),
                   ],

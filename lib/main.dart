@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:trash_out/model/localNotification.dart';
+import 'package:trash_out/model/trashNotification.dart';
 import 'package:trash_out/repository/notificationSettings_boxRepository.dart';
 import 'package:trash_out/typeAdapter/notificationSetting.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
@@ -48,7 +48,7 @@ Future<void> _init() async {
   // await _initializeNotification();
   await _initializeAwesomeNotification();
   await _initializeDB();
-  localNotification.setNotifications();
+  trashNotification.setNotifications();
 }
 
 _initializeAwesomeNotification() {
