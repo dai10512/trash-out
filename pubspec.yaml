@@ -56,6 +56,8 @@ dependencies:
   hive: ^2.2.1
   hive_flutter: ^1.1.0
   modal_bottom_sheet: ^2.0.1
+  awesome_notifications: any # Any attribute updates automatically your source to the last version
+
 
 dev_dependencies:
   flutter_test:

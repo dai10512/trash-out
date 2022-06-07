@@ -1,10 +1,23 @@
+import 'dart:async';
+
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:trash_out/model/localNotification.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
 
 TrashDaysBoxRepository trashDaysBoxRepository = TrashDaysBoxRepository();
 
 class TrashDaysBoxRepository {
-  Box<dynamic> box = Hive.box<TrashDay>('TrashDays');
+  Box<dynamic> box = Hive.box<TrashDay>('TrashDay');
+
+  void listen() {
+    print('listen');
+    final controller = StreamController();
+    controller.stream.listen(
+      (box) {
+        localNotification.judgeSetNotification();
+      },
+    );
+  }
 
   List<TrashDay> getTrashDays() {
     List<TrashDay> trashDays = box.values.toList().cast<TrashDay>();
@@ -15,8 +28,6 @@ class TrashDaysBoxRepository {
     TrashDay? trashDay = box.get(hiveKey);
     return trashDay;
   }
-
-
 
   void addTrashDay(TrashDay tempTrashDay) {
     box.add(tempTrashDay).then((value) => print('added'));

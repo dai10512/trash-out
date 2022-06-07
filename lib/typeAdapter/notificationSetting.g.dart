@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'trashDayNotification.dart';
+part of 'notificationSetting.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class TrashDayNotificationAdapter extends TypeAdapter<TrashDayNotification> {
+class NotificationSettingAdapter extends TypeAdapter<NotificationSetting> {
   @override
   final int typeId = 2;
 
   @override
-  TrashDayNotification read(BinaryReader reader) {
+  NotificationSetting read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return TrashDayNotification(
+    return NotificationSetting(
       whichDay: fields[0] as int,
       time: fields[1] as TimeOfDay,
       doNotify: fields[2] as bool,
@@ -24,7 +24,7 @@ class TrashDayNotificationAdapter extends TypeAdapter<TrashDayNotification> {
   }
 
   @override
-  void write(BinaryWriter writer, TrashDayNotification obj) {
+  void write(BinaryWriter writer, NotificationSetting obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)
@@ -41,7 +41,7 @@ class TrashDayNotificationAdapter extends TypeAdapter<TrashDayNotification> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TrashDayNotificationAdapter &&
+      other is NotificationSettingAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

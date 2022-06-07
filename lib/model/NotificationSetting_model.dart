@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trash_out/repository/trashDayNotifications_boxRepository.dart';
+import 'package:trash_out/repository/notificationSettings_boxRepository.dart';
 
-final trashDayNotificationModelProvider = ChangeNotifierProvider.family<TrashDayNotificationModel, dynamic>((ref, index) => TrashDayNotificationModel(index));
+// final trashDayNotificationModelProvider = ChangeNotifierProvider.family<TrashDayNotificationModel, dynamic>((ref, index) => TrashDayNotificationModel(index));
+final notificationSettingModelProvider = ChangeNotifierProvider.family<NotificationSettingModel, dynamic>((ref, index) => NotificationSettingModel(index));
 
 // TrashDayNotificationModel trashDayNotificationModel = TrashDayNotificationModel(index);
 
-class TrashDayNotificationModel extends ChangeNotifier {
+
+
+class NotificationSettingModel extends ChangeNotifier {
+
+// class TrashDayNotificationModel extends ChangeNotifier {
 // class TrashDayNotificationModel {
   int whichDay = 0;
   TimeOfDay time = TimeOfDay(hour: 0, minute: 0);
   bool doNotify = false;
 
-  TrashDayNotificationModel(index) {
+  NotificationSettingModel(index) {
     getTrashDayNotification(index);
   }
 
   void getTrashDayNotification(int index) {
-    final loadedData = trashDayNotificationsBoxRepository.getTrashDayNotification(index);
+    final loadedData = notificationSettingsBoxRepository.getNotificationSetting(index);
     whichDay = loadedData.whichDay;
     time = loadedData.time;
     doNotify = loadedData.doNotify;
@@ -33,14 +38,14 @@ class TrashDayNotificationModel extends ChangeNotifier {
     );
     if (picked != null) {
       time = picked;
-      trashDayNotificationsBoxRepository.writeTime(index, time);
+      notificationSettingsBoxRepository.writeTime(index, time);
     }
     notifyListeners();
   }
 
   void writeDoNotify(int index) {
     doNotify = !doNotify;
-    trashDayNotificationsBoxRepository.writeDoNotify(index, doNotify);
+    notificationSettingsBoxRepository.writeDoNotify(index, doNotify);
     notifyListeners();
   }
 
@@ -55,11 +60,6 @@ class TrashDayNotificationModel extends ChangeNotifier {
     }
     return '$hourString:$minuteString';
   }
-
-  
-
-
-
 }
 
 

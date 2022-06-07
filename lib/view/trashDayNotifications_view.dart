@@ -1,49 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:trash_out/localNotification.dart';
-import 'package:trash_out/model/TRashDayNotifications_model.dart';
-import 'package:trash_out/model/trashDayNotification_model.dart';
-import 'package:trash_out/repository/trashDayNotifications_boxRepository.dart';
+import 'package:trash_out/model/localNotification.dart';
+import 'package:trash_out/model/NotificationSetting_model.dart';
+import 'package:trash_out/repository/notificationSettings_boxRepository.dart';
+import 'package:trash_out/typeAdapter/notificationSetting.dart';
 
 class NotificationSettingView extends ConsumerWidget {
   const NotificationSettingView({Key? key}) : super(key: key);
 
   @override
   Widget build(context, ref) {
-    final TrashDayNotificationsModel trashDaysNotificationsModelRead = ref.read(trashDayNotificationsModelProvider);
-
     return Scaffold(
+      appBar: AppBar(),
       body: SafeArea(
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      icon: const Icon(Icons.arrow_back_ios),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
             GestureDetector(
               onTap: () => FocusScope.of(context).unfocus(),
               child: ValueListenableBuilder<Box<dynamic>>(
-                valueListenable: trashDayNotificationsBoxRepository.box.listenable(),
+                valueListenable: notificationSettingsBoxRepository.box.listenable(),
                 builder: (context, box, _) {
+                  List<NotificationSetting> notificationSettings = box.values.toList().cast<NotificationSetting>();
+
                   return ListView.builder(
                     padding: EdgeInsets.zero,
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: trashDaysNotificationsModelRead.trashDayNotifications.length,
+                    itemCount: notificationSettings.length,
                     itemBuilder: (BuildContext context, int index) {
                       return notificationListTile(context, index);
                     },
@@ -58,9 +43,9 @@ class NotificationSettingView extends ConsumerWidget {
               },
             ),
             TextButton(
-              child: Text('everyMinute'),
+              child: Text('awesomeNotificaion'),
               onPressed: () async {
-                localNotification.everyMinuteNotification();
+                localNotification.judgeSetNotification();
               },
             ),
           ],
@@ -73,8 +58,8 @@ class NotificationSettingView extends ConsumerWidget {
 Widget notificationListTile(BuildContext context, int index) {
   return Consumer(
     builder: (context, ref, _) {
-      final TrashDayNotificationModel trashDayNotificationModelRead = ref.read(trashDayNotificationModelProvider(index));
-      final TrashDayNotificationModel trashDayNotificationModelWatch = ref.watch(trashDayNotificationModelProvider(index));
+      final NotificationSettingModel trashDayNotificationModelRead = ref.read(notificationSettingModelProvider(index));
+      final NotificationSettingModel trashDayNotificationModelWatch = ref.watch(notificationSettingModelProvider(index));
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Card(
@@ -106,6 +91,8 @@ Widget notificationListTile(BuildContext context, int index) {
                       onChanged: (value) async {
                         await localNotification.requestPermissions();
                         trashDayNotificationModelRead.writeDoNotify(index);
+                        await localNotification.cancelAllNotifications();
+                        localNotification.judgeSetNotification();
                       },
                     ),
                   ],

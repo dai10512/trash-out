@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trash_out/repository/trashDaysBox_repository.dart';
+import 'package:trash_out/repository/trashDays_boxRepository.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
-import 'package:uuid/uuid.dart';
+import 'package:trash_out/util/util.dart';
 
-final trashDayModelProvider = ChangeNotifierProvider.family.autoDispose<TrashDayModel, dynamic>((ref, hiveKey) => TrashDayModel(hiveKey));
-
-Uuid uuid = const Uuid();
+final AutoDisposeChangeNotifierProviderFamily<TrashDayModel, dynamic> trashDayModelProvider = ChangeNotifierProvider.family.autoDispose<TrashDayModel, dynamic>((ref, hiveKey) => TrashDayModel(hiveKey));
 
 class TrashDayModel extends ChangeNotifier {
   String id = uuid.v4();
   String trashType = '';
-  Map<int, bool> weekdays = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false};
-  Map<int, bool> weeks = {1: true, 2: true, 3: true, 4: true, 5: true};
+  Map<int, bool> daysOfWeek = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false};
+  Map<int, bool> weeksOfMonth = {1: true, 2: true, 3: true, 4: true, 5: true};
 
   TrashDayModel(dynamic hiveKey) {
     loadData(hiveKey);
@@ -23,8 +21,8 @@ class TrashDayModel extends ChangeNotifier {
     if (loadedData != null) {
       id = loadedData.id;
       trashType = loadedData.trashType;
-      weekdays = {...loadedData.weekdays};
-      weeks = {...loadedData.weeks};
+      daysOfWeek = {...loadedData.daysOfWeek};
+      weeksOfMonth = {...loadedData.weeksOfMonth};
     }
     print('loaded');
   }
@@ -33,27 +31,39 @@ class TrashDayModel extends ChangeNotifier {
     final tempTrashDay = TrashDay(
       id: trashDayModel.id,
       trashType: trashDayModel.trashType,
-      weekdays: trashDayModel.weekdays,
-      weeks: trashDayModel.weeks,
+      daysOfWeek: trashDayModel.daysOfWeek,
+      weeksOfMonth: trashDayModel.weeksOfMonth,
     );
     if (hiveKey == null) {
-      trashDaysBoxRepository.addTrashDay(tempTrashDay);
+      addTrashDay(tempTrashDay);
     } else {
-      trashDaysBoxRepository.updateTrashType(hiveKey, tempTrashDay);
+      updateTrashDay(hiveKey, tempTrashDay);
     }
+  }
+
+  void addTrashDay(tempTrashDay) {
+    trashDaysBoxRepository.addTrashDay(tempTrashDay);
+  }
+
+  void updateTrashDay(hiveKey, tempTrashDay) {
+    trashDaysBoxRepository.updateTrashType(hiveKey, tempTrashDay);
+  }
+
+  void deleteTrashDay(dynamic hiveKey) {
+    trashDaysBoxRepository.deleteTrashDay(hiveKey);
   }
 
   void writeTrashType(String text) {
     trashType = text;
   }
 
-  void writeWeekdays(int index) {
-    weekdays[index] = !weekdays[index]!;
+  void writedaysOfWeek(int index) {
+    daysOfWeek[index] = !daysOfWeek[index]!;
     notifyListeners();
   }
 
-  void writeWeeks(int index) {
-    weeks[index] = !weeks[index]!;
+  void writeweeksOfMonth(int index) {
+    weeksOfMonth[index] = !weeksOfMonth[index]!;
     notifyListeners();
   }
 }

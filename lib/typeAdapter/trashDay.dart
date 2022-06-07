@@ -11,15 +11,15 @@ class TrashDay {
   String trashType;
 
   @HiveField(2)
-  Map<int, bool> weekdays;
+  Map<int, bool> daysOfWeek;
 
   @HiveField(3)
-  Map<int, bool> weeks;
+  Map<int, bool> weeksOfMonth;
 
   TrashDay({
     required this.id,
     required this.trashType,
-    required this.weekdays,
-    required this.weeks,
+    required this.daysOfWeek,
+    required this.weeksOfMonth,
   });
 }

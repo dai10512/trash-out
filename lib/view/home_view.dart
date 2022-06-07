@@ -6,8 +6,11 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: TrashDayListView(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(''),
+      ),
+      body: const TrashDayListView(),
     );
   }
 }

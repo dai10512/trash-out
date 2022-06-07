@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trash_out/model/trashDay_model.dart';
-import 'package:trash_out/model/trashDays_model.dart';
 
 class TrashDetailView extends ConsumerWidget {
   const TrashDetailView(this.hiveKey, {Key? key}) : super(key: key);
@@ -12,6 +11,9 @@ class TrashDetailView extends ConsumerWidget {
     final TrashDayModel trashDayRead = ref.read(trashDayModelProvider(hiveKey));
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text('aas'),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: SingleChildScrollView(
@@ -110,16 +112,16 @@ Widget _ordinalNumberCheck(dynamic hiveKey) {
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: trashDayWatch.weeks.length,
+              itemCount: trashDayWatch.weeksOfMonth.length,
               itemBuilder: (BuildContext context, int index) {
                 return ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                      (trashDayWatch.weeks[index + 1]!) ? Colors.blue : Colors.grey,
+                      (trashDayWatch.weeksOfMonth[index + 1]!) ? Colors.blue : Colors.grey,
                     ),
                   ),
                   onPressed: () {
-                    trashDayRead.writeWeeks(index + 1);
+                    trashDayRead.writeweeksOfMonth(index + 1);
                   },
                   child: Text(
                     '第${index + 1}週',
@@ -154,16 +156,16 @@ Widget _dayOfTheWeekCheck(dynamic hiveKey) {
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: trashDayRead.weekdays.length,
+              itemCount: trashDayRead.daysOfWeek.length,
               itemBuilder: (BuildContext context, int index) {
                 return ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                      (trashDayWatch.weekdays[index + 1]!) ? Colors.blue : Colors.grey,
+                      (trashDayWatch.daysOfWeek[index + 1]!) ? Colors.blue : Colors.grey,
                     ),
                   ),
                   onPressed: () {
-                    trashDayRead.writeWeekdays(index + 1);
+                    trashDayRead.writedaysOfWeek(index + 1);
                   },
                   child: Text(
                     dayOfTheWeekLabelMap[index + 1].toString(),
@@ -184,7 +186,6 @@ Widget _dayOfTheWeekCheck(dynamic hiveKey) {
 Widget _savedButton(dynamic hiveKey, TrashDayModel trashDayRead) {
   return Consumer(
     builder: (context, ref, child) {
-      final trashDayListModel = ref.read(trashDayListModelProvider);
       return SizedBox(
         width: double.infinity,
         child: ElevatedButton(

@@ -19,8 +19,8 @@ class TrashDayAdapter extends TypeAdapter<TrashDay> {
     return TrashDay(
       id: fields[0] as String,
       trashType: fields[1] as String,
-      weekdays: (fields[2] as Map).cast<int, bool>(),
-      weeks: (fields[3] as Map).cast<int, bool>(),
+      daysOfWeek: (fields[2] as Map).cast<int, bool>(),
+      weeksOfMonth: (fields[3] as Map).cast<int, bool>(),
     );
   }
 
@@ -33,9 +33,9 @@ class TrashDayAdapter extends TypeAdapter<TrashDay> {
       ..writeByte(1)
       ..write(obj.trashType)
       ..writeByte(2)
-      ..write(obj.weekdays)
+      ..write(obj.daysOfWeek)
       ..writeByte(3)
-      ..write(obj.weeks);
+      ..write(obj.weeksOfMonth);
   }
 
   @override

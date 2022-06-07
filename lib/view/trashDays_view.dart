@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:trash_out/model/trashDays_model.dart';
-import 'package:trash_out/repository/trashDaysBox_repository.dart';
+import 'package:trash_out/model/trashDay_model.dart';
+import 'package:trash_out/repository/trashDays_boxRepository.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
 import 'package:trash_out/view/trashDayNotifications_view.dart';
 import 'package:trash_out/view/trashDay_view.dart';
@@ -39,7 +39,7 @@ class TrashDayListView extends ConsumerWidget {
                       onPressed: () {
                         showCupertinoModalBottomSheet(
                           context: context,
-                          builder: (context) => TrashDetailView(null),
+                          builder: (context) => const TrashDetailView(null),
                         );
                       },
                     ),
@@ -103,50 +103,22 @@ class TrashDayListView extends ConsumerWidget {
   Widget buildSlidableListTile(TrashDay trashDay, dynamic hiveKey) {
     return Consumer(
       builder: (context, ref, child) {
-        final TrashDayListModel trashDayListModel = ref.watch(trashDayListModelProvider);
+        final TrashDayModel trashDayModel = ref.read(trashDayModelProvider(hiveKey));
         return Dismissible(
           key: UniqueKey(),
           onDismissed: (direction) {
-            trashDayListModel.deleteTrashDay(hiveKey);
+            trashDayModel.deleteTrashDay(hiveKey);
           },
           child: Card(
             child: ListTile(
               title: Text((trashDay.trashType != '') ? '${trashDay.trashType}' : '種類が登録されていません'),
-              subtitle: Text('${formatOrdinalNumber(trashDay.weeks)}  /  ${formatDayOfTheWeek(trashDay.weekdays)}'),
+              subtitle: Text('${formatOrdinalNumber(trashDay.weeksOfMonth)}  /  ${formatDayOfTheWeek(trashDay.daysOfWeek)}'),
               // trailing: const Icon(Icons.arrow_forward_ios),
               onTap: () {
                 showCupertinoModalBottomSheet(
                   context: context,
                   builder: (context) => TrashDetailView(hiveKey),
                 );
-
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //       builder: (BuildContext context) {
-                //         return TrashDetailView(hiveKey);
-                //       },
-                //       fullscreenDialog: true),
-                // );
-
-                // Navigator.of(context).push(
-                //   PageRouteBuilder(
-                //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                //       const Offset begin = const Offset(0.0, 1.0); // 下から上
-                //       // final Offset begin = Offset(0.0, -1.0); // 上から下
-                //       const Offset end = Offset.zero;
-                //       final Animatable<Offset> tween = Tween(begin: begin, end: end).chain(CurveTween(curve: Curves.easeInOut));
-                //       final Animation<Offset> offsetAnimation = animation.drive(tween);
-                //       return SlideTransition(
-                //         position: offsetAnimation,
-                //         child: child,
-                //       );
-                //     },
-                //     pageBuilder: (context, animation, secondaryAnimation) {
-                //       return TrashDetailView(hiveKey);
-                //     },
-                //   ),
-                // );
               },
             ),
           ),
@@ -156,11 +128,11 @@ class TrashDayListView extends ConsumerWidget {
   }
 }
 
-String formatOrdinalNumber(Map<int, bool> weeks) {
+String formatOrdinalNumber(Map<int, bool> weeksOfMonth) {
   String word = '';
   int count = 0;
-  for (var i = 1; i <= weeks.length; i++) {
-    if (weeks[i]!) {
+  for (var i = 1; i <= weeksOfMonth.length; i++) {
+    if (weeksOfMonth[i]!) {
       word += '第$i、';
       count++;
     }
@@ -175,11 +147,11 @@ String formatOrdinalNumber(Map<int, bool> weeks) {
   return word;
 }
 
-String formatDayOfTheWeek(Map<int, bool> weekdays) {
+String formatDayOfTheWeek(Map<int, bool> daysOfWeek) {
   String word = '';
   int count = 0;
-  for (var i = 1; i <= weekdays.length; i++) {
-    if (weekdays[i]!) {
+  for (var i = 1; i <= daysOfWeek.length; i++) {
+    if (daysOfWeek[i]!) {
       word += '${dayOfTheWeekMap[i]}、';
       count++;
     }
