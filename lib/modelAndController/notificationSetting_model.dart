@@ -1,23 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trash_out/modelAndController/trashNotification_controller.dart';
 import 'package:trash_out/repository/notificationSettings_boxRepository.dart';
 
-// final trashDayNotificationModelProvider = ChangeNotifierProvider.family<TrashDayNotificationModel, dynamic>((ref, index) => TrashDayNotificationModel(index));
 final notificationSettingModelProvider = ChangeNotifierProvider.family<NotificationSettingModel, dynamic>((ref, index) => NotificationSettingModel(index));
 
-// TrashDayNotificationModel trashDayNotificationModel = TrashDayNotificationModel(index);
-
-
-
 class NotificationSettingModel extends ChangeNotifier {
-
-// class TrashDayNotificationModel extends ChangeNotifier {
-// class TrashDayNotificationModel {
   int whichDay = 0;
-  TimeOfDay time = TimeOfDay(hour: 0, minute: 0);
+  TimeOfDay time = const TimeOfDay(hour: 0, minute: 0);
   bool doNotify = false;
 
-  NotificationSettingModel(index) {
+  NotificationSettingModel(int index) {
     getTrashDayNotification(index);
   }
 
@@ -30,7 +23,6 @@ class NotificationSettingModel extends ChangeNotifier {
   }
 
   Future<void> writeTime(BuildContext context, int index, TimeOfDay initialTime) async {
-    print('taped time');
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: initialTime,
@@ -38,14 +30,17 @@ class NotificationSettingModel extends ChangeNotifier {
     );
     if (picked != null) {
       time = picked;
-      notificationSettingsBoxRepository.writeTime(index, time);
+      await notificationSettingsBoxRepository.writeTime(index, time);
+      await trashNotificationController.setNotifications();
     }
     notifyListeners();
   }
 
-  void writeDoNotify(int index) {
+  Future<void> writeDoNotify(int index) async {
+    await trashNotificationController.requestPermissions();
     doNotify = !doNotify;
-    notificationSettingsBoxRepository.writeDoNotify(index, doNotify);
+    await notificationSettingsBoxRepository.writeDoNotify(index, doNotify);
+    await trashNotificationController.setNotifications();
     notifyListeners();
   }
 
@@ -61,6 +56,3 @@ class NotificationSettingModel extends ChangeNotifier {
     return '$hourString:$minuteString';
   }
 }
-
-
-

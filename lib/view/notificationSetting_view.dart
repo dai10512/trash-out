@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:trash_out/model/trashNotification.dart';
-import 'package:trash_out/model/NotificationSetting_model.dart';
+import 'package:trash_out/modelAndController/notificationSetting_model.dart';
 import 'package:trash_out/repository/notificationSettings_boxRepository.dart';
 import 'package:trash_out/typeAdapter/notificationSetting.dart';
 
@@ -12,7 +11,11 @@ class NotificationSettingView extends ConsumerWidget {
   @override
   Widget build(context, ref) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text('通知設定'),
+        centerTitle: true,
+        // actions: appBarIconList,
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -36,18 +39,6 @@ class NotificationSettingView extends ConsumerWidget {
                 },
               ),
             ),
-            TextButton(
-              child: Text('cancel'),
-              onPressed: () async {
-                trashNotification.cancelAllNotifications();
-              },
-            ),
-            TextButton(
-              child: Text('awesomeNotificaion'),
-              onPressed: () async {
-                trashNotification.judgeSetNotification();
-              },
-            ),
           ],
         ),
       ),
@@ -68,7 +59,7 @@ Widget notificationListTile(BuildContext context, int index) {
             child: Column(
               children: [
                 Text(
-                  '${formatWhichDay(notificationSettingModelWatch.whichDay)}のゴミ出しの通知時間',
+                  '${formatWhichDay(notificationSettingModelWatch.whichDay)}のゴミ収集の通知時間',
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         color: (notificationSettingModelRead.doNotify) ? Theme.of(context).primaryColor : Colors.grey,
                       ),
@@ -78,21 +69,19 @@ Widget notificationListTile(BuildContext context, int index) {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     MaterialButton(
-                      child: Text(
-                        notificationSettingModelWatch.formatTime(notificationSettingModelWatch.time),
-                        style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                              color: (notificationSettingModelRead.doNotify) ? Theme.of(context).primaryColor : Colors.grey,
-                            ),
-                      ),
-                      onPressed: () async => await notificationSettingModelRead.writeTime(context, index, notificationSettingModelRead.time),
-                    ),
+                        child: Text(
+                          notificationSettingModelWatch.formatTime(notificationSettingModelWatch.time),
+                          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                                color: (notificationSettingModelRead.doNotify) ? Theme.of(context).primaryColor : Colors.grey,
+                              ),
+                        ),
+                        onPressed: () async {
+                          await notificationSettingModelRead.writeTime(context, index, notificationSettingModelRead.time);
+                        }),
                     Switch(
                       value: notificationSettingModelWatch.doNotify,
                       onChanged: (value) async {
-                        await trashNotification.requestPermissions();
-                        notificationSettingModelRead.writeDoNotify(index);
-                        await trashNotification.cancelAllNotifications();
-                        trashNotification.judgeSetNotification();
+                        await notificationSettingModelRead.writeDoNotify(index);
                       },
                     ),
                   ],

@@ -26,13 +26,17 @@ class NotificationSettingsBoxRepository {
       time: const TimeOfDay(hour: 21, minute: 00),
       doNotify: false,
     );
-    box.add(todayNotification);
-    box.add(tomorrowNotification).then((value) => print('added default NotificationSetting'));
+    box.add(todayNotification).then(
+          (value) => box.add(tomorrowNotification).then(
+                (value) => print('added default NotificationSetting'),
+                onError: (e) => print("$e}"),
+              ),
+        );
   }
 
   NotificationSetting getNotificationSetting(int index) {
-    final NotificationSetting = box.getAt(index);
-    return NotificationSetting;
+    final notificationSetting = box.getAt(index);
+    return notificationSetting;
   }
 
   List<NotificationSetting> getNotificationSettings() {
@@ -40,27 +44,30 @@ class NotificationSettingsBoxRepository {
     return notificationSettings;
   }
 
-  void writeTime(int index, TimeOfDay time) {
+  Future<void> writeTime(int index, TimeOfDay time) async {
     print(time);
-    final NotificationSetting notificationSetting = box.getAt(index);
-    box.putAt(index, notificationSetting.copyWith(time: time)).then((value) => print('write time'));
-    print(notificationSetting.time);
-  }
-
-  void writeDoNotify(int index, bool doNotify) {
     final NotificationSetting notificationSetting = box.getAt(index);
     box
         .putAt(
-            index,
-            notificationSetting.copyWith(
-              doNotify: doNotify,
-            ))
-        .then((value) => print('write doNotify'))
-        .then((value) => print(notificationSetting.doNotify));
+          index,
+          notificationSetting.copyWith(time: time),
+        )
+        .then(
+          (value) => print('write time:${notificationSetting.time}'),
+          onError: (e) => print("$e}"),
+        );
+  }
+
+  Future<void> writeDoNotify(int index, bool doNotify) async {
+    final NotificationSetting notificationSetting = box.getAt(index);
+    box
+        .putAt(
+          index,
+          notificationSetting.copyWith(doNotify: doNotify),
+        )
+        .then(
+          (value) => print('write doNotify:${notificationSetting.doNotify}'),
+          onError: (e) => print("$e}"),
+        );
   }
 }
-
-
-
-
-

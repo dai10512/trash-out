@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:trash_out/model/trashNotification.dart';
+import 'package:trash_out/modelAndController/trashNotification_controller.dart';
 import 'package:trash_out/repository/notificationSettings_boxRepository.dart';
 import 'package:trash_out/typeAdapter/notificationSetting.dart';
 import 'package:trash_out/typeAdapter/trashDay.dart';
-import 'package:trash_out/view/home_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:trash_out/view/trashDayList_view.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,17 +38,16 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      home: const TrashDayListView(),
     );
   }
 }
 
 Future<void> _init() async {
   await _configureLocalTimeZone();
-  // await _initializeNotification();
   await _initializeAwesomeNotification();
   await _initializeDB();
-  trashNotification.setNotifications();
+  trashNotificationController.setNotifications();
 }
 
 _initializeAwesomeNotification() {
@@ -57,20 +56,12 @@ _initializeAwesomeNotification() {
       [
         NotificationChannel(
           channelGroupKey: 'basic_channel_group',
-          channelKey: 'basic_channel',
+          channelKey: 'trashOut',
           channelName: 'Basic notifications',
           channelDescription: 'Notification channel for basic tests',
           defaultColor: Color(0xFF9D50DD),
           ledColor: Colors.white,
         ),
-        NotificationChannel(
-          channelGroupKey: 'scheduled_channel',
-          channelKey: 'scheduled_channel',
-          channelName: 'schedule notifications',
-          channelDescription: 'Notification channel for schedule tests',
-          defaultColor: Color(0xFF9D50DD),
-          ledColor: Colors.white,
-        )
       ],
       channelGroups: [NotificationChannelGroup(channelGroupkey: 'basic_channel_group', channelGroupName: 'Basic group')],
       debug: true);
