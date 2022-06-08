@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // newMethod(context);
+    newMethod(context);
     // createScaffoldMessengerStreamListen(context);
 
     return MaterialApp(
@@ -110,13 +110,12 @@ void newMethod(BuildContext context) {
   );
 }
 
-// void createScaffoldMessengerStreamListen(BuildContext context) {
-//   AwesomeNotifications().createdStream.listen(
-//     (notification) {
-//       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-//         content: Text('Notification Created on ${notification.channelKey}'),
-//       ));
-//     },
-//   );
-// }
-
+void createScaffoldMessengerStreamListen(BuildContext context) {
+  AwesomeNotifications().createdStream.listen(
+    (notification) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Notification Created on ${notification.channelKey}'),
+      ));
+    },
+  );
+}
