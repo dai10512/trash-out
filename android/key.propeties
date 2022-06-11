@@ -1,0 +1,4 @@
+storePassword=trashout0610
+keyPassword=trashout0610
+keyAlias=key
+storeFile=/android/key.jks
