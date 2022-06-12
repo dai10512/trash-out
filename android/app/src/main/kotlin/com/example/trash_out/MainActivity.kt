@@ -1,4 +1,4 @@
-package com.example.trash_out
+package com.me.trash_out
 
 import io.flutter.embedding.android.FlutterActivity
 

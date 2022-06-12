@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.trash_out">
+    package="com.me.trash_out">
    <application
-        android:label="trash_out"
+        android:label="TrashOut"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
