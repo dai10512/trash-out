@@ -65,11 +65,13 @@ class TrashDayListView extends ConsumerWidget {
 
   Widget buildContent(List<TrashDay> trashDays) {
     if (trashDays.isEmpty) {
-      return Column(
-        children: const [
-          SizedBox(height: 300),
-          Text('データがありません'),
-        ],
+      return Center(
+        child: Column(
+          children: const [
+            SizedBox(height: 300),
+            Text('データがありません'),
+          ],
+        ),
       );
     } else {
       return Expanded(

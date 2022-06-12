@@ -14,6 +14,7 @@ class TrashDetailView extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('登録'),
+        centerTitle: true,
         automaticallyImplyLeading: false,
         elevation: 0,
         backgroundColor: Colors.transparent,

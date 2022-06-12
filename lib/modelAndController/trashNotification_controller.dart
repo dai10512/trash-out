@@ -1,6 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:trash_out/modelAndController/trashNotification_model.dart';
 import 'package:trash_out/repository/notificationSettings_boxRepository.dart';
 import 'package:trash_out/repository/trashDays_boxRepository.dart';
@@ -10,7 +10,7 @@ import 'package:trash_out/typeAdapter/notificationSetting.dart';
 import 'package:trash_out/util/util.dart';
 
 final TrashNotificationController trashNotificationController = TrashNotificationController();
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 // class TrashDayNotificationController{
 class TrashNotificationController {
@@ -18,19 +18,19 @@ class TrashNotificationController {
   List<NotificationSetting> notificationSettings = [];
 
   //初めての起動時に呼び出し、permissionの設定を促す。インスタンスの有無で判断される
-  Future<void> requestPermissions() async {
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
-        ?.requestPermissions(
-          alert: true,
-          badge: true,
-          sound: true,
-        )
-        .then(
-          (value) => print('requested Permission'),
-          onError: (e) => print("$e}"),
-        );
-  }
+  // Future<void> requestPermissions() async {
+  //   await flutterLocalNotificationsPlugin
+  //       .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
+  //       ?.requestPermissions(
+  //         alert: true,
+  //         badge: true,
+  //         sound: true,
+  //       )
+  //       .then(
+  //         (value) => print('requested Permission'),
+  //         onError: (e) => print("$e}"),
+  //       );
+  // }
 
   // アプリ起動時に呼び出す＋更新の都度呼び出す
   Future<void> setNotifications() async {

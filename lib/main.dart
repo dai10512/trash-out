@@ -29,10 +29,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    newMethod(context);
+    _actionStream(context);
     // createScaffoldMessengerStreamListen(context);
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         iconTheme: const IconThemeData.fallback().copyWith(color: Colors.grey[700]),
         useMaterial3: true,
@@ -50,7 +51,13 @@ Future<void> _init() async {
   trashNotificationController.setNotifications();
 }
 
-_initializeAwesomeNotification() {
+Future<void> _configureLocalTimeZone() async {
+  tz.initializeTimeZones();
+  final String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
+  tz.setLocalLocation(tz.getLocation(timeZoneName));
+}
+
+Future<void> _initializeAwesomeNotification() async {
   AwesomeNotifications().initialize(
       'resource://drawable/res_app_icon',
       [
@@ -69,19 +76,10 @@ _initializeAwesomeNotification() {
   AwesomeNotifications().isNotificationAllowed().then(
     (isAllowed) {
       if (!isAllowed) {
-        // This is just a basic example. For real apps, you must show some
-        // friendly dialog box before call the request method.
-        // This is very important to not harm the user experience
         AwesomeNotifications().requestPermissionToSendNotifications();
       }
     },
   );
-}
-
-Future<void> _configureLocalTimeZone() async {
-  tz.initializeTimeZones();
-  final String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
-  tz.setLocalLocation(tz.getLocation(timeZoneName));
 }
 
 Future<void> _initializeDB() async {
@@ -94,7 +92,7 @@ Future<void> _initializeDB() async {
   notificationSettingsBoxRepository.isFirst();
 }
 
-void newMethod(BuildContext context) {
+void _actionStream(BuildContext context) {
   AwesomeNotifications().actionStream.listen(
     (ReceivedNotification receivedNotification) {
       var id;
