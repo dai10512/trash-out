@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:trash_out/modelAndController/trashNotification_model.dart';
 import 'package:trash_out/repository/notificationSettings_boxRepository.dart';
-import 'package:trash_out/repository/trashDays_boxRepository.dart';
-import 'package:trash_out/typeAdapter/trashDay.dart';
+import 'package:trash_out/repository/trashList_boxRepository.dart';
+import 'package:trash_out/typeAdapter/trash.dart';
 import 'package:trash_out/typeAdapter/notificationSetting.dart';
 
 import 'package:trash_out/util/util.dart';
@@ -14,7 +14,7 @@ final TrashNotificationController trashNotificationController = TrashNotificatio
 
 // class TrashDayNotificationController{
 class TrashNotificationController {
-  List<TrashDay> trashDays = [];
+  List<Trash> trashList = [];
   List<NotificationSetting> notificationSettings = [];
 
   //初めての起動時に呼び出し、permissionの設定を促す。インスタンスの有無で判断される
@@ -50,7 +50,7 @@ class TrashNotificationController {
   }
 
   Future<void> getData() async {
-    trashDays = trashDaysBoxRepository.getTrashDays();
+    trashList = trashDaysBoxRepository.getTrashDays();
     notificationSettings = notificationSettingsBoxRepository.getNotificationSettings();
     print('got Data');
   }
@@ -69,11 +69,11 @@ class TrashNotificationController {
       // 通知がオンになっているか
       if (doNotify) {
         // アイテムの数だけ繰り返し
-        for (var p = 0; p < trashDays.length; p++) {
-          final TrashDay trashDay = trashDays[p];
-          final String trashType = trashDay.trashType;
-          final List<int> weekdays = mapToList(trashDay.daysOfWeek);
-          final List<int> weeksOfMonth = mapToList(trashDay.weeksOfMonth);
+        for (var p = 0; p < trashList.length; p++) {
+          final Trash trash = trashList[p];
+          final String trashType = trash.trashType;
+          final List<int> weekdays = mapToList(trash.weekdays);
+          final List<int> weeksOfMonth = mapToList(trash.weeksOfMonth);
 
           // 曜日があっているか判断
           for (var i = 0; i < weekdays.length; i++) {
@@ -106,11 +106,11 @@ class TrashNotificationController {
   //     // 通知がオンになっているか
   //     if (doNotify) {
   //       // アイテムの数だけ繰り返し
-  //       for (var p = 0; p < trashDays.length; p++) {
-  //         final TrashDay trashDay = trashDays[p];
-  //         final String trashType = trashDay.trashType;
-  //         final List<int> weekdays = mapToList(trashDay.daysOfWeek);
-  //         final List<int> weeksOfMonth = mapToList(trashDay.weeksOfMonth);
+  //       for (var p = 0; p < trashList.length; p++) {
+  //         final Trash trash = trashList[p];
+  //         final String trashType = trash.trashType;
+  //         final List<int> weekdays = mapToList(trash.daysOfWeek);
+  //         final List<int> weeksOfMonth = mapToList(trash.weeksOfMonth);
   //         Map<Map<int, int>, String> trashTypeMap = {};
 
   //         // 曜日があっているか判断

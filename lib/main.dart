@@ -4,13 +4,13 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:trash_out/modelAndController/trashNotification_controller.dart';
 import 'package:trash_out/repository/notificationSettings_boxRepository.dart';
 import 'package:trash_out/typeAdapter/notificationSetting.dart';
-import 'package:trash_out/typeAdapter/trashDay.dart';
+import 'package:trash_out/typeAdapter/trash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:trash_out/view/trashDayList_view.dart';
+import 'package:trash_out/view/trashList_view.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _actionStream(context);
+    // _actionStream(context);
     // createScaffoldMessengerStreamListen(context);
 
     return MaterialApp(
@@ -85,9 +85,9 @@ Future<void> _initializeAwesomeNotification() async {
 Future<void> _initializeDB() async {
   await Hive.initFlutter();
   Hive.registerAdapter(TimeOfDayAdapter());
-  Hive.registerAdapter(TrashDayAdapter());
+  Hive.registerAdapter(TrashAdapter());
   Hive.registerAdapter(NotificationSettingAdapter());
-  await Hive.openBox<TrashDay>('TrashDay');
+  await Hive.openBox<Trash>('Trash');
   await Hive.openBox<NotificationSetting>('NotificationSetting');
   notificationSettingsBoxRepository.isFirst();
 }

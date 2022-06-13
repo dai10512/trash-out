@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:trash_out/modelAndController/trashDay_model.dart';
-import 'package:trash_out/repository/trashDays_boxRepository.dart';
-import 'package:trash_out/typeAdapter/trashDay.dart';
+import 'package:trash_out/modelAndController/trash_model.dart';
+import 'package:trash_out/repository/trashList_boxRepository.dart';
+import 'package:trash_out/typeAdapter/trash.dart';
 import 'package:trash_out/util/util.dart';
 import 'package:trash_out/view/notificationSetting_view.dart';
-import 'package:trash_out/view/trashDay_view.dart';
+import 'package:trash_out/view/trash_view.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class TrashDayListView extends ConsumerWidget {
@@ -52,8 +52,8 @@ class TrashDayListView extends ConsumerWidget {
             ValueListenableBuilder<Box<dynamic>>(
               valueListenable: trashDaysBoxRepository.box.listenable(),
               builder: (context, box, _) {
-                List<TrashDay> trashDays = box.values.toList().cast<TrashDay>();
-                return buildContent(trashDays);
+                List<Trash> trashList = box.values.toList().cast<Trash>();
+                return buildContent(trashList);
               },
             ),
             const SizedBox(height: 30),
@@ -63,8 +63,8 @@ class TrashDayListView extends ConsumerWidget {
     );
   }
 
-  Widget buildContent(List<TrashDay> trashDays) {
-    if (trashDays.isEmpty) {
+  Widget buildContent(List<Trash> trashList) {
+    if (trashList.isEmpty) {
       return Center(
         child: Column(
           children: const [
@@ -78,18 +78,18 @@ class TrashDayListView extends ConsumerWidget {
         child: ListView.builder(
           shrinkWrap: true,
           padding: EdgeInsets.zero,
-          itemCount: trashDays.length,
+          itemCount: trashList.length,
           itemBuilder: (BuildContext context, int index) {
-            final trashDay = trashDays[index];
+            final trash = trashList[index];
             final hiveKey = trashDaysBoxRepository.box.keyAt(index);
-            return _buildSlidableListTile(trashDay, hiveKey);
+            return _buildSlidableListTile(trash, hiveKey);
           },
         ),
       );
     }
   }
 
-  Widget _buildSlidableListTile(TrashDay trashDay, dynamic hiveKey) {
+  Widget _buildSlidableListTile(Trash trash, dynamic hiveKey) {
     return Consumer(
       builder: (context, ref, child) {
         final TrashDayModel trashDayModel = ref.read(trashDayModelProvider(hiveKey));
@@ -100,8 +100,8 @@ class TrashDayListView extends ConsumerWidget {
           },
           child: Card(
             child: ListTile(
-              title: Text((trashDay.trashType != '') ? trashDay.trashType : '種類が登録されていません'),
-              subtitle: Text('${formatWeeksOfMonth(trashDay.weeksOfMonth)}  /  ${formatWeekdays(trashDay.daysOfWeek)}'),
+              title: Text((trash.trashType != '') ? trash.trashType : '種類が登録されていません'),
+              subtitle: Text('${formatWeeksOfMonth(trash.weeksOfMonth)}  /  ${formatWeekdays(trash.weekdays)}'),
               onTap: () {
                 showCupertinoModalBottomSheet(context: context, builder: (context) => TrashDetailView(hiveKey));
               },

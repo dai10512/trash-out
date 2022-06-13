@@ -1,40 +1,37 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'trashDay.dart';
+part of 'trash.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class TrashDayAdapter extends TypeAdapter<TrashDay> {
+class TrashAdapter extends TypeAdapter<Trash> {
   @override
   final int typeId = 1;
 
   @override
-  TrashDay read(BinaryReader reader) {
+  Trash read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return TrashDay(
-      id: fields[0] as String,
-      trashType: fields[1] as String,
-      daysOfWeek: (fields[2] as Map).cast<int, bool>(),
-      weeksOfMonth: (fields[3] as Map).cast<int, bool>(),
+    return Trash(
+      trashType: fields[0] as String,
+      weekdays: (fields[1] as Map).cast<int, bool>(),
+      weeksOfMonth: (fields[2] as Map).cast<int, bool>(),
     );
   }
 
   @override
-  void write(BinaryWriter writer, TrashDay obj) {
+  void write(BinaryWriter writer, Trash obj) {
     writer
-      ..writeByte(4)
-      ..writeByte(0)
-      ..write(obj.id)
-      ..writeByte(1)
-      ..write(obj.trashType)
-      ..writeByte(2)
-      ..write(obj.daysOfWeek)
       ..writeByte(3)
+      ..writeByte(0)
+      ..write(obj.trashType)
+      ..writeByte(1)
+      ..write(obj.weekdays)
+      ..writeByte(2)
       ..write(obj.weeksOfMonth);
   }
 
@@ -42,5 +39,9 @@ class TrashDayAdapter extends TypeAdapter<TrashDay> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is TrashDayAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TrashAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

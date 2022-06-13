@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trash_out/modelAndController/trashDay_model.dart';
+import 'package:trash_out/modelAndController/trash_model.dart';
 import 'package:trash_out/util/util.dart';
 
 class TrashDetailView extends ConsumerWidget {

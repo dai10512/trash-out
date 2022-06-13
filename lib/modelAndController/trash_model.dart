@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trash_out/modelAndController/trashNotification_controller.dart';
-import 'package:trash_out/repository/trashDays_boxRepository.dart';
-import 'package:trash_out/typeAdapter/trashDay.dart';
+import 'package:trash_out/repository/trashList_boxRepository.dart';
+import 'package:trash_out/typeAdapter/trash.dart';
 import 'package:trash_out/util/util.dart';
 
 final AutoDisposeChangeNotifierProviderFamily<TrashDayModel, dynamic> trashDayModelProvider =
@@ -19,21 +19,19 @@ class TrashDayModel extends ChangeNotifier {
   }
 
   void getData(dynamic hiveKey) {
-    final TrashDay? loadedData = trashDaysBoxRepository.getTrashDay(hiveKey);
+    final Trash? loadedData = trashDaysBoxRepository.getTrashDay(hiveKey);
     if (loadedData != null) {
-      id = loadedData.id;
       trashType = loadedData.trashType;
-      daysOfWeek = {...loadedData.daysOfWeek};
+      daysOfWeek = {...loadedData.weekdays};
       weeksOfMonth = {...loadedData.weeksOfMonth};
     }
     print('got data');
   }
 
   Future<void> saveTrashDay(dynamic hiveKey, TrashDayModel trashDayModel) async {
-    final tempTrashDay = TrashDay(
-      id: trashDayModel.id,
+    final tempTrashDay = Trash(
       trashType: trashDayModel.trashType,
-      daysOfWeek: trashDayModel.daysOfWeek,
+      weekdays: trashDayModel.daysOfWeek,
       weeksOfMonth: trashDayModel.weeksOfMonth,
     );
     if (hiveKey == null) {
@@ -44,11 +42,11 @@ class TrashDayModel extends ChangeNotifier {
     await trashNotificationController.setNotifications();
   }
 
-  Future<void> addTrashDay(TrashDay tempTrashDay) async {
+  Future<void> addTrashDay(Trash tempTrashDay) async {
     trashDaysBoxRepository.addTrashDay(tempTrashDay);
   }
 
-  Future<void> updateTrashDay(dynamic hiveKey, TrashDay tempTrashDay) async {
+  Future<void> updateTrashDay(dynamic hiveKey, Trash tempTrashDay) async {
     trashDaysBoxRepository.updateTrashType(hiveKey, tempTrashDay);
   }
 
