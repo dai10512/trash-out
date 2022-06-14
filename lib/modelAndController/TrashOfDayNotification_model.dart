@@ -10,15 +10,16 @@ class TrashNotificationModel {
 
   TrashNotificationModel(this.body, this.weekOfMonth, this.weekday, this.time) {
     createNotification();
+    print('created Notification');
   }
 
-  void createNotification() {
+  Future<void> createNotification() async{
     AwesomeNotifications()
         .createNotification(
           content: NotificationContent(
             id: int.parse(weekOfMonth.toString() + weekday.toString() + time.hour.toString() + time.minute.toString()),
             channelKey: 'trashOut',
-            title: 'TrashOutからの通知',
+            title: title,
             body: body,
           ),
           schedule: NotificationCalendar(
@@ -29,8 +30,6 @@ class TrashNotificationModel {
             repeats: true,
           ),
         )
-        .then((value) => print('notification scheduled'))
         .then((value) => print('title:$title / body:$body | 週$weekOfMonth / 曜日$weekday / 時間${time.hour}:${time.minute}'));
   }
 }
-

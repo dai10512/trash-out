@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trash_out/modelAndController/trashOfDay_model.dart';
 import 'package:trash_out/modelAndController/trash_model.dart';
 import 'package:trash_out/util/util.dart';
 
@@ -184,6 +185,7 @@ class TrashDetailView extends ConsumerWidget {
   Widget savedButton(dynamic hiveKey, TrashModel trashRead) {
     return Consumer(
       builder: (context, ref, child) {
+        final TrashOfDayViewModel trashOfDayViewModelRead = ref.read(trashOfDayViewModelProvider);
         return SizedBox(
           width: double.infinity,
           child: ElevatedButton(
@@ -193,6 +195,7 @@ class TrashDetailView extends ConsumerWidget {
             ),
             onPressed: () async {
               await trashRead.saveTrash(hiveKey, trashRead);
+              await trashOfDayViewModelRead.setTotalTrashType().then((value) => print(trashOfDayViewModelRead.totalTrashTypeOfToday));
               Navigator.pop(context);
             },
             child: Text((hiveKey == null) ? '新規登録する' : '更新する'),

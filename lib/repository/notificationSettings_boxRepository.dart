@@ -28,7 +28,7 @@ class NotificationSettingsBoxRepository {
     );
     box.add(todayNotification).then(
           (value) => box.add(tomorrowNotification).then(
-                (value) => print('added default NotificationSetting'),
+                (value) => print('initNotificationSettings'),
                 onError: (e) => print("$e}"),
               ),
         );
@@ -45,7 +45,6 @@ class NotificationSettingsBoxRepository {
   }
 
   Future<void> writeTime(int index, TimeOfDay time) async {
-    print(time);
     final NotificationSetting notificationSetting = box.getAt(index);
     box
         .putAt(

@@ -10,7 +10,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:trash_out/typeAdapter/trashOfDay.dart';
+import 'package:trash_out/typeAdapter/TrashOfDay.dart';
 import 'package:trash_out/view/trashList_view.dart';
 
 Future<void> main() async {
@@ -49,7 +49,7 @@ Future<void> _init() async {
   await _configureLocalTimeZone();
   await _initializeAwesomeNotification();
   await _initializeDB();
-  trashNotificationController.setNotifications();
+  await trashNotificationController.setNotifications();
 }
 
 Future<void> _configureLocalTimeZone() async {
@@ -88,10 +88,10 @@ Future<void> _initializeDB() async {
   Hive.registerAdapter(TimeOfDayAdapter());
   Hive.registerAdapter(TrashAdapter());
   Hive.registerAdapter(NotificationSettingAdapter());
-  // Hive.registerAdapter(TrashOfDayAdapter());
+  Hive.registerAdapter(TrashOfDayAdapter());
   await Hive.openBox<Trash>('Trash');
   await Hive.openBox<NotificationSetting>('NotificationSetting');
-  // await Hive.openBox<TrashOfDay>('TrashOfDay');
+  await Hive.openBox<TrashOfDay>('TrashOfDay');
   notificationSettingsBoxRepository.isFirst();
 }
 

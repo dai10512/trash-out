@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:trash_out/modelAndController/trashOfDay_model.dart';
 import 'package:trash_out/modelAndController/trash_model.dart';
 import 'package:trash_out/repository/trashList_boxRepository.dart';
 import 'package:trash_out/typeAdapter/trash.dart';
@@ -15,6 +16,7 @@ class TrashListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    print(DateTime.now());
     final List<Widget> appBarIconList = [
       IconButton(
         padding: EdgeInsets.zero,
@@ -56,6 +58,20 @@ class TrashListView extends ConsumerWidget {
             const SizedBox(height: 15),
             buildHeadline('収集ゴミのリスト'),
             buildTrashListSection(),
+            Consumer(builder: (context, ref, _) {
+              final TrashOfDayViewModel trashOfDayViewModelRead = ref.read(trashOfDayViewModelProvider);
+              final TrashOfDayViewModel trashOfDayViewModelWatch = ref.watch(trashOfDayViewModelProvider);
+              return Column(
+                children: [
+                  MaterialButton(
+                    onPressed: () async{
+                      await trashOfDayViewModelRead.setTotalTrashType();
+                    },
+                    child: Text(trashOfDayViewModelWatch.totalTrashTypeOfToday),
+                  ),
+                ],
+              );
+            }),
           ],
         ),
       ),
@@ -84,23 +100,43 @@ class TrashListView extends ConsumerWidget {
   }
 
   Widget buildTrashOfDayCard(BuildContext context, int whichDay) {
-    return Expanded(
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(13.0),
-          child: Column(children: [
-            Text(
-              (whichDay == 0) ? '今日' : '明日',
-              style: Theme.of(context).textTheme.bodySmall,
+    return Consumer(
+      builder: (context, ref, _) {
+        final TrashOfDayViewModel trashOfDayViewModelRead = ref.read(trashOfDayViewModelProvider);
+        final TrashOfDayViewModel trashOfDayViewModelWatch = ref.watch(trashOfDayViewModelProvider);
+        trashOfDayViewModelRead.setTotalTrashType();
+        print(trashOfDayViewModelRead.totalTrashTypeOfToday);
+        // print(1);
+        return Expanded(
+          child: SizedBox(
+            height: 200,
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(13.0),
+                child: Column(children: [
+                  Text(
+                    (whichDay == 0) ? '今日' : '明日',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 5),
+                  FittedBox(
+                    child: Text(
+                      (whichDay == 0) ? trashOfDayViewModelWatch.totalTrashTypeOfToday : trashOfDayViewModelWatch.totalTrashTypeOfTomorrow,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                  ),
+                  MaterialButton(
+                    onPressed: () {
+                      trashOfDayViewModelRead.setTotalTrashType();
+                    },
+                    child: Text(trashOfDayViewModelWatch.totalTrashTypeOfToday),
+                  ),
+                ]),
+              ),
             ),
-            const SizedBox(height: 3),
-            Text(
-              'aa',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-          ]),
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 

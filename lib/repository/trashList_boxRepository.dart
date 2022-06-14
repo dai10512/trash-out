@@ -19,7 +19,7 @@ class TrashListBoxRepository {
 
   Future<void> addTrash(Trash tempTrash) async {
     box.add(tempTrash).then(
-          (value) => print('added'),
+          (value) => print('added Trash'),
           onError: (e) => print("$e}"),
         );
   }

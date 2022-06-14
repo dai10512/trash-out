@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trash_out/modelAndController/trashOfDayNotification_controller.dart';
+import 'package:trash_out/modelAndController/trashOfDay_model.dart';
 import 'package:trash_out/repository/trashList_boxRepository.dart';
 import 'package:trash_out/typeAdapter/trash.dart';
 
@@ -23,7 +24,6 @@ class TrashModel extends ChangeNotifier {
       daysOfWeek = {...loadedData.weekdays};
       weeksOfMonth = {...loadedData.weeksOfMonth};
     }
-    print('got data');
   }
 
   Future<void> saveTrash(dynamic hiveKey, TrashModel trashModel) async {
@@ -67,5 +67,4 @@ class TrashModel extends ChangeNotifier {
     weeksOfMonth[index] = !weeksOfMonth[index]!;
     notifyListeners();
   }
-  
 }
