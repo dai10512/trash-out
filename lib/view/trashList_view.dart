@@ -126,8 +126,8 @@ class TrashListView extends ConsumerWidget {
                     ),
                   ),
                   MaterialButton(
-                    onPressed: () {
-                      trashOfDayViewModelRead.setTotalTrashType();
+                    onPressed: ()async {
+                      await trashOfDayViewModelRead.setTotalTrashType();
                     },
                     child: Text(trashOfDayViewModelWatch.totalTrashTypeOfToday),
                   ),
