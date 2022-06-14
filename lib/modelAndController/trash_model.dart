@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trash_out/modelAndController/trashNotification_controller.dart';
+import 'package:trash_out/modelAndController/trashOfDayNotification_controller.dart';
 import 'package:trash_out/repository/trashList_boxRepository.dart';
 import 'package:trash_out/typeAdapter/trash.dart';
-import 'package:trash_out/util/util.dart';
 
-final AutoDisposeChangeNotifierProviderFamily<TrashDayModel, dynamic> trashDayModelProvider =
-    ChangeNotifierProvider.family.autoDispose<TrashDayModel, dynamic>((ref, hiveKey) => TrashDayModel(hiveKey));
+final AutoDisposeChangeNotifierProviderFamily<TrashModel, dynamic> trashModelProvider =
+    ChangeNotifierProvider.family.autoDispose<TrashModel, dynamic>((ref, hiveKey) => TrashModel(hiveKey));
 
-class TrashDayModel extends ChangeNotifier {
-  String id = uuid.v4();
+class TrashModel extends ChangeNotifier {
   String trashType = '';
   Map<int, bool> daysOfWeek = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false};
   Map<int, bool> weeksOfMonth = {1: true, 2: true, 3: true, 4: true, 5: true};
 
-  TrashDayModel(dynamic hiveKey) {
+  TrashModel(dynamic hiveKey) {
     getData(hiveKey);
   }
 
   void getData(dynamic hiveKey) {
-    final Trash? loadedData = trashDaysBoxRepository.getTrashDay(hiveKey);
+    final Trash? loadedData = trashListBoxRepository.getTrash(hiveKey);
     if (loadedData != null) {
       trashType = loadedData.trashType;
       daysOfWeek = {...loadedData.weekdays};
@@ -28,30 +26,30 @@ class TrashDayModel extends ChangeNotifier {
     print('got data');
   }
 
-  Future<void> saveTrashDay(dynamic hiveKey, TrashDayModel trashDayModel) async {
-    final tempTrashDay = Trash(
-      trashType: trashDayModel.trashType,
-      weekdays: trashDayModel.daysOfWeek,
-      weeksOfMonth: trashDayModel.weeksOfMonth,
+  Future<void> saveTrash(dynamic hiveKey, TrashModel trashModel) async {
+    final tempTrash = Trash(
+      trashType: trashModel.trashType,
+      weekdays: trashModel.daysOfWeek,
+      weeksOfMonth: trashModel.weeksOfMonth,
     );
     if (hiveKey == null) {
-      await addTrashDay(tempTrashDay);
+      await addTrash(tempTrash);
     } else {
-      await updateTrashDay(hiveKey, tempTrashDay);
+      await updateTrash(hiveKey, tempTrash);
     }
     await trashNotificationController.setNotifications();
   }
 
-  Future<void> addTrashDay(Trash tempTrashDay) async {
-    trashDaysBoxRepository.addTrashDay(tempTrashDay);
+  Future<void> addTrash(Trash tempTrash) async {
+    trashListBoxRepository.addTrash(tempTrash);
   }
 
-  Future<void> updateTrashDay(dynamic hiveKey, Trash tempTrashDay) async {
-    trashDaysBoxRepository.updateTrashType(hiveKey, tempTrashDay);
+  Future<void> updateTrash(dynamic hiveKey, Trash tempTrash) async {
+    trashListBoxRepository.updateTrashType(hiveKey, tempTrash);
   }
 
-  Future<void> deleteTrashDay(dynamic hiveKey) async {
-    await trashDaysBoxRepository.deleteTrashDay(hiveKey).then(
+  Future<void> deleteTrash(dynamic hiveKey) async {
+    await trashListBoxRepository.deleteTrash(hiveKey).then(
           (value) => trashNotificationController.setNotifications(),
         );
   }
@@ -69,4 +67,5 @@ class TrashDayModel extends ChangeNotifier {
     weeksOfMonth[index] = !weeksOfMonth[index]!;
     notifyListeners();
   }
+  
 }

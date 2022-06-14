@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:trash_out/modelAndController/trashNotification_controller.dart';
+import 'package:trash_out/modelAndController/trashOfDayNotification_controller.dart';
 import 'package:trash_out/repository/notificationSettings_boxRepository.dart';
 import 'package:trash_out/typeAdapter/notificationSetting.dart';
 import 'package:trash_out/typeAdapter/trash.dart';
@@ -10,6 +10,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:trash_out/typeAdapter/trashOfDay.dart';
 import 'package:trash_out/view/trashList_view.dart';
 
 Future<void> main() async {
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         primarySwatch: Colors.blue,
       ),
-      home: const TrashDayListView(),
+      home: const TrashListView(),
     );
   }
 }
@@ -87,8 +88,10 @@ Future<void> _initializeDB() async {
   Hive.registerAdapter(TimeOfDayAdapter());
   Hive.registerAdapter(TrashAdapter());
   Hive.registerAdapter(NotificationSettingAdapter());
+  // Hive.registerAdapter(TrashOfDayAdapter());
   await Hive.openBox<Trash>('Trash');
   await Hive.openBox<NotificationSetting>('NotificationSetting');
+  // await Hive.openBox<TrashOfDay>('TrashOfDay');
   notificationSettingsBoxRepository.isFirst();
 }
 

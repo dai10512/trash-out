@@ -9,8 +9,8 @@ import 'package:trash_out/view/notificationSetting_view.dart';
 import 'package:trash_out/view/trash_view.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-class TrashDayListView extends ConsumerWidget {
-  const TrashDayListView({Key? key}) : super(key: key);
+class TrashListView extends ConsumerWidget {
+  const TrashListView({Key? key}) : super(key: key);
   // final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -34,7 +34,7 @@ class TrashDayListView extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('収集ゴミリスト'),
+        title: const Text('ホーム'),
         centerTitle: true,
         actions: appBarIconList,
       ),
@@ -46,31 +46,83 @@ class TrashDayListView extends ConsumerWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Padding(
-        padding: const EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+        padding: const EdgeInsets.symmetric(horizontal: commonHorizontalPadding),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ValueListenableBuilder<Box<dynamic>>(
-              valueListenable: trashDaysBoxRepository.box.listenable(),
-              builder: (context, box, _) {
-                List<Trash> trashList = box.values.toList().cast<Trash>();
-                return buildContent(trashList);
-              },
-            ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 15),
+            buildHeadline('収集ゴミの案内'),
+            buildTrashOfDaySection(context),
+            const SizedBox(height: 15),
+            buildHeadline('収集ゴミのリスト'),
+            buildTrashListSection(),
           ],
         ),
       ),
     );
   }
 
+  Widget buildHeadline(text) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 15),
+      child: Text(
+        text,
+        style: const TextStyle(fontSize: 13),
+      ),
+    );
+  }
+
+  Widget buildTrashOfDaySection(context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        buildTrashOfDayCard(context, 0),
+        const SizedBox(width: 7),
+        buildTrashOfDayCard(context, 1),
+      ],
+    );
+  }
+
+  Widget buildTrashOfDayCard(BuildContext context, int whichDay) {
+    return Expanded(
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(13.0),
+          child: Column(children: [
+            Text(
+              (whichDay == 0) ? '今日' : '明日',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            const SizedBox(height: 3),
+            Text(
+              'aa',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+          ]),
+        ),
+      ),
+    );
+  }
+
+  Widget buildTrashListSection() {
+    return ValueListenableBuilder<Box<dynamic>>(
+      valueListenable: trashListBoxRepository.box.listenable(),
+      builder: (context, box, _) {
+        List<Trash> trashList = box.values.toList().cast<Trash>();
+        return buildContent(trashList);
+      },
+    );
+  }
+
   Widget buildContent(List<Trash> trashList) {
     if (trashList.isEmpty) {
-      return Center(
-        child: Column(
-          children: const [
-            SizedBox(height: 300),
-            Text('データがありません'),
-          ],
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.only(top: 30.0),
+          child: Text(
+            '収集ゴミが未登録です。\n右上の「＋」ボタンを押して\nリストを作成しましょう',
+            textAlign: TextAlign.center,
+          ),
         ),
       );
     } else {
@@ -81,7 +133,7 @@ class TrashDayListView extends ConsumerWidget {
           itemCount: trashList.length,
           itemBuilder: (BuildContext context, int index) {
             final trash = trashList[index];
-            final hiveKey = trashDaysBoxRepository.box.keyAt(index);
+            final hiveKey = trashListBoxRepository.box.keyAt(index);
             return _buildSlidableListTile(trash, hiveKey);
           },
         ),
@@ -92,11 +144,11 @@ class TrashDayListView extends ConsumerWidget {
   Widget _buildSlidableListTile(Trash trash, dynamic hiveKey) {
     return Consumer(
       builder: (context, ref, child) {
-        final TrashDayModel trashDayModel = ref.read(trashDayModelProvider(hiveKey));
+        final TrashModel trashModel = ref.read(trashModelProvider(hiveKey));
         return Dismissible(
           key: UniqueKey(),
           onDismissed: (direction) {
-            trashDayModel.deleteTrashDay(hiveKey);
+            trashModel.deleteTrash(hiveKey);
           },
           child: Card(
             child: ListTile(

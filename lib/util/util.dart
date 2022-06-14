@@ -1,6 +1,5 @@
 import 'package:uuid/uuid.dart';
 
-
 List<int> mapToList(Map map) {
   final List<int> keys = [];
   for (var i = 1; i <= map.length; i++) {
@@ -11,9 +10,9 @@ List<int> mapToList(Map map) {
   return keys;
 }
 
-const uuid =  Uuid();
+const uuid = Uuid();
 
-final Map<int,String>weekdayMap = {
+final Map<int, String> weekdayMap = {
   1: '月曜日',
   2: '火曜日',
   3: '水曜日',
@@ -23,3 +22,4 @@ final Map<int,String>weekdayMap = {
   7: '日曜日',
 };
 
+const commonHorizontalPadding = 20.0;

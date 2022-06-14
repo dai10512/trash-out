@@ -33,3 +33,4 @@ class TrashNotificationModel {
         .then((value) => print('title:$title / body:$body | 週$weekOfMonth / 曜日$weekday / 時間${time.hour}:${time.minute}'));
   }
 }
+

@@ -4,8 +4,6 @@ part 'trash.g.dart';
 
 @HiveType(typeId: 1)
 class Trash {
-
-
   @HiveField(0)
   String trashType;
 

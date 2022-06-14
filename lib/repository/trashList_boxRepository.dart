@@ -2,36 +2,36 @@ import 'dart:async';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:trash_out/typeAdapter/trash.dart';
 
-TrashDaysBoxRepository trashDaysBoxRepository = TrashDaysBoxRepository();
+TrashListBoxRepository trashListBoxRepository = TrashListBoxRepository();
 
-class TrashDaysBoxRepository {
+class TrashListBoxRepository {
   Box<dynamic> box = Hive.box<Trash>('Trash');
 
-  List<Trash> getTrashDays() {
+  List<Trash> getTrashList() {
     List<Trash> trashList = box.values.toList().cast<Trash>();
     return trashList;
   }
 
-  Trash? getTrashDay(hiveKey) {
+  Trash? getTrash(hiveKey) {
     Trash? trash = box.get(hiveKey);
     return trash;
   }
 
-  Future<void> addTrashDay(Trash tempTrashDay) async {
-    box.add(tempTrashDay).then(
+  Future<void> addTrash(Trash tempTrash) async {
+    box.add(tempTrash).then(
           (value) => print('added'),
           onError: (e) => print("$e}"),
         );
   }
 
-  Future<void> updateTrashType(dynamic hiveKey, Trash tempTrashDay) async {
-    box.put(hiveKey, tempTrashDay).then(
+  Future<void> updateTrashType(dynamic hiveKey, Trash tempTrash) async {
+    box.put(hiveKey, tempTrash).then(
           (value) => print('updated'),
           onError: (e) => print("$e}"),
         );
   }
 
-  Future<void> deleteTrashDay(hiveKey) async {
+  Future<void> deleteTrash(hiveKey) async {
     box.delete(hiveKey).then(
           (value) => print('deleted'),
           onError: (e) => print("$e}"),
