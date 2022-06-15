@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // _actionStream(context);
+    _actionStream(context);
     // createScaffoldMessengerStreamListen(context);
 
     return MaterialApp(
