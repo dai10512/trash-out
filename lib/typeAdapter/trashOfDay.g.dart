@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'TrashOfDay.dart';
+part of 'trashOfDay.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
