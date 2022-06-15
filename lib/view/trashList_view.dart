@@ -64,7 +64,7 @@ class TrashListView extends ConsumerWidget {
               return Column(
                 children: [
                   MaterialButton(
-                    onPressed: () async{
+                    onPressed: () async {
                       await trashOfDayViewModelRead.setTotalTrashType();
                     },
                     child: Text(trashOfDayViewModelWatch.totalTrashTypeOfToday),
@@ -104,7 +104,7 @@ class TrashListView extends ConsumerWidget {
       builder: (context, ref, _) {
         final TrashOfDayViewModel trashOfDayViewModelRead = ref.read(trashOfDayViewModelProvider);
         final TrashOfDayViewModel trashOfDayViewModelWatch = ref.watch(trashOfDayViewModelProvider);
-        trashOfDayViewModelRead.setTotalTrashType();
+        // trashOfDayViewModelRead.setTotalTrashType();
         print(trashOfDayViewModelRead.totalTrashTypeOfToday);
         // print(1);
         return Expanded(
@@ -120,13 +120,17 @@ class TrashListView extends ConsumerWidget {
                   ),
                   const SizedBox(height: 5),
                   FittedBox(
-                    child: Text(
-                      (whichDay == 0) ? trashOfDayViewModelWatch.totalTrashTypeOfToday : trashOfDayViewModelWatch.totalTrashTypeOfTomorrow,
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
+                    child: StreamBuilder<Object>(
+                        stream: null,
+                        builder: (context, snapshot) {
+                          return Text(
+                            (whichDay == 0) ? trashOfDayViewModelWatch.totalTrashTypeOfToday : trashOfDayViewModelWatch.totalTrashTypeOfTomorrow,
+                            style: Theme.of(context).textTheme.headlineSmall,
+                          );
+                        }),
                   ),
                   MaterialButton(
-                    onPressed: ()async {
+                    onPressed: () async {
                       await trashOfDayViewModelRead.setTotalTrashType();
                     },
                     child: Text(trashOfDayViewModelWatch.totalTrashTypeOfToday),

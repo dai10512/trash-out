@@ -195,7 +195,7 @@ class TrashDetailView extends ConsumerWidget {
             ),
             onPressed: () async {
               await trashRead.saveTrash(hiveKey, trashRead);
-              await trashOfDayViewModelRead.setTotalTrashType().then((value) => print(trashOfDayViewModelRead.totalTrashTypeOfToday));
+              await trashOfDayViewModelRead.setTotalTrashType();
               Navigator.pop(context);
             },
             child: Text((hiveKey == null) ? '新規登録する' : '更新する'),
