@@ -1,5 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:trash_out/util/util.dart';
 
 class TrashNotificationModel {
   String title = 'TrashOutからの通知';
@@ -13,7 +14,7 @@ class TrashNotificationModel {
     print('created Notification');
   }
 
-  Future<void> createNotification() async{
+  Future<void> createNotification() async {
     AwesomeNotifications()
         .createNotification(
           content: NotificationContent(
@@ -30,6 +31,7 @@ class TrashNotificationModel {
             repeats: true,
           ),
         )
-        .then((value) => print('title:$title / body:$body | 週$weekOfMonth / 曜日$weekday / 時間${time.hour}:${time.minute}'));
+        .then((value) =>
+            print('$title / $body / ${formatWeekOfMonthMap[weekOfMonth]} / ${formatWeekdayMap[weekday]} / 時間${time.hour}:${time.minute}'));
   }
 }

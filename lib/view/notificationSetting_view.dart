@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:trash_out/modelAndController/notificationSetting_model.dart';
 import 'package:trash_out/repository/notificationSettings_boxRepository.dart';
 import 'package:trash_out/typeAdapter/notificationSetting.dart';
+import 'package:trash_out/util/util.dart';
 
 class NotificationSettingView extends ConsumerWidget {
   const NotificationSettingView({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class NotificationSettingView extends ConsumerWidget {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: notificationSettings.length,
+                    itemCount: notificationSettings.length-1,
                     itemBuilder: (BuildContext context, int index) {
                       return notificationListTile(context, index);
                     },
@@ -95,12 +96,4 @@ Widget notificationListTile(BuildContext context, int index) {
   );
 }
 
-String formatWhichDay(int whichDay) {
-  String text = '';
-  if (whichDay == 0) {
-    text = '今日';
-  } else {
-    text = '明日';
-  }
-  return text;
-}
+

@@ -58,20 +58,6 @@ class TrashListView extends ConsumerWidget {
             const SizedBox(height: 15),
             buildHeadline('収集ゴミのリスト'),
             buildTrashListSection(),
-            Consumer(builder: (context, ref, _) {
-              final TrashOfDayViewModel trashOfDayViewModelRead = ref.read(trashOfDayViewModelProvider);
-              final TrashOfDayViewModel trashOfDayViewModelWatch = ref.watch(trashOfDayViewModelProvider);
-              return Column(
-                children: [
-                  MaterialButton(
-                    onPressed: () async {
-                      await trashOfDayViewModelRead.setTotalTrashType();
-                    },
-                    child: Text(trashOfDayViewModelWatch.totalTrashTypeOfToday),
-                  ),
-                ],
-              );
-            }),
           ],
         ),
       ),
@@ -102,40 +88,43 @@ class TrashListView extends ConsumerWidget {
   Widget buildTrashOfDayCard(BuildContext context, int whichDay) {
     return Consumer(
       builder: (context, ref, _) {
-        final TrashOfDayViewModel trashOfDayViewModelWatch = ref.watch(trashOfDayViewModelProvider); //なぜか必要
+        final TrashOfDayViewModel trashOfDayViewModelWatch = ref.watch(trashOfDayViewModelProvider); //必要
         return Expanded(
-          child: SizedBox(
-            height: 90,
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(13.0),
-                child: Column(
-                  children: [
-                    Text(
-                      (whichDay == 0) ? '今日' : '明日',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: 5),
-                    FittedBox(
-                      child: FutureBuilder(
-                        future: (whichDay == 0) ? trashOfDayViewModel.getTotalTrashTypeOfToday() : trashOfDayViewModel.getTotalTrashTypeOfTomorrow(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return Text(
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(13.0),
+              child: Column(
+                children: [
+                  Text(
+                    formatWhichDay(whichDay),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 5),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: FutureBuilder(
+                      future: (whichDay == 0) ? trashOfDayViewModelWatch.getTotalTrashTypeOfToday() : trashOfDayViewModelWatch.getTotalTrashTypeOfTomorrow(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return FittedBox(
+                            child: Text(
                               snapshot.data.toString(),
                               style: Theme.of(context).textTheme.headlineSmall,
-                            );
-                          } else {
-                            return Text(
+                              textAlign: TextAlign.center,
+                            ),
+                          );
+                        } else {
+                          return FittedBox(
+                            child: Text(
                               "無し",
                               style: Theme.of(context).textTheme.headlineSmall,
-                            );
-                          }
-                        },
-                      ),
+                            ),
+                          );
+                        }
+                      },
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -168,7 +157,9 @@ class TrashListView extends ConsumerWidget {
     } else {
       return Expanded(
         child: ListView.builder(
+          // reverse: true,
           shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
           padding: EdgeInsets.zero,
           itemCount: trashList.length,
           itemBuilder: (BuildContext context, int index) {
@@ -185,10 +176,13 @@ class TrashListView extends ConsumerWidget {
     return Consumer(
       builder: (context, ref, child) {
         final TrashModel trashModel = ref.read(trashModelProvider(hiveKey));
+        final TrashOfDayViewModel trashOfDayViewModelRead = ref.read(trashOfDayViewModelProvider);
         return Dismissible(
           key: UniqueKey(),
-          onDismissed: (direction) {
-            trashModel.deleteTrash(hiveKey);
+          
+          onDismissed: (direction) async {
+            await trashModel.deleteTrash(hiveKey);
+            await trashOfDayViewModelRead.setTotalTrashType();
           },
           child: Card(
             child: ListTile(
@@ -203,47 +197,4 @@ class TrashListView extends ConsumerWidget {
       },
     );
   }
-}
-
-String formatWeeksOfMonth(Map<int, bool> weeksOfMonth) {
-  String word = '';
-  int count = 0;
-  for (var i = 1; i <= weeksOfMonth.length; i++) {
-    if (weeksOfMonth[i]!) {
-      word += '第$i、';
-      count++;
-    }
-  }
-
-  switch (count) {
-    case 0:
-      word = '週が未登録です';
-      break;
-    case 5:
-      word = '毎週';
-      break;
-    default:
-      word = '毎月${word.substring(0, word.length - 1)}';
-  }
-  return word;
-}
-
-String formatWeekdays(Map<int, bool> daysOfWeek) {
-  String word = '';
-  int count = 0;
-  for (var i = 1; i <= daysOfWeek.length; i++) {
-    if (daysOfWeek[i]!) {
-      word += '${weekdayMap[i]}、';
-      count++;
-    }
-  }
-  switch (count) {
-    case 0:
-      word = '週が未登録です';
-      break;
-    default:
-      word = word.substring(0, word.length - 1);
-  }
-
-  return word;
 }

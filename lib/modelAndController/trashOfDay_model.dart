@@ -8,6 +8,8 @@ import 'package:trash_out/typeAdapter/TrashOfDay.dart';
 TrashOfDayViewModel trashOfDayViewModel = TrashOfDayViewModel();
 
 final trashOfDayViewModelProvider = ChangeNotifierProvider<TrashOfDayViewModel>((ref) => TrashOfDayViewModel());
+
+
 final DateTime today = DateTime.now();
 final DateTime tomorrow = today.add(const Duration(days: 1));
 

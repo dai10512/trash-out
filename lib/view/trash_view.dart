@@ -167,7 +167,7 @@ class TrashDetailView extends ConsumerWidget {
                       trashRead.writeDaysOfWeek(index + 1);
                     },
                     child: Text(
-                      weekdayMap[index + 1].toString(),
+                      formatWeekdayMap[index + 1].toString(),
                       style: const TextStyle(
                         color: Colors.white,
                       ),

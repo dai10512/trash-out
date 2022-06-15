@@ -43,7 +43,6 @@ class TrashNotificationController {
   }
 
   Future<void> uploadTrashOfDay() async {
-
     Map trashOfDayMap = {};
     trashList = trashListBoxRepository.getTrashList();
 
@@ -54,23 +53,24 @@ class TrashNotificationController {
       final List<int> weeksOfMonth = mapToList(trash.weeksOfMonth);
       for (var l = 0; l < weeksOfMonth.length; l++) {
         for (var s = 0; s < weekdays.length; s++) {
-          int scheduleNumber = int.parse(weeksOfMonth[l].toString() + weekdays[s].toString()) ;
+          int scheduleNumber = int.parse(weeksOfMonth[l].toString() + weekdays[s].toString());
           if (trashOfDayMap.containsKey(scheduleNumber)) {
-            trashOfDayMap[scheduleNumber] = trashOfDayMap[scheduleNumber] + ',' + trashType;
+            trashOfDayMap[scheduleNumber] = trashOfDayMap[scheduleNumber] + '\n' + trashType;
           } else {
             trashOfDayMap[scheduleNumber] = trashType;
           }
         }
       }
     }
-    trashOfDayMap.forEach((scheduleNumber, trashType)async {
-      int weekOfMonth = int.parse(scheduleNumber.toString()[0]);
-      int weekday = int.parse(scheduleNumber.toString()[1]);
-      TrashOfDay tempTrashOfDay = TrashOfDay(totalTrashType: trashType, weekday: weekday, weekOfMonth: weekOfMonth);
-      await trashOfDayBoxRepository.addTrashOfDay(tempTrashOfDay);
-    });
-        print('upload setTrashOfDay');
-
+    trashOfDayMap.forEach(
+      (scheduleNumber, trashType) async {
+        int weekOfMonth = int.parse(scheduleNumber.toString()[0]);
+        int weekday = int.parse(scheduleNumber.toString()[1]);
+        TrashOfDay tempTrashOfDay = TrashOfDay(totalTrashType: trashType, weekday: weekday, weekOfMonth: weekOfMonth);
+        await trashOfDayBoxRepository.addTrashOfDay(tempTrashOfDay);
+      },
+    );
+    print('upload setTrashOfDay');
   }
 
   Future<void> setTrashOfDayNotification() async {
@@ -91,10 +91,11 @@ class TrashNotificationController {
 
         // アイテムの数だけ繰り返し
         for (var s = 0; s < trashOfDayList.length; s++) {
-          final TrashOfDay trashOfDay = trashOfDayList[s];
-          final int weekOfMonth = trashOfDay.weekOfMonth;
-          final int weekday = trashOfDay.weekday;
-          final String totalTrashType = trashOfDay.totalTrashType;
+          TrashOfDay trashOfDay = trashOfDayList[s];
+          String totalTrashType = trashOfDay.totalTrashType;
+          int weekOfMonth = trashOfDay.weekOfMonth;
+          int weekday = trashOfDay.weekday;
+          totalTrashType = totalTrashType.replaceAll('\n', '、');
           if (whichDay == 0) {
             notificationMessage = '本日の収集ゴミは、$totalTrashTypeです';
           } else {
