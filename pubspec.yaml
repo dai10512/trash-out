@@ -37,8 +37,8 @@ dependencies:
   flutter_riverpod: ^1.0.4
   date_time_picker: ^2.1.0
   flutter_datetime_picker: ^1.5.1
-  flutter_localizations:
-    sdk: flutter
+  # flutter_localizations:
+  #   sdk: flutter
   uuid: ^3.0.6
   drift: ^1.6.0
   http: ^0.13.4

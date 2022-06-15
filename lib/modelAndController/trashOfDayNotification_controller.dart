@@ -4,7 +4,7 @@ import 'package:trash_out/modelAndController/trashOfDayNotification_model.dart';
 import 'package:trash_out/repository/notificationSettings_boxRepository.dart';
 import 'package:trash_out/repository/trashList_boxRepository.dart';
 import 'package:trash_out/repository/trashOfDay_boxRepository.dart';
-import 'package:trash_out/typeAdapter/TrashOfDay.dart';
+import 'package:trash_out/typeAdapter/trashOfDay.dart';
 import 'package:trash_out/typeAdapter/trash.dart';
 import 'package:trash_out/typeAdapter/notificationSetting.dart';
 
