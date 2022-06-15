@@ -21,16 +21,16 @@ class NotificationSettingsBoxRepository {
       time: const TimeOfDay(hour: 8, minute: 00),
       doNotify: false,
     );
-    final tomorrowNotification = NotificationSetting(
-      whichDay: 1,
-      time: const TimeOfDay(hour: 21, minute: 00),
-      doNotify: false,
-    );
+    // final tomorrowNotification = NotificationSetting(
+    //   whichDay: 1,
+    //   time: const TimeOfDay(hour: 21, minute: 00),
+    //   doNotify: false,
+    // );
     box.add(todayNotification).then(
-          (value) => box.add(tomorrowNotification).then(
-                (value) => print('initNotificationSettings'),
-                onError: (e) => print("$e}"),
-              ),
+          // (value) => box.add(tomorrowNotification).then(
+          (value) => print('initNotificationSettings'),
+          onError: (e) => print("$e}"),
+          // ),
         );
   }
 

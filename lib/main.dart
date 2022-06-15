@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
     // createScaffoldMessengerStreamListen(context);
 
     return MaterialApp(
+      locale: Locale('ja'),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         iconTheme: const IconThemeData.fallback().copyWith(color: Colors.grey[700]),

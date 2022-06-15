@@ -32,7 +32,7 @@ class NotificationSettingView extends ConsumerWidget {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: notificationSettings.length-1,
+                    itemCount: notificationSettings.length,
                     itemBuilder: (BuildContext context, int index) {
                       return notificationListTile(context, index);
                     },
@@ -60,7 +60,7 @@ Widget notificationListTile(BuildContext context, int index) {
             child: Column(
               children: [
                 Text(
-                  '${formatWhichDay(notificationSettingModelWatch.whichDay)}のゴミ収集の通知時間',
+                  '当日の収集ゴミの通知時間',
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         color: (notificationSettingModelRead.doNotify) ? Theme.of(context).primaryColor : Colors.grey,
                       ),
@@ -95,5 +95,3 @@ Widget notificationListTile(BuildContext context, int index) {
     },
   );
 }
-
-
