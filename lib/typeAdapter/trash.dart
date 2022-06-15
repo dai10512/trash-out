@@ -1,25 +1,21 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
-part 'trashDay.g.dart';
+part 'trash.g.dart';
 
 @HiveType(typeId: 1)
-class TrashDay {
+class Trash {
   @HiveField(0)
-  String id;
-
-  @HiveField(1)
   String trashType;
 
-  @HiveField(2)
-  Map<int, bool> daysOfWeek;
+  @HiveField(1)
+  Map<int, bool> weekdays;
 
-  @HiveField(3)
+  @HiveField(2)
   Map<int, bool> weeksOfMonth;
 
-  TrashDay({
-    required this.id,
+  Trash({
     required this.trashType,
-    required this.daysOfWeek,
+    required this.weekdays,
     required this.weeksOfMonth,
   });
 }

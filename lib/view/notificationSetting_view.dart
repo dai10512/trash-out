@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:trash_out/modelAndController/notificationSetting_model.dart';
 import 'package:trash_out/repository/notificationSettings_boxRepository.dart';
 import 'package:trash_out/typeAdapter/notificationSetting.dart';
+import 'package:trash_out/util/util.dart';
 
 class NotificationSettingView extends ConsumerWidget {
   const NotificationSettingView({Key? key}) : super(key: key);
@@ -59,7 +60,7 @@ Widget notificationListTile(BuildContext context, int index) {
             child: Column(
               children: [
                 Text(
-                  '${formatWhichDay(notificationSettingModelWatch.whichDay)}のゴミ収集の通知時間',
+                  '当日の収集ゴミの通知時間',
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         color: (notificationSettingModelRead.doNotify) ? Theme.of(context).primaryColor : Colors.grey,
                       ),
@@ -93,14 +94,4 @@ Widget notificationListTile(BuildContext context, int index) {
       );
     },
   );
-}
-
-String formatWhichDay(int whichDay) {
-  String text = '';
-  if (whichDay == 0) {
-    text = '今日';
-  } else {
-    text = '明日';
-  }
-  return text;
 }

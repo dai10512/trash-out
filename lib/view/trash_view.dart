@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trash_out/modelAndController/trashDay_model.dart';
+import 'package:trash_out/modelAndController/trashOfDay_model.dart';
+import 'package:trash_out/modelAndController/trash_model.dart';
 import 'package:trash_out/util/util.dart';
 
 class TrashDetailView extends ConsumerWidget {
@@ -9,7 +10,7 @@ class TrashDetailView extends ConsumerWidget {
 
   @override
   Widget build(context, ref) {
-    final TrashDayModel trashDayRead = ref.read(trashDayModelProvider(hiveKey));
+    final TrashModel trashRead = ref.read(trashModelProvider(hiveKey));
 
     return Scaffold(
       appBar: AppBar(
@@ -33,7 +34,7 @@ class TrashDetailView extends ConsumerWidget {
                   const SizedBox(height: 10),
                   notificationDateForm(),
                   const SizedBox(height: 10),
-                  savedButton(hiveKey, trashDayRead),
+                  savedButton(hiveKey, trashRead),
                 ],
               ),
             ),
@@ -46,8 +47,8 @@ class TrashDetailView extends ConsumerWidget {
   Widget trashTypeForm() {
     return Consumer(
       builder: (context, ref, _) {
-        final TrashDayModel trashDayRead = ref.read(trashDayModelProvider(hiveKey));
-        final TextEditingController controller = TextEditingController(text: trashDayRead.trashType);
+        final TrashModel trashRead = ref.read(trashModelProvider(hiveKey));
+        final TextEditingController controller = TextEditingController(text: trashRead.trashType);
         return Column(
           children: [
             Card(
@@ -64,7 +65,7 @@ class TrashDetailView extends ConsumerWidget {
                       obscureText: false,
                       decoration: const InputDecoration(hintText: '[例：燃えるゴミ]', filled: true),
                       onChanged: (text) {
-                        trashDayRead.writeTrashType(text);
+                        trashRead.writeTrashType(text);
                       },
                     ),
                   ],
@@ -96,8 +97,8 @@ class TrashDetailView extends ConsumerWidget {
   Widget weekOfMonthCheck(dynamic hiveKey) {
     return Consumer(
       builder: (context, ref, _) {
-        final TrashDayModel trashDayRead = ref.read(trashDayModelProvider(hiveKey));
-        final TrashDayModel trashDayWatch = ref.watch(trashDayModelProvider(hiveKey));
+        final TrashModel trashRead = ref.read(trashModelProvider(hiveKey));
+        final TrashModel trashWatch = ref.watch(trashModelProvider(hiveKey));
 
         return Expanded(
           flex: 2,
@@ -110,16 +111,16 @@ class TrashDetailView extends ConsumerWidget {
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: trashDayWatch.weeksOfMonth.length,
+                itemCount: trashWatch.weeksOfMonth.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        (trashDayWatch.weeksOfMonth[index + 1]!) ? Colors.blue : Colors.grey,
+                        (trashWatch.weeksOfMonth[index + 1]!) ? Colors.blue : Colors.grey,
                       ),
                     ),
                     onPressed: () {
-                      trashDayRead.writeWeeksOfMonth(index + 1);
+                      trashRead.writeWeeksOfMonth(index + 1);
                     },
                     child: Text(
                       '毎月第${index + 1}',
@@ -138,8 +139,8 @@ class TrashDetailView extends ConsumerWidget {
   Widget dayOfTheWeekCheck(dynamic hiveKey) {
     return Consumer(
       builder: (context, ref, _) {
-        final TrashDayModel trashDayRead = ref.read(trashDayModelProvider(hiveKey));
-        final TrashDayModel trashDayWatch = ref.watch(trashDayModelProvider(hiveKey));
+        final TrashModel trashRead = ref.read(trashModelProvider(hiveKey));
+        final TrashModel trashWatch = ref.watch(trashModelProvider(hiveKey));
         return Expanded(
           flex: 3,
           child: Column(
@@ -154,19 +155,19 @@ class TrashDetailView extends ConsumerWidget {
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: trashDayRead.daysOfWeek.length,
+                itemCount: trashRead.daysOfWeek.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        (trashDayWatch.daysOfWeek[index + 1]!) ? Colors.blue : Colors.grey,
+                        (trashWatch.daysOfWeek[index + 1]!) ? Colors.blue : Colors.grey,
                       ),
                     ),
                     onPressed: () {
-                      trashDayRead.writeDaysOfWeek(index + 1);
+                      trashRead.writeDaysOfWeek(index + 1);
                     },
                     child: Text(
-                      weekdayMap[index + 1].toString(),
+                      formatWeekdayMap[index + 1].toString(),
                       style: const TextStyle(
                         color: Colors.white,
                       ),
@@ -181,9 +182,10 @@ class TrashDetailView extends ConsumerWidget {
     );
   }
 
-  Widget savedButton(dynamic hiveKey, TrashDayModel trashDayRead) {
+  Widget savedButton(dynamic hiveKey, TrashModel trashRead) {
     return Consumer(
       builder: (context, ref, child) {
+        final TrashOfDayViewModel trashOfDayViewModelRead = ref.read(trashOfDayViewModelProvider);
         return SizedBox(
           width: double.infinity,
           child: ElevatedButton(
@@ -192,7 +194,8 @@ class TrashDetailView extends ConsumerWidget {
               onPrimary: Colors.white,
             ),
             onPressed: () async {
-              await trashDayRead.saveTrashDay(hiveKey, trashDayRead);
+              await trashRead.saveTrash(hiveKey, trashRead);
+              await trashOfDayViewModelRead.setTotalTrashType();
               Navigator.pop(context);
             },
             child: Text((hiveKey == null) ? '新規登録する' : '更新する'),
