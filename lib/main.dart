@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
     // createScaffoldMessengerStreamListen(context);
 
     return MaterialApp(
-      locale: Locale('ja'),
+      locale: const Locale('ja'),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         iconTheme: const IconThemeData.fallback().copyWith(color: Colors.grey[700]),
@@ -68,7 +68,7 @@ Future<void> _initializeAwesomeNotification() async {
           channelKey: 'trashOut',
           channelName: 'Basic notifications',
           channelDescription: 'Notification channel for basic tests',
-          defaultColor: Color(0xFF9D50DD),
+          defaultColor: const Color(0xFF9D50DD),
           ledColor: Colors.white,
         ),
       ],
