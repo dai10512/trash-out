@@ -102,32 +102,40 @@ class TrashListView extends ConsumerWidget {
   Widget buildTrashOfDayCard(BuildContext context, int whichDay) {
     return Consumer(
       builder: (context, ref, _) {
-        final TrashOfDayViewModel trashOfDayViewModelRead = ref.read(trashOfDayViewModelProvider);
-        final TrashOfDayViewModel trashOfDayViewModelWatch = ref.watch(trashOfDayViewModelProvider);
-        // trashOfDayViewModelRead.setTotalTrashType();
-        // trashOfDayViewModel.setTotalTrashType();
-
-        print(trashOfDayViewModelRead.totalTrashTypeOfToday);
-        // print(1);
+        final TrashOfDayViewModel trashOfDayViewModelWatch = ref.watch(trashOfDayViewModelProvider); //なぜか必要
         return Expanded(
           child: SizedBox(
-            height: 200,
+            height: 90,
             child: Card(
               child: Padding(
                 padding: const EdgeInsets.all(13.0),
-                child: Column(children: [
-                  Text(
-                    (whichDay == 0) ? '今日' : '明日',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  const SizedBox(height: 5),
-                  FittedBox(
-                    child: Text(
-                      (whichDay == 0) ? trashOfDayViewModelWatch.totalTrashTypeOfToday : trashOfDayViewModelWatch.totalTrashTypeOfTomorrow,
-                      style: Theme.of(context).textTheme.headlineSmall,
+                child: Column(
+                  children: [
+                    Text(
+                      (whichDay == 0) ? '今日' : '明日',
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
-                  ),
-                ]),
+                    const SizedBox(height: 5),
+                    FittedBox(
+                      child: FutureBuilder(
+                        future: (whichDay == 0) ? trashOfDayViewModel.getTotalTrashTypeOfToday() : trashOfDayViewModel.getTotalTrashTypeOfTomorrow(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Text(
+                              snapshot.data.toString(),
+                              style: Theme.of(context).textTheme.headlineSmall,
+                            );
+                          } else {
+                            return Text(
+                              "無し",
+                              style: Theme.of(context).textTheme.headlineSmall,
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

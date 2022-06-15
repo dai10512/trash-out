@@ -38,7 +38,6 @@ class TrashOfDayViewModel extends ChangeNotifier {
 
     totalTrashTypeOfTomorrow = '無し';
 
-
     for (var i = 0; i < trashDayOfList.length; i++) {
       final trashDay = trashDayOfList[i];
       if (tomorrowWeekOfMonth == trashDay.weekOfMonth && tomorrowWeekday == trashDay.weekday) {
@@ -48,5 +47,47 @@ class TrashOfDayViewModel extends ChangeNotifier {
       }
     }
     notifyListeners();
+  }
+
+  Future<String> getTotalTrashTypeOfToday() async {
+    print('start setTotalTrashType');
+    List<TrashOfDay> trashDayOfList = trashOfDayBoxRepository.getTrashOfDayList();
+
+    final currentWeekOfMonth = (today.day ~/ 7) + 1;
+    final currentWeekday = today.weekday;
+
+    totalTrashTypeOfToday = '無し';
+
+    for (var i = 0; i < trashDayOfList.length; i++) {
+      final trashDay = trashDayOfList[i];
+      if (currentWeekOfMonth == trashDay.weekOfMonth && currentWeekday == trashDay.weekday) {
+        totalTrashTypeOfToday = trashDay.totalTrashType;
+        print('今日のゴミ:$totalTrashTypeOfToday');
+        break;
+      }
+    }
+
+    return totalTrashTypeOfToday;
+  }
+
+  Future<String> getTotalTrashTypeOfTomorrow() async {
+    print('start setTotalTrashType');
+    List<TrashOfDay> trashDayOfList = trashOfDayBoxRepository.getTrashOfDayList();
+
+    final tomorrowWeekOfMonth = (tomorrow.day ~/ 7) + 1;
+    final tomorrowWeekday = tomorrow.weekday;
+
+    totalTrashTypeOfTomorrow = '無し';
+
+    for (var i = 0; i < trashDayOfList.length; i++) {
+      final trashDay = trashDayOfList[i];
+      if (tomorrowWeekOfMonth == trashDay.weekOfMonth && tomorrowWeekday == trashDay.weekday) {
+        totalTrashTypeOfTomorrow = trashDay.totalTrashType;
+        print('明日のゴミ:$totalTrashTypeOfTomorrow');
+        break;
+      }
+    }
+
+    return totalTrashTypeOfTomorrow;
   }
 }
