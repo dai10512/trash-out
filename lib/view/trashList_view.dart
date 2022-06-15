@@ -105,6 +105,8 @@ class TrashListView extends ConsumerWidget {
         final TrashOfDayViewModel trashOfDayViewModelRead = ref.read(trashOfDayViewModelProvider);
         final TrashOfDayViewModel trashOfDayViewModelWatch = ref.watch(trashOfDayViewModelProvider);
         // trashOfDayViewModelRead.setTotalTrashType();
+        // trashOfDayViewModel.setTotalTrashType();
+
         print(trashOfDayViewModelRead.totalTrashTypeOfToday);
         // print(1);
         return Expanded(
@@ -120,20 +122,10 @@ class TrashListView extends ConsumerWidget {
                   ),
                   const SizedBox(height: 5),
                   FittedBox(
-                    child: StreamBuilder<Object>(
-                        stream: null,
-                        builder: (context, snapshot) {
-                          return Text(
-                            (whichDay == 0) ? trashOfDayViewModelWatch.totalTrashTypeOfToday : trashOfDayViewModelWatch.totalTrashTypeOfTomorrow,
-                            style: Theme.of(context).textTheme.headlineSmall,
-                          );
-                        }),
-                  ),
-                  MaterialButton(
-                    onPressed: () async {
-                      await trashOfDayViewModelRead.setTotalTrashType();
-                    },
-                    child: Text(trashOfDayViewModelWatch.totalTrashTypeOfToday),
+                    child: Text(
+                      (whichDay == 0) ? trashOfDayViewModelWatch.totalTrashTypeOfToday : trashOfDayViewModelWatch.totalTrashTypeOfTomorrow,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
                   ),
                 ]),
               ),

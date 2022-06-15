@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trash_out/repository/trashOfDay_boxRepository.dart';
 import 'package:trash_out/typeAdapter/TrashOfDay.dart';
 
-// TrashOfDayViewModel trashOfDayViewModel = TrashOfDayViewModel();
+TrashOfDayViewModel trashOfDayViewModel = TrashOfDayViewModel();
 
 final trashOfDayViewModelProvider = ChangeNotifierProvider<TrashOfDayViewModel>((ref) => TrashOfDayViewModel());
 final DateTime today = DateTime.now();
