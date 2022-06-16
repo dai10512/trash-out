@@ -15,27 +15,26 @@ class TrashNotificationModel {
   }
 
   Future<void> createNotification() async {
-    await AwesomeNotifications()
-        .createNotification(
-          content: NotificationContent(
-            id: int.parse(weekOfMonth.toString() + weekday.toString() + time.hour.toString() + time.minute.toString()),
-            channelKey: 'TrashOut',
-            title: title,
-            body: body,
-          ),
-          schedule: NotificationCalendar(
-            weekOfMonth: weekOfMonth,
-            weekday: weekday,
-            hour: time.hour,
-            minute: time.minute,
-            repeats: true,
-          ),
-        )
-        .then(
-          (value) => print('$title / $body / ${formatWeekOfMonthMap[weekOfMonth]} / ${formatWeekdayMap[weekday]} / 時間${time.hour}:${time.minute}'),
-        );
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: int.parse(weekOfMonth.toString() + weekday.toString() + time.hour.toString() + time.minute.toString()),
+        channelKey: 'TrashOut',
+        title: title,
+        body: body,
+      ),
+      schedule: NotificationCalendar(
+        weekOfMonth: weekOfMonth,
+        weekday: weekday,
+        hour: time.hour,
+        minute: time.minute,
+        repeats: true,
+      ),
+    ) 
+    .then(
+      (value) => print('$title / $body / ${formatWeekOfMonthMap[weekOfMonth]} / ${formatWeekdayMap[weekday]} / 時間${time.hour}:${time.minute}'),
+    );
     List<NotificationModel> scheduleList = await AwesomeNotifications().listScheduledNotifications();
-    print(scheduleList.length);
-    print(scheduleList);
+    // print(scheduleList.length);
+    // print(scheduleList[0].schedule);
   }
 }

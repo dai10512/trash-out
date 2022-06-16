@@ -16,7 +16,6 @@ class TrashListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    print(DateTime.now());
     final List<Widget> appBarIconList = [
       IconButton(
         padding: EdgeInsets.zero,
@@ -27,7 +26,7 @@ class TrashListView extends ConsumerWidget {
       ),
       IconButton(
         padding: EdgeInsets.zero,
-        icon: const Icon(Icons.notifications),
+        icon: const Icon(Icons.settings),
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationSettingView()));
         },
@@ -179,7 +178,6 @@ class TrashListView extends ConsumerWidget {
         final TrashOfDayViewModel trashOfDayViewModelRead = ref.read(trashOfDayViewModelProvider);
         return Dismissible(
           key: UniqueKey(),
-          
           onDismissed: (direction) async {
             await trashModel.deleteTrash(hiveKey);
             await trashOfDayViewModelRead.setTotalTrashType();

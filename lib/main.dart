@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-// import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:trash_out/modelAndController/trashOfDayNotification_controller.dart';
 import 'package:trash_out/repository/notificationSettings_boxRepository.dart';
@@ -9,8 +7,6 @@ import 'package:trash_out/typeAdapter/trash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
 import 'package:trash_out/typeAdapter/trashOfDay.dart';
 import 'package:trash_out/view/trashList_view.dart';
 
@@ -48,33 +44,25 @@ class MyApp extends StatelessWidget {
 }
 
 Future<void> _init() async {
-  await _configureLocalTimeZone();
   await _initializeAwesomeNotification();
   await _initializeDB();
   await trashNotificationController.setNotifications();
 }
 
-Future<void> _configureLocalTimeZone() async {
-  tz.initializeTimeZones();
-  final String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
-  tz.setLocalLocation(tz.getLocation(timeZoneName));
-}
-
 Future<void> _initializeAwesomeNotification() async {
   AwesomeNotifications().initialize(
-      'resource://drawable/res_app_icon',
-      [
-        NotificationChannel(
-          channelGroupKey: 'basic_channel_group',
-          channelKey: 'TrashOut',
-          channelName: 'Basic notifications',
-          channelDescription: 'Notification channel for basic tests',
-          defaultColor: const Color(0xFF9D50DD),
-          ledColor: Colors.white,
-        ),
-      ],
-      channelGroups: [NotificationChannelGroup(channelGroupkey: 'basic_channel_group', channelGroupName: 'Basic group')],
-      debug: true);
+    'resource://drawable/res_app_icon',
+    [
+      NotificationChannel(
+        channelGroupKey: 'basic_channel_group',
+        channelKey: 'TrashOut',
+        channelName: 'TrashOut',
+        channelDescription: 'scheduledNotification',
+      ),
+    ],
+    channelGroups: [NotificationChannelGroup(channelGroupkey: 'basic_channel_group', channelGroupName: 'Basic group')],
+    debug: true,
+  );
 
   AwesomeNotifications().isNotificationAllowed().then(
     (isAllowed) {
