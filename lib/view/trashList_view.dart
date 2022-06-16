@@ -12,7 +12,6 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class TrashListView extends ConsumerWidget {
   const TrashListView({Key? key}) : super(key: key);
-  // final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context, ref) {
@@ -158,7 +157,7 @@ class TrashListView extends ConsumerWidget {
         child: ListView.builder(
           // reverse: true,
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           padding: EdgeInsets.zero,
           itemCount: trashList.length,
           itemBuilder: (BuildContext context, int index) {

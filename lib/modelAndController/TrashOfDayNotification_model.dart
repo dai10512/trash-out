@@ -34,7 +34,5 @@ class TrashNotificationModel {
       (value) => print('$title / $body / ${formatWeekOfMonthMap[weekOfMonth]} / ${formatWeekdayMap[weekday]} / 時間${time.hour}:${time.minute}'),
     );
     List<NotificationModel> scheduleList = await AwesomeNotifications().listScheduledNotifications();
-    // print(scheduleList.length);
-    // print(scheduleList[0].schedule);
   }
 }
