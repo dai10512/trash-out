@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+import 'package:intl/intl.dart';
 
 Uuid uuid = const Uuid();
+
+final DateTime today = DateTime.now();
+final DateTime tomorrow = today.add(const Duration(days: 1));
+// DateTime now = DateTime.now();
+// String today = outputFormat.format(now);
+// DateFormat outputFormat = DateFormat('yyyy-MM-dd');
+
 double commonHorizontalPadding = 20.0;
 double commonElevation = 5;
 Color? cardTextColor = Colors.blueGrey[800];

@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 import 'package:trash_out/typeAdapter/trashOfDay.dart';
-import 'package:trash_out/view/trashList_view.dart';
+import 'package:trash_out/view/home.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _actionStream(context);
+    // _actionStream(context);
     // createScaffoldMessengerStreamListen(context);
 
     return MaterialApp(
