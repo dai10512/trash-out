@@ -6,6 +6,8 @@ double commonHorizontalPadding = 20.0;
 double commonElevation = 5;
 Color? cardTextColor = Colors.blueGrey[800];
 Color? cardTextColorOff = cardTextColor!.withOpacity(0.4);
+Color? buttonTopLeftColor = Colors.orange[600];
+Color? buttonRightColor = Colors.orange[300];
 
 Color? topLeftColor = Colors.blue[300];
 Color? bottomRightColor = Colors.blue[100];
@@ -24,6 +26,12 @@ LinearGradient cardGradient = LinearGradient(
 
 LinearGradient cardGradientOff = LinearGradient(
   colors: [topLeftColor!.withOpacity(0.2), bottomRightColor!.withOpacity(0.2)],
+  begin: Alignment.topLeft,
+  end: Alignment.bottomRight,
+);
+
+LinearGradient buttonGradient = LinearGradient(
+  colors: [buttonTopLeftColor!.withOpacity(0.5), buttonRightColor!.withOpacity(0.5)],
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
 );

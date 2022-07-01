@@ -190,19 +190,29 @@ class TrashDetailView extends ConsumerWidget {
     return Consumer(
       builder: (context, ref, child) {
         final TrashOfDayViewModel trashOfDayViewModelRead = ref.read(trashOfDayViewModelProvider);
-        return SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Colors.orange,
-              onPrimary: Colors.white,
+        return MaterialButton(
+          elevation: commonElevation,
+          padding: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+          onPressed: () async {
+            await trashRead.saveTrash(hiveKey, trashRead);
+            await trashOfDayViewModelRead.setTotalTrashType();
+            Navigator.pop(context);
+          },
+          child: Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+            elevation: commonElevation,
+            child: Ink(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: buttonGradient,
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Center(
+                child: Text((hiveKey == null) ? '新規登録する' : '更新する'),
+              ),
             ),
-            onPressed: () async {
-              await trashRead.saveTrash(hiveKey, trashRead);
-              await trashOfDayViewModelRead.setTotalTrashType();
-              Navigator.pop(context);
-            },
-            child: Text((hiveKey == null) ? '新規登録する' : '更新する'),
           ),
         );
       },
