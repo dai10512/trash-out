@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 Uuid uuid = const Uuid();
 
-final DateTime today = DateTime.now();
-final DateTime tomorrow = today.add(const Duration(days: 1));
-// DateTime now = DateTime.now();
-// String today = outputFormat.format(now);
-// DateFormat outputFormat = DateFormat('yyyy-MM-dd');
+DateTime now = DateTime.now();
+DateTime after24h = now.add(const Duration(days: 1));
+
+DateFormat outputFormat = DateFormat('yMMMd', 'ja');
+
+String today = outputFormat.format(now);
+String tomorrow = outputFormat.format(after24h);
 
 double commonHorizontalPadding = 20.0;
 double commonElevation = 5;

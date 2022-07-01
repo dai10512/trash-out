@@ -18,8 +18,8 @@ class TrashOfDayViewModel extends ChangeNotifier {
     print('start setTotalTrashType');
     List<TrashOfDay> trashDayOfList = trashOfDayBoxRepository.getTrashOfDayList();
 
-    final currentWeekOfMonth = (today.day ~/ 7) + 1;
-    final currentWeekDay = today.weekday;
+    final currentWeekOfMonth = (now.day / 7) + 1;
+    final currentWeekDay = after24h.weekday;
 
     totalTrashTypeOfToday = '無し';
 
@@ -32,8 +32,8 @@ class TrashOfDayViewModel extends ChangeNotifier {
       }
     }
 
-    final tomorrowWeekOfMonth = (tomorrow.day ~/ 7) + 1;
-    final tomorrowWeekday = tomorrow.weekday;
+    final tomorrowWeekOfMonth = (after24h.day ~/ 7) + 1;
+    final tomorrowWeekday = after24h.weekday;
 
     totalTrashTypeOfTomorrow = '無し';
 
@@ -52,8 +52,8 @@ class TrashOfDayViewModel extends ChangeNotifier {
     print('start setTotalTrashType');
     List<TrashOfDay> trashDayOfList = trashOfDayBoxRepository.getTrashOfDayList();
 
-    final currentWeekOfMonth = (today.day ~/ 7) + 1;
-    final currentWeekday = today.weekday;
+    final currentWeekOfMonth = (now.day ~/ 7) + 1;
+    final currentWeekday = now.weekday;
 
     totalTrashTypeOfToday = '無し';
 
@@ -73,8 +73,8 @@ class TrashOfDayViewModel extends ChangeNotifier {
     print('start setTotalTrashType');
     List<TrashOfDay> trashDayOfList = trashOfDayBoxRepository.getTrashOfDayList();
 
-    final tomorrowWeekOfMonth = (tomorrow.day ~/ 7) + 1;
-    final tomorrowWeekday = tomorrow.weekday;
+    final tomorrowWeekOfMonth = (after24h.day ~/ 7) + 1;
+    final tomorrowWeekday = after24h.weekday;
 
     totalTrashTypeOfTomorrow = '無し';
 

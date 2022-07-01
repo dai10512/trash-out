@@ -5,6 +5,8 @@ import 'package:trash_out/repository/notificationSettings_boxRepository.dart';
 import 'package:trash_out/typeAdapter/notificationSetting.dart';
 import 'package:trash_out/typeAdapter/trash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 import 'package:trash_out/typeAdapter/trashOfDay.dart';
@@ -12,8 +14,10 @@ import 'package:trash_out/view/home.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  await _init();
+  await initializeDateFormatting('ja_JP');
+  await _initializeAwesomeNotification();
+  await _initializeDB();
+  await trashNotificationController.setNotifications();
 
   runApp(
     const ProviderScope(
@@ -28,7 +32,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // _actionStream(context);
-    // createScaffoldMessengerStreamListen(context);
 
     return MaterialApp(
       locale: const Locale('ja'),
@@ -41,12 +44,6 @@ class MyApp extends StatelessWidget {
       home: const TrashListView(),
     );
   }
-}
-
-Future<void> _init() async {
-  await _initializeAwesomeNotification();
-  await _initializeDB();
-  await trashNotificationController.setNotifications();
 }
 
 Future<void> _initializeAwesomeNotification() async {

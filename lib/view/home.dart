@@ -109,10 +109,35 @@ class TrashListView extends ConsumerWidget {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return FittedBox(
-                            child: Text(
-                              snapshot.data.toString(),
-                              style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: cardTextColor),
-                              textAlign: TextAlign.center,
+                            child: Column(
+                              children: [
+                                Text(
+                                  (whichDay == 0) ? today.toString() : tomorrow.toString(),
+                                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: cardTextColor),
+                                  textAlign: TextAlign.center,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      (whichDay == 0)
+                                          ? formatWeekOfMonthMap[(now.day % 7) + 1].toString()
+                                          : formatWeekOfMonthMap[(after24h.day % 7) + 1].toString(),
+                                      style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: cardTextColor),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    Text(
+                                      (whichDay == 0) ? formatWeekdayMap[now.weekday].toString() : formatWeekdayMap[after24h.weekday].toString(),
+                                      style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: cardTextColor),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  snapshot.data.toString(),
+                                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: cardTextColor),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
                             ),
                           );
                         } else {
