@@ -1,9 +1,68 @@
+import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
+Uuid uuid = const Uuid();
+double commonHorizontalPadding = 20.0;
+double commonElevation = 5;
+Color? cardTextColor = Colors.blueGrey[800];
+Color? cardTextColorOff = cardTextColor!.withOpacity(0.4);
 
-const uuid = Uuid();
-const commonHorizontalPadding = 20.0;
+Color? topLeftColor = Colors.blue[300];
+Color? bottomRightColor = Colors.blue[100];
 
+LinearGradient commonGradient = LinearGradient(
+  colors: [topLeftColor!, bottomRightColor!],
+  begin: Alignment.topLeft,
+  end: Alignment.bottomRight,
+);
+
+LinearGradient cardGradient = LinearGradient(
+  colors: [topLeftColor!.withOpacity(0.5), bottomRightColor!.withOpacity(0.5)],
+  begin: Alignment.topLeft,
+  end: Alignment.bottomRight,
+);
+
+LinearGradient cardGradientOff = LinearGradient(
+  colors: [topLeftColor!.withOpacity(0.2), bottomRightColor!.withOpacity(0.2)],
+  begin: Alignment.topLeft,
+  end: Alignment.bottomRight,
+);
+
+const double totalPadding = 20;
+
+class CoolDivider extends StatelessWidget {
+  const CoolDivider({
+    Key? key,
+    this.height = 16,
+    this.thickness = 1,
+    this.indent = 0,
+    this.endIndent = 0,
+    required this.gradient,
+  }) : super(key: key);
+
+  final double height;
+  final double thickness;
+  final double indent;
+  final double endIndent;
+  final LinearGradient gradient;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(height: height),
+        Container(
+          height: thickness,
+          margin: EdgeInsetsDirectional.only(
+            start: indent,
+            end: endIndent,
+          ),
+          decoration: BoxDecoration(gradient: commonGradient),
+        ),
+      ],
+    );
+  }
+}
 
 final Map<int, String> formatWeekdayMap = {
   1: '月曜日',
@@ -65,7 +124,6 @@ String formatWeekdays(Map<int, bool> daysOfWeek) {
 
   return word;
 }
-
 
 String formatWhichDay(int whichDay) {
   String text = '';

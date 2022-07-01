@@ -46,7 +46,7 @@ class TrashListView extends ConsumerWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: commonHorizontalPadding),
+        padding: EdgeInsets.symmetric(horizontal: commonHorizontalPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -89,13 +89,17 @@ class TrashListView extends ConsumerWidget {
         final TrashOfDayViewModel trashOfDayViewModelWatch = ref.watch(trashOfDayViewModelProvider); //必要
         return Expanded(
           child: Card(
-            child: Padding(
+            elevation: commonElevation,
+            child: Container(
+              decoration: BoxDecoration(gradient: cardGradient, borderRadius: BorderRadius.circular(10.0)),
+              // width: (isMonitor) ? 280 : double.infinity,
+              // padding: const EdgeInsets.all(20.0),
               padding: const EdgeInsets.all(13.0),
               child: Column(
                 children: [
                   Text(
                     formatWhichDay(whichDay),
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(color: cardTextColor),
                   ),
                   const SizedBox(height: 5),
                   Padding(
@@ -107,7 +111,7 @@ class TrashListView extends ConsumerWidget {
                           return FittedBox(
                             child: Text(
                               snapshot.data.toString(),
-                              style: Theme.of(context).textTheme.headlineSmall,
+                              style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: cardTextColor),
                               textAlign: TextAlign.center,
                             ),
                           );
@@ -115,7 +119,7 @@ class TrashListView extends ConsumerWidget {
                           return FittedBox(
                             child: Text(
                               "無し",
-                              style: Theme.of(context).textTheme.headlineSmall,
+                              style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.blueGrey[700]),
                             ),
                           );
                         }
@@ -182,12 +186,24 @@ class TrashListView extends ConsumerWidget {
             await trashOfDayViewModelRead.setTotalTrashType();
           },
           child: Card(
-            child: ListTile(
-              title: Text((trash.trashType != '') ? trash.trashType : '種類が登録されていません'),
-              subtitle: Text('${formatWeeksOfMonth(trash.weeksOfMonth)}  /  ${formatWeekdays(trash.weekdays)}'),
-              onTap: () {
-                showCupertinoModalBottomSheet(context: context, builder: (context) => TrashDetailView(hiveKey));
-              },
+            elevation: commonElevation,
+            child: Container(
+              decoration: BoxDecoration(gradient: cardGradient, borderRadius: BorderRadius.circular(10.0)),
+              // width: (isMonitor) ? 280 : double.infinity,
+              padding: const EdgeInsets.all(0.0),
+              child: ListTile(
+                title: Text(
+                  (trash.trashType != '') ? trash.trashType : '種類が登録されていません',
+                  style: TextStyle(color: cardTextColor),
+                ),
+                subtitle: Text(
+                  '${formatWeeksOfMonth(trash.weeksOfMonth)}  /  ${formatWeekdays(trash.weekdays)}',
+                  style: TextStyle(color: cardTextColor),
+                ),
+                onTap: () {
+                  showCupertinoModalBottomSheet(context: context, builder: (context) => TrashDetailView(hiveKey));
+                },
+              ),
             ),
           ),
         );

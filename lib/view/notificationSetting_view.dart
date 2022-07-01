@@ -55,14 +55,17 @@ Widget notificationListTile(BuildContext context, int index) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
+          elevation: commonElevation,
+          child: Container(
+            decoration:
+                BoxDecoration(gradient: (notificationSettingModelRead.doNotify) ? cardGradient : cardGradientOff, borderRadius: BorderRadius.circular(10.0)),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
                 Text(
                   '当日の収集ゴミの通知時間',
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: (notificationSettingModelRead.doNotify) ? Theme.of(context).primaryColor : Colors.grey,
+                        color: (notificationSettingModelRead.doNotify) ? cardTextColor : cardTextColorOff,
                       ),
                 ),
                 const SizedBox(height: 10),
@@ -73,7 +76,7 @@ Widget notificationListTile(BuildContext context, int index) {
                         child: Text(
                           notificationSettingModelWatch.formatTime(notificationSettingModelWatch.time),
                           style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                                color: (notificationSettingModelRead.doNotify) ? Theme.of(context).primaryColor : Colors.grey,
+                                color: (notificationSettingModelRead.doNotify) ? cardTextColor : cardTextColorOff,
                               ),
                         ),
                         onPressed: () async {

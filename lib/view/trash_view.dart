@@ -52,7 +52,9 @@ class TrashDetailView extends ConsumerWidget {
         return Column(
           children: [
             Card(
-              child: Padding(
+              elevation: commonElevation,
+              child: Container(
+                decoration: BoxDecoration(gradient: cardGradientOff, borderRadius: BorderRadius.circular(10.0)),
                 padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,7 +82,9 @@ class TrashDetailView extends ConsumerWidget {
 
   Widget notificationDateForm() {
     return Card(
-      child: Padding(
+      elevation: commonElevation,
+      child: Container(
+        decoration: BoxDecoration(gradient: cardGradientOff, borderRadius: BorderRadius.circular(10.0)),
         padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
