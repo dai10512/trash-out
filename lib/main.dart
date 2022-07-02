@@ -10,7 +10,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 import 'package:trash_out/typeAdapter/trashOfDay.dart';
-import 'package:trash_out/view/home.dart';
+import 'package:trash_out/view/home_view.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         primarySwatch: Colors.blue,
       ),
-      home: const TrashListView(),
+      home: const HomeView(),
     );
   }
 }

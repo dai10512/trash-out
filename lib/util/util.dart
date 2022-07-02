@@ -20,7 +20,7 @@ Color? cardTextColorOff = cardTextColor!.withOpacity(0.4);
 Color? buttonTopLeftColor = Colors.orange[600];
 Color? buttonRightColor = Colors.orange[300];
 
-Color? topLeftColor = Colors.blue[300];
+Color? topLeftColor = Colors.blue[200];
 Color? bottomRightColor = Colors.blue[100];
 
 LinearGradient commonGradient = LinearGradient(
