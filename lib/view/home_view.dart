@@ -85,56 +85,67 @@ class HomeView extends ConsumerWidget {
           child: Card(
             elevation: commonElevation,
             child: Container(
+              padding: EdgeInsets.zero,
               decoration: BoxDecoration(gradient: cardGradient, borderRadius: BorderRadius.circular(10.0)),
               width: double.infinity,
-              padding: const EdgeInsets.all(13.0),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: FutureBuilder(
-                      future: (whichDay == 0) ? trashOfDayViewModelWatch.getTotalTrashTypeOfToday() : trashOfDayViewModelWatch.getTotalTrashTypeOfTomorrow(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          print(now.day / 7);
-                          return Column(
-                            // crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                child: Text(
-                                  (whichDay == 0)
-                                      ? '$today\n${formatWeekOfMonthMap[(now.day / 7).toInt() + 1]}週 ${formatWeekdayMap[now.weekday]}'
-                                      : '$tomorrow\n${formatWeekOfMonthMap[(after24h.day / 7).toInt() + 1]}週 ${formatWeekdayMap[after24h.weekday]}',
-                                  style: Theme.of(context).textTheme.titleLarge!.copyWith(color: cardTextColor),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                              Divider(),
-                              Container(
-                                child: FittedBox(
-                                  child: Text(
-                                    snapshot.data.toString(),
-                                    style: Theme.of(context).textTheme.displayLarge!.copyWith(color: cardTextColor),
-                                    textAlign: TextAlign.center,
+              // padding: const EdgeInsets.all(13.0),
+              child: StreamBuilder<Object>(
+                  stream: null,
+                  builder: (context, snapshot) {
+                    return Column(
+                      children: [
+                        FutureBuilder(
+                          future:
+                              (whichDay == 0) ? trashOfDayViewModelWatch.getTotalTrashTypeOfToday() : trashOfDayViewModelWatch.getTotalTrashTypeOfTomorrow(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              print(now.day / 7);
+                              return Column(
+                                // crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.zero,
+                                    width: double.infinity,
+                                    child: Card(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(20.0),
+                                        child: Text(
+                                          (whichDay == 0)
+                                              ? '$today\n${formatWeekOfMonthMap[(now.day / 7).toInt() + 1]}週 ${formatWeekdayMap[now.weekday]}'
+                                              : '$tomorrow\n${formatWeekOfMonthMap[(after24h.day / 7).toInt() + 1]}週 ${formatWeekdayMap[after24h.weekday]}',
+                                          style: Theme.of(context).textTheme.titleLarge!.copyWith(color: cardTextColor),
+                                          textAlign: TextAlign.left,
+                                        ),
+                                      ),
+                                    ),
                                   ),
+                                  Container(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: FittedBox(
+                                        child: Text(
+                                          snapshot.data.toString(),
+                                          style: Theme.of(context).textTheme.displayLarge!.copyWith(color: cardTextColor),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return FittedBox(
+                                child: Text(
+                                  "無し",
+                                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.blueGrey[700]),
                                 ),
-                              ),
-                            ],
-                          );
-                        } else {
-                          return FittedBox(
-                            child: Text(
-                              "無し",
-                              style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.blueGrey[700]),
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
+                              );
+                            }
+                          },
+                        ),
+                      ],
+                    );
+                  }),
             ),
           ),
         );
