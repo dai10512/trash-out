@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trash_out/modelAndController/trashOfDay_model.dart';
-import 'package:trash_out/modelAndController/trash_model.dart';
-import 'package:trash_out/util/util.dart';
+import '../modelAndController/trashOfDay_model.dart';
+import '../modelAndController/trash_model.dart';
+import '../util/util.dart';
 
 class TrashDetailView extends ConsumerWidget {
   const TrashDetailView(this.hiveKey, {Key? key}) : super(key: key);

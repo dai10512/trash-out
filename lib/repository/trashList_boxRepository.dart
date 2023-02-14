@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:trash_out/typeAdapter/trash.dart';
+import '../typeAdapter/trash.dart';
 
 TrashListBoxRepository trashListBoxRepository = TrashListBoxRepository();
 

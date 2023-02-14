@@ -1,6 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:trash_out/util/util.dart';
+import '../util/util.dart';
 
 class TrashNotificationModel {
   String title = 'TrashOutからの通知';

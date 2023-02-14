@@ -1,5 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:trash_out/typeAdapter/trashOfDay.dart';
+
+import '../typeAdapter/trashOfDay.dart';
 
 TrashOfDayBoxRepository trashOfDayBoxRepository = TrashOfDayBoxRepository();
 

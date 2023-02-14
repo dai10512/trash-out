@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:trash_out/modelAndController/trashOfDay_model.dart';
-import 'package:trash_out/modelAndController/trash_model.dart';
-import 'package:trash_out/repository/trashList_boxRepository.dart';
-import 'package:trash_out/typeAdapter/trash.dart';
-import 'package:trash_out/util/util.dart';
-import 'package:trash_out/view/notificationSetting_view.dart';
-import 'package:trash_out/view/trash_view.dart';
+import '../modelAndController/trashOfDay_model.dart';
+import '../modelAndController/trash_model.dart';
+import '../repository/trashList_boxRepository.dart';
+import '../typeAdapter/trash.dart';
+import '../util/util.dart';
+import 'notificationSetting_view.dart';
+import 'trash_view.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class TrashListView extends ConsumerWidget {

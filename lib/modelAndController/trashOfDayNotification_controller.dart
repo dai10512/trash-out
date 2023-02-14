@@ -1,14 +1,14 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:trash_out/modelAndController/trashOfDayNotification_model.dart';
-import 'package:trash_out/repository/notificationSettings_boxRepository.dart';
-import 'package:trash_out/repository/trashList_boxRepository.dart';
-import 'package:trash_out/repository/trashOfDay_boxRepository.dart';
-import 'package:trash_out/typeAdapter/trashOfDay.dart';
-import 'package:trash_out/typeAdapter/trash.dart';
-import 'package:trash_out/typeAdapter/notificationSetting.dart';
+import 'trashOfDayNotification_model.dart';
+import '../repository/notificationSettings_boxRepository.dart';
+import '../repository/trashList_boxRepository.dart';
+import '../repository/trashOfDay_boxRepository.dart';
+import '../typeAdapter/trashOfDay.dart';
+import '../typeAdapter/trash.dart';
+import '../typeAdapter/notificationSetting.dart';
 
-import 'package:trash_out/util/util.dart';
+import '../util/util.dart';
 
 final TrashNotificationController trashNotificationController = TrashNotificationController();
 // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();

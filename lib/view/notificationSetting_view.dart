@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:trash_out/modelAndController/notificationSetting_model.dart';
-import 'package:trash_out/repository/notificationSettings_boxRepository.dart';
-import 'package:trash_out/typeAdapter/notificationSetting.dart';
-import 'package:trash_out/util/util.dart';
+import '../modelAndController/notificationSetting_model.dart';
+import '../repository/notificationSettings_boxRepository.dart';
+import '../typeAdapter/notificationSetting.dart';
+import '../util/util.dart';
 
 class NotificationSettingView extends ConsumerWidget {
   const NotificationSettingView({Key? key}) : super(key: key);

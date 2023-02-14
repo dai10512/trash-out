@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:trash_out/modelAndController/trashOfDayNotification_controller.dart';
-import 'package:trash_out/repository/notificationSettings_boxRepository.dart';
-import 'package:trash_out/typeAdapter/notificationSetting.dart';
-import 'package:trash_out/typeAdapter/trash.dart';
+import 'modelAndController/trashOfDayNotification_controller.dart';
+import 'repository/notificationSettings_boxRepository.dart';
+import 'typeAdapter/notificationSetting.dart';
+import 'typeAdapter/trash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
-import 'package:trash_out/typeAdapter/trashOfDay.dart';
-import 'package:trash_out/view/trashList_view.dart';
+import 'typeAdapter/trashOfDay.dart';
+import 'view/trashList_view.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

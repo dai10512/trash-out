@@ -1,8 +1,8 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trash_out/modelAndController/trashOfDayNotification_controller.dart';
-import 'package:trash_out/repository/notificationSettings_boxRepository.dart';
+import 'trashOfDayNotification_controller.dart';
+import '../repository/notificationSettings_boxRepository.dart';
 
 final notificationSettingModelProvider = ChangeNotifierProvider.family<NotificationSettingModel, dynamic>((ref, index) => NotificationSettingModel(index));
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trash_out/modelAndController/trashOfDayNotification_controller.dart';
-import 'package:trash_out/modelAndController/trashOfDay_model.dart';
-import 'package:trash_out/repository/trashList_boxRepository.dart';
-import 'package:trash_out/typeAdapter/trash.dart';
+import 'trashOfDayNotification_controller.dart';
+import 'trashOfDay_model.dart';
+import '../repository/trashList_boxRepository.dart';
+import '../typeAdapter/trash.dart';
 
 final AutoDisposeChangeNotifierProviderFamily<TrashModel, dynamic> trashModelProvider =
     ChangeNotifierProvider.family.autoDispose<TrashModel, dynamic>((ref, hiveKey) => TrashModel(hiveKey));

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:trash_out/typeAdapter/notificationSetting.dart';
+import '../typeAdapter/notificationSetting.dart';
 
 NotificationSettingsBoxRepository notificationSettingsBoxRepository = NotificationSettingsBoxRepository();
 

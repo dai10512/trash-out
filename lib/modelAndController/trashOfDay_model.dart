@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:trash_out/repository/trashOfDay_boxRepository.dart';
-import 'package:trash_out/typeAdapter/trashOfDay.dart';
+import '../repository/trashOfDay_boxRepository.dart';
+import '../typeAdapter/trashOfDay.dart';
 
 TrashOfDayViewModel trashOfDayViewModel = TrashOfDayViewModel();
 
