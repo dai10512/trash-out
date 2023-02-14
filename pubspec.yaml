@@ -46,8 +46,8 @@ dependencies:
   image: ^3.2.0
   hive: ^2.2.1
   hive_flutter: ^1.1.0
-  modal_bottom_sheet: ^2.0.1
-  awesome_notifications: any # Any attribute updates automatically your source to the last version
+  modal_bottom_sheet: ^3.0.0-pre
+  awesome_notifications: ^0.6.21
   flutter_native_timezone: ^2.0.0
   timezone: ^0.8.0
 
