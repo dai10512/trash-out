@@ -48,7 +48,7 @@ dependencies:
   hive_flutter:
   modal_bottom_sheet:
   awesome_notifications:
-  flutter_native_timezone:
+  flutter_native_timezone: ^2.0.0
   timezone:
 
 dev_dependencies:
