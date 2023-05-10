@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trash_out/model/trash_info.dart';
 
 import '../modelAndController/trashOfDay_model.dart';
 import '../modelAndController/trash_model.dart';
@@ -15,6 +16,19 @@ class TrashDetailView extends ConsumerStatefulWidget {
 
 class _TrashDetailViewState extends ConsumerState<TrashDetailView> {
   get hiveKey => widget.hiveKey;
+  final newTrashInfo = const TrashInfo();
+
+  TextEditingController trashTypeController = TextEditingController(text: '');
+  Map<int, bool> weeksOfMonth = {};
+  Map<int, bool> daysOfWeek = {};
+
+  @override
+  void initState() {
+    trashTypeController.text = newTrashInfo.trashType;
+    weeksOfMonth = newTrashInfo.weeksOfMonth;
+    daysOfWeek = newTrashInfo.daysOfWeek;
+    super.initState();
+  }
 
   @override
   Widget build(context) {

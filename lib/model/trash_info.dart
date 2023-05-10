@@ -1,12 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'trash.freezed.dart';
+part 'trash_info.freezed.dart';
 
 @freezed
-abstract class Trash with _$Trash {
-  const factory Trash({
+abstract class TrashInfo with _$TrashInfo {
+  const factory TrashInfo({
     @Default('')
-        String? trashType,
+        String trashType,
     @Default({
       1: false,
       2: false,
@@ -25,13 +25,13 @@ abstract class Trash with _$Trash {
       5: true,
     })
         Map<int, bool> weeksOfMonth,
-  }) = _Trash;
+  }) = _TrashInfo;
 
   //　毎週〇〇曜日を表示
-  get weeksOfMonthStr {
-    weeksOfMonth.removeWhere((_, value) => value == false);
-    final weeksOfMonthList = weeksOfMonth.keys.toList();
-    final weeksOfMonthStr = '毎月第${weeksOfMonthList.join(',第')}';
-    return weeksOfMonthStr;
-  }
+  // get weeksOfMonthStr {
+  //   weeksOfMonth.removeWhere((_, value) => value == false);
+  //   final weeksOfMonthList = weeksOfMonth.keys.toList();
+  //   final weeksOfMonthStr = '毎月第${weeksOfMonthList.join(',第')}';
+  //   return weeksOfMonthStr;
+  // }
 }

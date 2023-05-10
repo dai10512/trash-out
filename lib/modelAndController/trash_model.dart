@@ -10,6 +10,8 @@ import 'trashOfDayNotification_controller.dart';
 //   build() => Trash(trashType: '', weekdays: {});
 // }
 
+
+
 final AutoDisposeChangeNotifierProviderFamily<TrashModel, dynamic>
     trashModelProvider =
     ChangeNotifierProvider.family.autoDispose<TrashModel, dynamic>(
