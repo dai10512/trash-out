@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trash_out/view/trashList_view.dart';
+import 'package:trash_out/view/trash_List_view.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);

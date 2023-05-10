@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
 import '../modelAndController/notificationSetting_model.dart';
 import '../repository/notificationSettings_boxRepository.dart';
 import '../typeAdapter/notificationSetting.dart';
@@ -15,7 +16,6 @@ class NotificationSettingView extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('通知設定'),
         centerTitle: true,
-        // actions: appBarIconList,
       ),
       body: SafeArea(
         child: Column(
@@ -23,9 +23,11 @@ class NotificationSettingView extends ConsumerWidget {
             GestureDetector(
               onTap: () => FocusScope.of(context).unfocus(),
               child: ValueListenableBuilder<Box<dynamic>>(
-                valueListenable: notificationSettingsBoxRepository.box.listenable(),
+                valueListenable:
+                    notificationSettingsBoxRepository.box.listenable(),
                 builder: (context, box, _) {
-                  List<NotificationSetting> notificationSettings = box.values.toList().cast<NotificationSetting>();
+                  List<NotificationSetting> notificationSettings =
+                      box.values.toList().cast<NotificationSetting>();
 
                   return ListView.builder(
                     padding: EdgeInsets.zero,
@@ -50,22 +52,29 @@ class NotificationSettingView extends ConsumerWidget {
 Widget notificationListTile(BuildContext context, int index) {
   return Consumer(
     builder: (context, ref, _) {
-      final NotificationSettingModel notificationSettingModelRead = ref.read(notificationSettingModelProvider(index));
-      final NotificationSettingModel notificationSettingModelWatch = ref.watch(notificationSettingModelProvider(index));
+      final NotificationSettingModel notificationSettingModelRead =
+          ref.read(notificationSettingModelProvider(index));
+      final NotificationSettingModel notificationSettingModelWatch =
+          ref.watch(notificationSettingModelProvider(index));
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Card(
           elevation: commonElevation,
           child: Container(
-            decoration:
-                BoxDecoration(gradient: (notificationSettingModelRead.doNotify) ? cardGradient : cardGradientOff, borderRadius: BorderRadius.circular(10.0)),
+            decoration: BoxDecoration(
+                gradient: (notificationSettingModelRead.doNotify)
+                    ? cardGradient
+                    : cardGradientOff,
+                borderRadius: BorderRadius.circular(10.0)),
             padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
                 Text(
                   '当日の収集ゴミの通知時間',
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: (notificationSettingModelRead.doNotify) ? cardTextColor : cardTextColorOff,
+                        color: (notificationSettingModelRead.doNotify)
+                            ? cardTextColor
+                            : cardTextColorOff,
                       ),
                 ),
                 const SizedBox(height: 10),
@@ -74,13 +83,20 @@ Widget notificationListTile(BuildContext context, int index) {
                   children: <Widget>[
                     MaterialButton(
                         child: Text(
-                          notificationSettingModelWatch.formatTime(notificationSettingModelWatch.time),
-                          style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                                color: (notificationSettingModelRead.doNotify) ? cardTextColor : cardTextColorOff,
+                          notificationSettingModelWatch
+                              .formatTime(notificationSettingModelWatch.time),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineLarge!
+                              .copyWith(
+                                color: (notificationSettingModelRead.doNotify)
+                                    ? cardTextColor
+                                    : cardTextColorOff,
                               ),
                         ),
                         onPressed: () async {
-                          await notificationSettingModelRead.writeTime(context, index, notificationSettingModelRead.time);
+                          await notificationSettingModelRead.writeTime(context,
+                              index, notificationSettingModelRead.time);
                         }),
                     Switch(
                       value: notificationSettingModelWatch.doNotify,

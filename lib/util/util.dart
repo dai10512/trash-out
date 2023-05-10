@@ -38,39 +38,6 @@ LinearGradient buttonGradient = LinearGradient(
 
 const double totalPadding = 20;
 
-class CoolDivider extends StatelessWidget {
-  const CoolDivider({
-    Key? key,
-    this.height = 16,
-    this.thickness = 1,
-    this.indent = 0,
-    this.endIndent = 0,
-    required this.gradient,
-  }) : super(key: key);
-
-  final double height;
-  final double thickness;
-  final double indent;
-  final double endIndent;
-  final LinearGradient gradient;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: height),
-        Container(
-          height: thickness,
-          margin: EdgeInsetsDirectional.only(
-            start: indent,
-            end: endIndent,
-          ),
-          decoration: BoxDecoration(gradient: commonGradient),
-        ),
-      ],
-    );
-  }
-}
 
 final Map<int, String> formatWeekdayMap = {
   1: '月曜日',
@@ -82,13 +49,13 @@ final Map<int, String> formatWeekdayMap = {
   7: '日曜日',
 };
 
-final Map<int, String> formatWeekOfMonthMap = {
-  1: '第1',
-  2: '第2',
-  3: '第3',
-  4: '第4',
-  5: '第5',
-};
+// final Map<int, String> formatWeekOfMonthMap = {
+//   1: '第1',
+//   2: '第2',
+//   3: '第3',
+//   4: '第4',
+//   5: '第5',
+// };
 
 String formatWeeksOfMonth(Map<int, bool> weeksOfMonth) {
   String word = '';
