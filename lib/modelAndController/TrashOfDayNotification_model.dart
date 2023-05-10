@@ -17,7 +17,10 @@ class TrashNotificationModel {
   Future<void> createNotification() async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
-        id: int.parse(weekOfMonth.toString() + weekday.toString() + time.hour.toString() + time.minute.toString()),
+        id: int.parse(weekOfMonth.toString() +
+            weekday.toString() +
+            time.hour.toString() +
+            time.minute.toString()),
         channelKey: 'TrashOut',
         title: title,
         body: body,
@@ -29,10 +32,10 @@ class TrashNotificationModel {
         minute: time.minute,
         repeats: true,
       ),
-    ) 
-    .then(
-      (value) => print('$title / $body / ${formatWeekOfMonthMap[weekOfMonth]} / ${formatWeekdayMap[weekday]} / 時間${time.hour}:${time.minute}'),
     );
-    List<NotificationModel> scheduleList = await AwesomeNotifications().listScheduledNotifications();
+    // .then(
+    //   (value) => print('$title / $body / ${formatWeekOfMonthMap[weekOfMonth]} / ${formatWeekdayMap[weekday]} / 時間${time.hour}:${time.minute}'),
+    // );
+    // List<NotificationModel> scheduleList = await AwesomeNotifications().listScheduledNotifications();
   }
 }

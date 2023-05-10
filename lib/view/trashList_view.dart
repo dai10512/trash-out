@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
 import '../modelAndController/trashOfDay_model.dart';
 import '../modelAndController/trash_model.dart';
 import '../repository/trashList_boxRepository.dart';
@@ -8,26 +10,34 @@ import '../typeAdapter/trash.dart';
 import '../util/util.dart';
 import 'notificationSetting_view.dart';
 import 'trash_view.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+// import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class TrashListView extends ConsumerWidget {
   const TrashListView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final List<Widget> appBarIconList = [
       IconButton(
         padding: EdgeInsets.zero,
         icon: const Icon(Icons.add),
         onPressed: () {
-          showCupertinoModalBottomSheet(context: context, builder: (context) => const TrashDetailView(null));
+          showMaterialModalBottomSheet(
+            context: context,
+            builder: (context) => const TrashDetailView(null),
+          );
         },
       ),
       IconButton(
         padding: EdgeInsets.zero,
         icon: const Icon(Icons.settings),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationSettingView()));
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const NotificationSettingView(),
+            ),
+          );
         },
       ),
     ];
@@ -86,12 +96,15 @@ class TrashListView extends ConsumerWidget {
   Widget buildTrashOfDayCard(BuildContext context, int whichDay) {
     return Consumer(
       builder: (context, ref, _) {
-        final TrashOfDayViewModel trashOfDayViewModelWatch = ref.watch(trashOfDayViewModelProvider); //必要
+        final TrashOfDayViewModel trashOfDayViewModelWatch =
+            ref.watch(trashOfDayViewModelProvider); //必要
         return Expanded(
           child: Card(
             elevation: commonElevation,
             child: Container(
-              decoration: BoxDecoration(gradient: cardGradient, borderRadius: BorderRadius.circular(10.0)),
+              decoration: BoxDecoration(
+                  gradient: cardGradient,
+                  borderRadius: BorderRadius.circular(10.0)),
               // width: (isMonitor) ? 280 : double.infinity,
               // padding: const EdgeInsets.all(20.0),
               padding: const EdgeInsets.all(13.0),
@@ -99,19 +112,28 @@ class TrashListView extends ConsumerWidget {
                 children: [
                   Text(
                     formatWhichDay(whichDay),
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(color: cardTextColor),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: cardTextColor),
                   ),
                   const SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: FutureBuilder(
-                      future: (whichDay == 0) ? trashOfDayViewModelWatch.getTotalTrashTypeOfToday() : trashOfDayViewModelWatch.getTotalTrashTypeOfTomorrow(),
+                      future: whichDay == 0
+                          ? trashOfDayViewModelWatch.getTotalTrashTypeOfToday()
+                          : trashOfDayViewModelWatch
+                              .getTotalTrashTypeOfTomorrow(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return FittedBox(
                             child: Text(
                               snapshot.data.toString(),
-                              style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: cardTextColor),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall!
+                                  .copyWith(color: cardTextColor),
                               textAlign: TextAlign.center,
                             ),
                           );
@@ -119,7 +141,10 @@ class TrashListView extends ConsumerWidget {
                           return FittedBox(
                             child: Text(
                               "無し",
-                              style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.blueGrey[700]),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall!
+                                  .copyWith(color: Colors.blueGrey[700]),
                             ),
                           );
                         }
@@ -146,68 +171,72 @@ class TrashListView extends ConsumerWidget {
   }
 
   Widget buildContent(List<Trash> trashList) {
-    if (trashList.isEmpty) {
-      return const Center(
-        child: Padding(
-          padding: EdgeInsets.only(top: 30.0),
-          child: Text(
-            '収集ゴミが未登録です。\n右上の「＋」ボタンを押して\nリストを作成しましょう',
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-    } else {
-      return Expanded(
-        child: ListView.builder(
-          // reverse: true,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.zero,
-          itemCount: trashList.length,
-          itemBuilder: (BuildContext context, int index) {
-            final trash = trashList[index];
-            final hiveKey = trashListBoxRepository.box.keyAt(index);
-            return _buildSlidableListTile(trash, hiveKey);
-          },
-        ),
-      );
-    }
-  }
-
-  Widget _buildSlidableListTile(Trash trash, dynamic hiveKey) {
-    return Consumer(
-      builder: (context, ref, child) {
-        final TrashModel trashModel = ref.read(trashModelProvider(hiveKey));
-        final TrashOfDayViewModel trashOfDayViewModelRead = ref.read(trashOfDayViewModelProvider);
-        return Dismissible(
-          key: UniqueKey(),
-          onDismissed: (direction) async {
-            await trashModel.deleteTrash(hiveKey);
-            await trashOfDayViewModelRead.setTotalTrashType();
-          },
-          child: Card(
-            elevation: commonElevation,
-            child: Container(
-              decoration: BoxDecoration(gradient: cardGradient, borderRadius: BorderRadius.circular(10.0)),
-              // width: (isMonitor) ? 280 : double.infinity,
-              padding: const EdgeInsets.all(0.0),
-              child: ListTile(
-                title: Text(
-                  (trash.trashType != '') ? trash.trashType : '種類が登録されていません',
-                  style: TextStyle(color: cardTextColor),
-                ),
-                subtitle: Text(
-                  '${formatWeeksOfMonth(trash.weeksOfMonth)}  /  ${formatWeekdays(trash.weekdays)}',
-                  style: TextStyle(color: cardTextColor),
-                ),
-                onTap: () {
-                  showCupertinoModalBottomSheet(context: context, builder: (context) => TrashDetailView(hiveKey));
-                },
+    return trashList.isEmpty
+        ? const Center(
+            child: Padding(
+              padding: EdgeInsets.only(top: 30.0),
+              child: Text(
+                '収集ゴミが未登録です。\n右上の「＋」ボタンを押して\nリストを作成しましょう',
+                textAlign: TextAlign.center,
               ),
             ),
-          ),
-        );
-      },
-    );
+          )
+        : Expanded(
+            child: ListView.builder(
+              // reverse: true,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.zero,
+              itemCount: trashList.length,
+              itemBuilder: (context, index) {
+                final trash = trashList[index];
+                final hiveKey = trashListBoxRepository.box.keyAt(index);
+                return _buildSlidableListTile(trash, hiveKey);
+              },
+            ),
+          );
   }
 }
+
+Widget _buildSlidableListTile(Trash trash, dynamic hiveKey) {
+  return Consumer(
+    builder: (context, ref, child) {
+      final TrashModel trashModel = ref.read(trashModelProvider(hiveKey));
+      final TrashOfDayViewModel trashOfDayViewModelRead =
+          ref.read(trashOfDayViewModelProvider);
+      return Dismissible(
+        key: UniqueKey(),
+        onDismissed: (direction) async {
+          await trashModel.deleteTrash(hiveKey);
+          await trashOfDayViewModelRead.setTotalTrashType();
+        },
+        child: Card(
+          elevation: commonElevation,
+          child: Container(
+            decoration: BoxDecoration(
+                gradient: cardGradient,
+                borderRadius: BorderRadius.circular(10.0)),
+            // width: (isMonitor) ? 280 : double.infinity,
+            padding: const EdgeInsets.all(0.0),
+            child: ListTile(
+              title: Text(
+                (trash.trashType != '') ? trash.trashType : '種類が登録されていません',
+                style: TextStyle(color: cardTextColor),
+              ),
+              subtitle: Text(
+                '${formatWeeksOfMonth(trash.weeksOfMonth)}  /  ${formatWeekdays(trash.weekdays)}',
+                style: TextStyle(color: cardTextColor),
+              ),
+              onTap: () {
+                showModalBottomSheet(
+                    context: context,
+                    builder: (context) => TrashDetailView(hiveKey));
+              },
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
+// }
