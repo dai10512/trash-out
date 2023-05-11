@@ -11,6 +11,9 @@ import 'trashOfDayNotification_controller.dart';
 // }
 
 
+class A{
+  
+}
 
 final AutoDisposeChangeNotifierProviderFamily<TrashModel, dynamic>
     trashModelProvider =

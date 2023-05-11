@@ -9,6 +9,7 @@ import '../util/util.dart';
 class TrashDetailView extends ConsumerStatefulWidget {
   const TrashDetailView(this.hiveKey, {super.key});
   final dynamic hiveKey;
+  // final TrashInfo? trashInfo; // hiveKeyの代わりに今後使う
 
   @override
   ConsumerState<TrashDetailView> createState() => _TrashDetailViewState();
@@ -16,17 +17,27 @@ class TrashDetailView extends ConsumerStatefulWidget {
 
 class _TrashDetailViewState extends ConsumerState<TrashDetailView> {
   get hiveKey => widget.hiveKey;
-  final newTrashInfo = const TrashInfo();
 
   TextEditingController trashTypeController = TextEditingController(text: '');
-  Map<int, bool> weeksOfMonth = {};
-  Map<int, bool> daysOfWeek = {};
+  Map<int, bool> daysOfWeek = {
+    1: false,
+    2: false,
+    3: false,
+    4: false,
+    5: false,
+    6: false,
+    7: false
+  };
+  Map<int, bool> weeksOfMonth = {
+    1: false,
+    2: false,
+    3: false,
+    4: false,
+    5: false,
+  };
 
   @override
   void initState() {
-    trashTypeController.text = newTrashInfo.trashType;
-    weeksOfMonth = newTrashInfo.weeksOfMonth;
-    daysOfWeek = newTrashInfo.daysOfWeek;
     super.initState();
   }
 
@@ -51,7 +62,7 @@ class _TrashDetailViewState extends ConsumerState<TrashDetailView> {
                 const SizedBox(height: 10),
                 notificationDateForm(),
                 const SizedBox(height: 10),
-                savedButton(hiveKey),
+                savedButton(),
               ],
             ),
           ),
@@ -61,8 +72,6 @@ class _TrashDetailViewState extends ConsumerState<TrashDetailView> {
   }
 
   Widget trashTypeForm() {
-    final trashRead = ref.read(trashModelProvider(hiveKey));
-    final controller = TextEditingController(text: trashRead.trashType);
     return Column(
       children: [
         Card(
@@ -71,20 +80,19 @@ class _TrashDetailViewState extends ConsumerState<TrashDetailView> {
             decoration: BoxDecoration(
                 gradient: cardGradientOff,
                 borderRadius: BorderRadius.circular(10.0)),
-            padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
+            padding: const EdgeInsetsDirectional.all(15),
             child: Column(
               children: [
                 const Text('ゴミの種類'),
                 const SizedBox(height: 15),
                 TextFormField(
-                  controller: controller,
+                  controller: trashTypeController,
                   autofocus: true,
                   obscureText: false,
                   decoration: const InputDecoration(
-                      hintText: '[例：燃えるゴミ]', filled: true),
-                  onChanged: (text) {
-                    trashRead.writeTrashType(text);
-                  },
+                    hintText: '[例：燃えるゴミ]',
+                    filled: true,
+                  ),
                 ),
               ],
             ),
@@ -105,17 +113,16 @@ class _TrashDetailViewState extends ConsumerState<TrashDetailView> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            weekOfMonthButtons(hiveKey),
+            weekOfMonthButtons(),
             const SizedBox(width: 20),
-            dayOfTheWeekButtons(hiveKey),
+            dayOfTheWeekButtons(),
           ],
         ),
       ),
     );
   }
 
-  Widget weekOfMonthButtons(dynamic hiveKey) {
-    final trashWatch = ref.watch(trashModelProvider(hiveKey));
+  Widget weekOfMonthButtons() {
     return Expanded(
       flex: 2,
       child: Column(
@@ -127,18 +134,20 @@ class _TrashDetailViewState extends ConsumerState<TrashDetailView> {
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: trashWatch.weeksOfMonth.length,
-            itemBuilder: (BuildContext context, int index) {
+            itemCount: weeksOfMonth.length,
+            itemBuilder: (context, index) {
+              bool isSelectedWeekOfMonth = weeksOfMonth[index + 1]!;
               return ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
-                    (trashWatch.weeksOfMonth[index + 1]!)
-                        ? Colors.blue
-                        : Colors.grey,
+                    isSelectedWeekOfMonth
+                        ? Colors.blue // 選択時
+                        : Colors.grey, // 非選択時
                   ),
                 ),
                 onPressed: () {
-                  trashWatch.writeWeeksOfMonth(index + 1);
+                  weeksOfMonth[index + 1] = !isSelectedWeekOfMonth;
+                  setState(() {});
                 },
                 child: Text(
                   '毎月第${index + 1}',
@@ -152,9 +161,7 @@ class _TrashDetailViewState extends ConsumerState<TrashDetailView> {
     );
   }
 
-  Widget dayOfTheWeekButtons(dynamic hiveKey) {
-    final trashWatch = ref.read(trashModelProvider(hiveKey));
-
+  Widget dayOfTheWeekButtons() {
     return Expanded(
       flex: 3,
       child: Column(
@@ -169,18 +176,19 @@ class _TrashDetailViewState extends ConsumerState<TrashDetailView> {
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: trashWatch.daysOfWeek.length,
+            itemCount: daysOfWeek.length,
             itemBuilder: (BuildContext context, int index) {
+              bool isSelectedDayOfWeek = daysOfWeek[index + 1]!;
+
               return ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
-                    (trashWatch.daysOfWeek[index + 1]!)
-                        ? Colors.blue
-                        : Colors.grey,
+                    isSelectedDayOfWeek ? Colors.blue : Colors.grey,
                   ),
                 ),
                 onPressed: () {
-                  trashWatch.writeDaysOfWeek(index + 1);
+                  daysOfWeek[index + 1] = !isSelectedDayOfWeek;
+                  setState(() {});
                 },
                 child: Text(
                   formatWeekdayMap[index + 1].toString(),
@@ -196,14 +204,19 @@ class _TrashDetailViewState extends ConsumerState<TrashDetailView> {
     );
   }
 
-  Widget savedButton(
-    dynamic hiveKey,
-  ) {
+  Widget savedButton() {
     final trashOfDayViewModelRead = ref.read(trashOfDayViewModelProvider);
     final trashRead = ref.read(trashModelProvider(hiveKey));
 
     return MaterialButton(
       onPressed: () async {
+        //validation設ける
+        final newTrashInfo = TrashInfo(
+          trashType: trashTypeController.text,
+          weeksOfMonth: weeksOfMonth,
+          daysOfWeek: daysOfWeek,
+        );
+        // sharedに保存する
         await trashRead.saveTrash(hiveKey, trashRead);
         await trashOfDayViewModelRead.setTotalTrashType();
         Navigator.pop(context);
