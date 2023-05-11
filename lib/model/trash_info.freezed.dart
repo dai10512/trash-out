@@ -119,32 +119,16 @@ class __$$_TrashInfoCopyWithImpl<$Res>
 
 class _$_TrashInfo implements _TrashInfo {
   const _$_TrashInfo(
-      {this.trashType = '',
-      final Map<int, bool> daysOfWeek = const {
-        1: false,
-        2: false,
-        3: false,
-        4: false,
-        5: false,
-        6: false,
-        7: false
-      },
-      final Map<int, bool> weeksOfMonth = const {
-        1: true,
-        2: true,
-        3: true,
-        4: true,
-        5: true
-      }})
+      {required this.trashType,
+      required final Map<int, bool> daysOfWeek,
+      required final Map<int, bool> weeksOfMonth})
       : _daysOfWeek = daysOfWeek,
         _weeksOfMonth = weeksOfMonth;
 
   @override
-  @JsonKey()
   final String trashType;
   final Map<int, bool> _daysOfWeek;
   @override
-  @JsonKey()
   Map<int, bool> get daysOfWeek {
     if (_daysOfWeek is EqualUnmodifiableMapView) return _daysOfWeek;
     // ignore: implicit_dynamic_type
@@ -153,7 +137,6 @@ class _$_TrashInfo implements _TrashInfo {
 
   final Map<int, bool> _weeksOfMonth;
   @override
-  @JsonKey()
   Map<int, bool> get weeksOfMonth {
     if (_weeksOfMonth is EqualUnmodifiableMapView) return _weeksOfMonth;
     // ignore: implicit_dynamic_type
@@ -194,9 +177,9 @@ class _$_TrashInfo implements _TrashInfo {
 
 abstract class _TrashInfo implements TrashInfo {
   const factory _TrashInfo(
-      {final String trashType,
-      final Map<int, bool> daysOfWeek,
-      final Map<int, bool> weeksOfMonth}) = _$_TrashInfo;
+      {required final String trashType,
+      required final Map<int, bool> daysOfWeek,
+      required final Map<int, bool> weeksOfMonth}) = _$_TrashInfo;
 
   @override
   String get trashType;

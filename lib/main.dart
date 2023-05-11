@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trash_out/util/util.dart';
 
 import 'modelAndController/trashOfDayNotification_controller.dart';
 import 'my_app.dart';
@@ -18,13 +20,13 @@ Future<void> main() async {
     ),
   );
 }
+
 Future<void> _init() async {
   await _initializeAwesomeNotification();
   await _initializeDB();
   await trashNotificationController.setNotifications();
+  prefs = await SharedPreferences.getInstance();
 }
-
-
 
 Future<void> _initializeAwesomeNotification() async {
   // AwesomeNotifications().initialize(
@@ -83,7 +85,7 @@ Future<void> _initializeDB() async {
 //   );
 // }
 
- actionStream(BuildContext context) {
+actionStream(BuildContext context) {
   // AwesomeNotifications().setListeners(
   //   onActionReceivedMethod: (ReceivedAction receivedAction) async {
   //     // NotificationController.onActionReceivedMethod(context, receivedAction);

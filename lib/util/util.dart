@@ -1,45 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
-Uuid uuid = const Uuid();
-double commonHorizontalPadding = 20.0;
-double commonElevation = 5;
-Color? cardTextColor = Colors.blueGrey[800];
-Color? cardTextColorOff = cardTextColor!.withOpacity(0.4);
-Color? buttonTopLeftColor = Colors.orange[600];
-Color? buttonRightColor = Colors.orange[300];
-
-Color? topLeftColor = Colors.blue[300];
-Color? bottomRightColor = Colors.blue[100];
-
-LinearGradient commonGradient = LinearGradient(
+const uuid = Uuid();
+SharedPreferences? prefs;
+/////////////////////////////////////////////
+///レイアウト
+const double commonHorizontalPadding = 20.0;
+const double commonElevation = 5;
+const double totalPadding = 20;
+/////////////////////////////////////////////
+///色
+final cardTextColor = Colors.blueGrey[800];
+final cardTextColorOff = cardTextColor!.withOpacity(0.4);
+final buttonTopLeftColor = Colors.orange[600];
+final buttonRightColor = Colors.orange[300];
+final topLeftColor = Colors.blue[300];
+final bottomRightColor = Colors.blue[100];
+/////////////////////////////////////////////
+///グラディエント
+final commonGradient = LinearGradient(
   colors: [topLeftColor!, bottomRightColor!],
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
 );
 
-LinearGradient cardGradient = LinearGradient(
+final cardGradient = LinearGradient(
   colors: [topLeftColor!.withOpacity(0.5), bottomRightColor!.withOpacity(0.5)],
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
 );
 
-LinearGradient cardGradientOff = LinearGradient(
+final cardGradientOff = LinearGradient(
   colors: [topLeftColor!.withOpacity(0.2), bottomRightColor!.withOpacity(0.2)],
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
 );
 
-LinearGradient buttonGradient = LinearGradient(
-  colors: [buttonTopLeftColor!.withOpacity(0.5), buttonRightColor!.withOpacity(0.5)],
+final buttonGradient = LinearGradient(
+  colors: [
+    buttonTopLeftColor!.withOpacity(0.5),
+    buttonRightColor!.withOpacity(0.5)
+  ],
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
 );
 
-const double totalPadding = 20;
+///////////////////////////////////////////
 
-
-final Map<int, String> formatWeekdayMap = {
+final formatWeekdayMap = {
   1: '月曜日',
   2: '火曜日',
   3: '水曜日',
