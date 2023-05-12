@@ -15,8 +15,6 @@ class TrashDetailView extends ConsumerStatefulWidget {
 }
 
 class _TrashDetailViewState extends ConsumerState<TrashDetailView> {
-  // get hiveKey => widget.hiveKey;
-
   TrashInfoListService get trashListServiceNotifier =>
       ref.watch(trashInfoListServiceProvider.notifier);
 
@@ -109,9 +107,10 @@ class _TrashDetailViewState extends ConsumerState<TrashDetailView> {
       elevation: commonElevation,
       child: Container(
         decoration: BoxDecoration(
-            gradient: cardGradientOff,
-            borderRadius: BorderRadius.circular(10.0)),
-        padding: const EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
+          gradient: cardGradientOff,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        padding: const EdgeInsetsDirectional.all(15),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -210,7 +209,7 @@ class _TrashDetailViewState extends ConsumerState<TrashDetailView> {
     // final trashOfDayViewModelRead = ref.read(trashOfDayViewModelProvider);
     // final trashRead = ref.read(trashModelProvider(hiveKey));
 
-    return MaterialButton(
+    return ElevatedButton(
       onPressed: () async {
         //validation設ける
         final newTrashInfo = TrashInfo(
@@ -228,25 +227,11 @@ class _TrashDetailViewState extends ConsumerState<TrashDetailView> {
           Navigator.pop(context);
         }
       },
-      elevation: commonElevation,
-      padding: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        elevation: commonElevation,
-        child: Ink(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            gradient: buttonGradient,
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Center(
-            child: Text(widget.trashInfo == null ? '新規登録する' : '更新する'),
-          ),
-        ),
+      // elevation: commonElevation,
+      // padding: EdgeInsets.zero,
+      // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+      child: Center(
+        child: Text(widget.trashInfo == null ? '新規登録する' : '更新する'),
       ),
     );
   }
