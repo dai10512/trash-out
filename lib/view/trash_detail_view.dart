@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trash_out/model/trash_info.dart';
+import 'package:trash_out/model/trash_info_list_service.dart';
+import 'package:uuid/uuid.dart';
 
-import '../modelAndController/trashOfDay_model.dart';
-import '../modelAndController/trash_model.dart';
 import '../util/util.dart';
 
 class TrashDetailView extends ConsumerStatefulWidget {
-  const TrashDetailView(this.hiveKey, {super.key});
-  final dynamic hiveKey;
-  // final TrashInfo? trashInfo; // hiveKeyの代わりに今後使う
+  const TrashDetailView(this.trashInfo, {super.key});
+  final TrashInfo? trashInfo;
 
   @override
   ConsumerState<TrashDetailView> createState() => _TrashDetailViewState();
 }
 
 class _TrashDetailViewState extends ConsumerState<TrashDetailView> {
-  get hiveKey => widget.hiveKey;
+  // get hiveKey => widget.hiveKey;
+
+  TrashInfoListService get trashListServiceNotifier =>
+      ref.watch(trashInfoListServiceProvider.notifier);
 
   TextEditingController trashTypeController = TextEditingController(text: '');
   Map<int, bool> daysOfWeek = {
@@ -205,21 +207,26 @@ class _TrashDetailViewState extends ConsumerState<TrashDetailView> {
   }
 
   Widget savedButton() {
-    final trashOfDayViewModelRead = ref.read(trashOfDayViewModelProvider);
-    final trashRead = ref.read(trashModelProvider(hiveKey));
+    // final trashOfDayViewModelRead = ref.read(trashOfDayViewModelProvider);
+    // final trashRead = ref.read(trashModelProvider(hiveKey));
 
     return MaterialButton(
       onPressed: () async {
         //validation設ける
         final newTrashInfo = TrashInfo(
+          id: const Uuid().v4(),
           trashType: trashTypeController.text,
           weeksOfMonth: weeksOfMonth,
           daysOfWeek: daysOfWeek,
         );
+        await trashListServiceNotifier.add(newTrashInfo);
+        ref.invalidate(trashInfoListServiceProvider);
         // sharedに保存する
-        await trashRead.saveTrash(hiveKey, trashRead);
-        await trashOfDayViewModelRead.setTotalTrashType();
-        Navigator.pop(context);
+        // await trashRead.saveTrash(hiveKey, trashRead);
+        // await trashOfDayViewModelRead.setTotalTrashType();
+        if (mounted) {
+          Navigator.pop(context);
+        }
       },
       elevation: commonElevation,
       padding: EdgeInsets.zero,
@@ -237,7 +244,7 @@ class _TrashDetailViewState extends ConsumerState<TrashDetailView> {
           ),
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Center(
-            child: Text(hiveKey == null ? '新規登録する' : '更新する'),
+            child: Text(widget.trashInfo == null ? '新規登録する' : '更新する'),
           ),
         ),
       ),

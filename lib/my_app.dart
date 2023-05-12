@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trash_out/view/trash_List_view.dart';
+import 'package:trash_out/view/trash_list_view.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -9,7 +9,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   _actionStream(BuildContext context) {
     // AwesomeNotifications().setListeners(
     //   onActionReceivedMethod: (ReceivedAction receivedAction) async {
@@ -40,5 +39,4 @@ class _MyAppState extends State<MyApp> {
       home: const TrashListView(),
     );
   }
-
 }

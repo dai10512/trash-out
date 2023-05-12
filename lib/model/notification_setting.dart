@@ -10,6 +10,10 @@ abstract class Trash with _$Trash {
     @Default(0) int? minute,
     @Default(false) bool doNotify,
   }) = _Trash;
+
+    // factory TrashInfo.fromJson(Map<String, dynamic> json) =>
+    //   _$TrashInfoFromJson(json);
+
 }
 
 enum NotificationDay {

@@ -14,12 +14,18 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+TrashInfo _$TrashInfoFromJson(Map<String, dynamic> json) {
+  return _TrashInfo.fromJson(json);
+}
+
 /// @nodoc
 mixin _$TrashInfo {
+  String get id => throw _privateConstructorUsedError;
   String get trashType => throw _privateConstructorUsedError;
   Map<int, bool> get daysOfWeek => throw _privateConstructorUsedError;
   Map<int, bool> get weeksOfMonth => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $TrashInfoCopyWith<TrashInfo> get copyWith =>
       throw _privateConstructorUsedError;
@@ -31,7 +37,8 @@ abstract class $TrashInfoCopyWith<$Res> {
       _$TrashInfoCopyWithImpl<$Res, TrashInfo>;
   @useResult
   $Res call(
-      {String trashType,
+      {String id,
+      String trashType,
       Map<int, bool> daysOfWeek,
       Map<int, bool> weeksOfMonth});
 }
@@ -49,11 +56,16 @@ class _$TrashInfoCopyWithImpl<$Res, $Val extends TrashInfo>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? trashType = null,
     Object? daysOfWeek = null,
     Object? weeksOfMonth = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       trashType: null == trashType
           ? _value.trashType
           : trashType // ignore: cast_nullable_to_non_nullable
@@ -78,7 +90,8 @@ abstract class _$$_TrashInfoCopyWith<$Res> implements $TrashInfoCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String trashType,
+      {String id,
+      String trashType,
       Map<int, bool> daysOfWeek,
       Map<int, bool> weeksOfMonth});
 }
@@ -94,11 +107,16 @@ class __$$_TrashInfoCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? trashType = null,
     Object? daysOfWeek = null,
     Object? weeksOfMonth = null,
   }) {
     return _then(_$_TrashInfo(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       trashType: null == trashType
           ? _value.trashType
           : trashType // ignore: cast_nullable_to_non_nullable
@@ -116,15 +134,21 @@ class __$$_TrashInfoCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$_TrashInfo implements _TrashInfo {
   const _$_TrashInfo(
-      {required this.trashType,
+      {required this.id,
+      required this.trashType,
       required final Map<int, bool> daysOfWeek,
       required final Map<int, bool> weeksOfMonth})
       : _daysOfWeek = daysOfWeek,
         _weeksOfMonth = weeksOfMonth;
 
+  factory _$_TrashInfo.fromJson(Map<String, dynamic> json) =>
+      _$$_TrashInfoFromJson(json);
+
+  @override
+  final String id;
   @override
   final String trashType;
   final Map<int, bool> _daysOfWeek;
@@ -145,7 +169,7 @@ class _$_TrashInfo implements _TrashInfo {
 
   @override
   String toString() {
-    return 'TrashInfo(trashType: $trashType, daysOfWeek: $daysOfWeek, weeksOfMonth: $weeksOfMonth)';
+    return 'TrashInfo(id: $id, trashType: $trashType, daysOfWeek: $daysOfWeek, weeksOfMonth: $weeksOfMonth)';
   }
 
   @override
@@ -153,6 +177,7 @@ class _$_TrashInfo implements _TrashInfo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_TrashInfo &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.trashType, trashType) ||
                 other.trashType == trashType) &&
             const DeepCollectionEquality()
@@ -161,9 +186,11 @@ class _$_TrashInfo implements _TrashInfo {
                 .equals(other._weeksOfMonth, _weeksOfMonth));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      id,
       trashType,
       const DeepCollectionEquality().hash(_daysOfWeek),
       const DeepCollectionEquality().hash(_weeksOfMonth));
@@ -173,14 +200,27 @@ class _$_TrashInfo implements _TrashInfo {
   @pragma('vm:prefer-inline')
   _$$_TrashInfoCopyWith<_$_TrashInfo> get copyWith =>
       __$$_TrashInfoCopyWithImpl<_$_TrashInfo>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_TrashInfoToJson(
+      this,
+    );
+  }
 }
 
 abstract class _TrashInfo implements TrashInfo {
   const factory _TrashInfo(
-      {required final String trashType,
+      {required final String id,
+      required final String trashType,
       required final Map<int, bool> daysOfWeek,
       required final Map<int, bool> weeksOfMonth}) = _$_TrashInfo;
 
+  factory _TrashInfo.fromJson(Map<String, dynamic> json) =
+      _$_TrashInfo.fromJson;
+
+  @override
+  String get id;
   @override
   String get trashType;
   @override

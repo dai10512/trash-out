@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:trash_out/model/trash_info_list_service.dart';
 
+import '../model/trash_info.dart';
 import '../modelAndController/trashOfDay_model.dart';
-import '../modelAndController/trash_model.dart';
-import '../repository/trashList_boxRepository.dart';
-import '../typeAdapter/trash.dart';
+// import '../modelAndController/trash_model.dart';
+// import '../repository/trashList_boxRepository.dart';
+// import '../typeAdapter/trash.dart';
 import '../util/util.dart';
 import 'notification_setting_view.dart';
 import 'trash_detail_view.dart';
@@ -19,6 +20,9 @@ class TrashListView extends ConsumerStatefulWidget {
 }
 
 class _State extends ConsumerState<TrashListView> {
+  TrashInfoListService get trashInfoListServiceNotifier =>
+      ref.watch(trashInfoListServiceProvider.notifier);
+
   @override
   Widget build(BuildContext context) {
     final appBarIconList = [
@@ -61,7 +65,8 @@ class _State extends ConsumerState<TrashListView> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: commonHorizontalPadding),
+        padding:
+            const EdgeInsets.symmetric(horizontal: commonHorizontalPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -158,18 +163,13 @@ class _State extends ConsumerState<TrashListView> {
   }
 
   Widget buildTrashListSection() {
-    return ValueListenableBuilder<Box<dynamic>>(
-      valueListenable: trashListBoxRepository.box.listenable(),
-      builder: (context, box, _) {
-        List<Trash> trashList = box.values.toList().cast<Trash>();
-        return buildContent(trashList);
-      },
-    );
-  }
-
-  Widget buildContent(List<Trash> trashList) {
-    return trashList.isEmpty
-        ? const Center(
+    final asyncValue = ref.watch(trashInfoListServiceProvider);
+    return asyncValue.when(
+      loading: () => const CircularProgressIndicator(),
+      error: (error, __) => Text(error.toString()),
+      data: (trashInfoList) {
+        if (trashInfoList.isEmpty) {
+          return const Center(
             child: Padding(
               padding: EdgeInsets.only(top: 30.0),
               child: Text(
@@ -177,35 +177,36 @@ class _State extends ConsumerState<TrashListView> {
                 textAlign: TextAlign.center,
               ),
             ),
-          )
-        : Expanded(
-            child: ListView.builder(
-              // reverse: true,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.zero,
-              itemCount: trashList.length,
-              itemBuilder: (context, index) {
-                final trash = trashList[index];
-                final hiveKey = trashListBoxRepository.box.keyAt(index);
-                return _buildSlidableListTile(trash, hiveKey);
-              },
-            ),
           );
+        }
+        return Expanded(
+          child: ListView.builder(
+            // reverse: true,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            itemCount: trashInfoList.length,
+            itemBuilder: (context, index) {
+              // final trash = trashInfoList[index];
+              // final hiveKey = trashListBoxRepository.box.keyAt(index);
+              return _buildSlidableListTile(trashInfoList[index]!);
+            },
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildSlidableListTile(
-    Trash trash,
-    dynamic hiveKey,
+    TrashInfo trashInfo,
   ) {
-    final trashModel = ref.read(trashModelProvider(hiveKey));
-    final trashOfDayViewModelRead = ref.read(trashOfDayViewModelProvider);
-
     return Dismissible(
       key: UniqueKey(),
-      onDismissed: (direction) async {
-        await trashModel.deleteTrash(hiveKey);
-        await trashOfDayViewModelRead.setTotalTrashType();
+      onDismissed: (_) async {
+        trashInfoListServiceNotifier.delete(trashInfo);
+        ref.invalidate(trashInfoListServiceProvider);
+        // await trashModel.deleteTrash(hiveKey);
+        // await trashOfDayViewModelRead.setTotalTrashType();
       },
       child: Card(
         elevation: commonElevation,
@@ -217,17 +218,19 @@ class _State extends ConsumerState<TrashListView> {
           padding: const EdgeInsets.all(0.0),
           child: ListTile(
             title: Text(
-              (trash.trashType != '') ? trash.trashType : '種類が登録されていません',
+              (trashInfo.trashType != '')
+                  ? trashInfo.trashType
+                  : '種類が登録されていません',
               style: TextStyle(color: cardTextColor),
             ),
             subtitle: Text(
-              '${formatWeeksOfMonth(trash.weeksOfMonth)}  /  ${formatWeekdays(trash.weekdays)}',
+              '${formatWeeksOfMonth(trashInfo.weeksOfMonth)}  /  ${formatWeekdays(trashInfo.daysOfWeek)}',
               style: TextStyle(color: cardTextColor),
             ),
             onTap: () {
               showModalBottomSheet(
                   context: context,
-                  builder: (context) => TrashDetailView(hiveKey));
+                  builder: (context) => TrashDetailView(trashInfo));
             },
           ),
         ),

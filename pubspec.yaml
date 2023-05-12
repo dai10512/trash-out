@@ -61,6 +61,7 @@ dev_dependencies:
     sdk: flutter
   pedantic_mono:
   freezed: ^2.3.3
+  json_serializable: ^6.6.2
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

@@ -7,12 +7,12 @@ part of 'trash_info_list_service.dart';
 // **************************************************************************
 
 String _$trashInfoListServiceHash() =>
-    r'0537d835dbc71faec48df459f7ac3526e8179f98';
+    r'328991e7a61a9432bfd1a4bc8c99e408b3875b21';
 
 /// See also [TrashInfoListService].
 @ProviderFor(TrashInfoListService)
 final trashInfoListServiceProvider = AutoDisposeAsyncNotifierProvider<
-    TrashInfoListService, List<TrashInfo?>?>.internal(
+    TrashInfoListService, List<TrashInfo?>>.internal(
   TrashInfoListService.new,
   name: r'trashInfoListServiceProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,5 +22,5 @@ final trashInfoListServiceProvider = AutoDisposeAsyncNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$TrashInfoListService = AutoDisposeAsyncNotifier<List<TrashInfo?>?>;
+typedef _$TrashInfoListService = AutoDisposeAsyncNotifier<List<TrashInfo?>>;
 // ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions
