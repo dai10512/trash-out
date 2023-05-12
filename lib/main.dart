@@ -1,14 +1,15 @@
-// import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trash_out/util/util.dart';
 
 import 'modelAndController/trashOfDayNotification_controller.dart';
+import 'my_app.dart';
 import 'repository/notificationSettings_boxRepository.dart';
 import 'typeAdapter/notificationSetting.dart';
 import 'typeAdapter/trash.dart';
 import 'typeAdapter/trashOfDay.dart';
-import 'view/trashList_view.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,13 +20,13 @@ Future<void> main() async {
     ),
   );
 }
+
 Future<void> _init() async {
   await _initializeAwesomeNotification();
   await _initializeDB();
   await trashNotificationController.setNotifications();
+  prefs = await SharedPreferences.getInstance();
 }
-
-
 
 Future<void> _initializeAwesomeNotification() async {
   // AwesomeNotifications().initialize(
@@ -67,7 +68,7 @@ Future<void> _initializeDB() async {
   notificationSettingsBoxRepository.isFirst();
 }
 
-// versionが古いため修正
+// // versionが古いため修正
 // void _actionStream(BuildContext context) {
 //   AwesomeNotifications().actionStream.listen(
 //     (ReceivedNotification receivedNotification) {
@@ -84,7 +85,7 @@ Future<void> _initializeDB() async {
 //   );
 // }
 
-_actionStream(BuildContext context) {
+actionStream(BuildContext context) {
   // AwesomeNotifications().setListeners(
   //   onActionReceivedMethod: (ReceivedAction receivedAction) async {
   //     // NotificationController.onActionReceivedMethod(context, receivedAction);
@@ -104,24 +105,3 @@ _actionStream(BuildContext context) {
 //   );
 // }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    _actionStream(context);
-    // createScaffoldMessengerStreamListen(context);
-
-    return MaterialApp(
-      locale: const Locale('ja'),
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        iconTheme:
-            const IconThemeData.fallback().copyWith(color: Colors.grey[700]),
-        useMaterial3: true,
-        primarySwatch: Colors.blue,
-      ),
-      home: const TrashListView(),
-    );
-  }
-}

@@ -1,22 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'trashOfDayNotification_controller.dart';
-import 'trashOfDay_model.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../model/trash_info.dart';
 import '../repository/trashList_boxRepository.dart';
 import '../typeAdapter/trash.dart';
+import 'trashOfDayNotification_controller.dart';
 
-final AutoDisposeChangeNotifierProviderFamily<TrashModel, dynamic> trashModelProvider =
-    ChangeNotifierProvider.family.autoDispose<TrashModel, dynamic>((ref, hiveKey) => TrashModel(hiveKey));
+// class TrashNotifier extends Notifier<Trash> {
+//   @override
+//   build() => Trash(trashType: '', weekdays: {});
+// }
+
+@riverpod
+List<TrashInfo?>? trashInfoList(ref) => null;
+
+// class TrashInfoListNotifier extends Notifier<> {
+//   @override
+//    build() {
+//     return ;
+//   }
+// }
+
+final AutoDisposeChangeNotifierProviderFamily<TrashModel, dynamic>
+    trashModelProvider =
+    ChangeNotifierProvider.family.autoDispose<TrashModel, dynamic>(
+  (ref, hiveKey) => TrashModel(hiveKey),
+);
 
 class TrashModel extends ChangeNotifier {
   String trashType = '';
-  Map<int, bool> daysOfWeek = {1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false};
-  Map<int, bool> weeksOfMonth = {1: true, 2: true, 3: true, 4: true, 5: true};
+  Map<int, bool> daysOfWeek = {
+    1: false,
+    2: false,
+    3: false,
+    4: false,
+    5: false,
+    6: false,
+    7: false,
+  };
+  Map<int, bool> weeksOfMonth = {
+    1: true,
+    2: true,
+    3: true,
+    4: true,
+    5: true,
+  };
 
+////////////////////////////
   TrashModel(dynamic hiveKey) {
     getData(hiveKey);
   }
 
+  //データ取得
   void getData(dynamic hiveKey) {
     final Trash? loadedData = trashListBoxRepository.getTrash(hiveKey);
     if (loadedData != null) {
@@ -26,6 +62,7 @@ class TrashModel extends ChangeNotifier {
     }
   }
 
+  //データ保存
   Future<void> saveTrash(dynamic hiveKey, TrashModel trashModel) async {
     final tempTrash = Trash(
       trashType: trashModel.trashType,
@@ -40,10 +77,12 @@ class TrashModel extends ChangeNotifier {
     await trashNotificationController.setNotifications();
   }
 
+  //データ追加
   Future<void> addTrash(Trash tempTrash) async {
     trashListBoxRepository.addTrash(tempTrash);
   }
 
+  // データ修正
   Future<void> updateTrash(dynamic hiveKey, Trash tempTrash) async {
     trashListBoxRepository.updateTrashType(hiveKey, tempTrash);
   }
