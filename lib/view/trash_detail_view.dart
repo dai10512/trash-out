@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:trash_out/model/trash_info.dart';
 import 'package:trash_out/model/trash_info_list_service.dart';
+import 'package:trash_out/model/trash_of_day_service.dart';
 import 'package:uuid/uuid.dart';
 
 import '../util/util.dart';
@@ -47,7 +48,7 @@ class _TrashDetailViewState extends ConsumerState<TrashDetailView> {
       appBar: AppBar(
         title: const Text('登録'),
         centerTitle: true,
-        automaticallyImplyLeading: false,
+        // automaticallyImplyLeading: false,
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
@@ -220,6 +221,7 @@ class _TrashDetailViewState extends ConsumerState<TrashDetailView> {
         );
         await trashListServiceNotifier.add(newTrashInfo);
         ref.invalidate(trashInfoListServiceProvider);
+        ref.invalidate(trashOfDayListServiceProvider);
         // sharedに保存する
         // await trashRead.saveTrash(hiveKey, trashRead);
         // await trashOfDayViewModelRead.setTotalTrashType();

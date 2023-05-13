@@ -45,16 +45,14 @@ dependencies:
   image:
   hive:
   hive_flutter:
-  modal_bottom_sheet: ^3.0.0-pre
-  # awesome_notifications: ^0.7.4+1
+  # awesome_notifications: ^0.7.0
+  awesome_notifications: ^0.6.21
   flutter_native_timezone: ^2.0.0
   timezone:
   freezed_annotation: ^2.1.0
   shared_preferences: ^2.1.1
   riverpod_annotation:
   riverpod_lint: ^1.3.1
-
-
 
 dev_dependencies:
   flutter_test:

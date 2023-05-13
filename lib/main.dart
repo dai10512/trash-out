@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -29,31 +30,33 @@ Future<void> _init() async {
 }
 
 Future<void> _initializeAwesomeNotification() async {
-  // AwesomeNotifications().initialize(
-  //   'resource://drawable/res_app_icon',
-  //   [
-  //     NotificationChannel(
-  //       channelGroupKey: 'basic_channel_group',
-  //       channelKey: 'TrashOut',
-  //       channelName: 'TrashOut',
-  //       channelDescription: 'scheduledNotification',
-  //     ),
-  //   ],
-  //   channelGroups: [
-  //     NotificationChannelGroup(
-  //         channelGroupKey: 'basic_channel_group',
-  //         channelGroupName: 'Basic group'),
-  //   ],
-  //   debug: true,
-  // );
+  final awesomeNotifications = AwesomeNotifications();
+  awesomeNotifications.initialize(
+    'resource://drawable/res_app_icon',
+    // null,
+    [
+      NotificationChannel(
+        channelGroupKey: 'basic_channel_group',
+        channelKey: 'TrashOut',
+        channelName: 'TrashOut',
+        channelDescription: 'scheduledNotification',
+      ),
+    ],
+    channelGroups: [
+      NotificationChannelGroup(
+          channelGroupkey: 'basic_channel_group',
+          channelGroupName: 'Basic group'),
+    ],
+    debug: true,
+  );
 
-  // AwesomeNotifications().isNotificationAllowed().then(
-  //   (isAllowed) {
-  //     if (!isAllowed) {
-  //       AwesomeNotifications().requestPermissionToSendNotifications();
-  //     }
-  //   },
-  // );
+  awesomeNotifications.isNotificationAllowed().then(
+    (isAllowed) {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    },
+  );
 }
 
 Future<void> _initializeDB() async {
@@ -69,29 +72,29 @@ Future<void> _initializeDB() async {
 }
 
 // // versionが古いため修正
-// void _actionStream(BuildContext context) {
-//   AwesomeNotifications().actionStream.listen(
-//     (ReceivedNotification receivedNotification) {
-//       var id;
-//       Navigator.of(context).pushNamed(
-//         '/NotificationPage',
-//         arguments: {
-//           // your page params. I recommend you to pass the
-//           // entire *receivedNotification* object
-//           id: receivedNotification.id
-//         },
-//       );
-//     },
-//   );
-// }
-
-actionStream(BuildContext context) {
-  // AwesomeNotifications().setListeners(
-  //   onActionReceivedMethod: (ReceivedAction receivedAction) async {
-  //     // NotificationController.onActionReceivedMethod(context, receivedAction);
-  //   },
-  // );
+void actionStream(BuildContext context) {
+  AwesomeNotifications().actionStream.listen(
+    (ReceivedNotification receivedNotification) {
+      var id;
+      Navigator.of(context).pushNamed(
+        '/NotificationPage',
+        arguments: {
+          // your page params. I recommend you to pass the
+          // entire *receivedNotification* object
+          id: receivedNotification.id
+        },
+      );
+    },
+  );
 }
+
+// actionStream(BuildContext context) {
+//   // AwesomeNotifications().setListeners(
+//   //   onActionReceivedMethod: (ReceivedAction receivedAction) async {
+//   //     NotificationController.onActionReceivedMethod(context, receivedAction);
+//   //   },
+//   // );
+// }
 
 
 // 使用してなさそう

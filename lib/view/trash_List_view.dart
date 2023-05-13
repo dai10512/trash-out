@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:trash_out/model/trash_info_list_service.dart';
 import 'package:trash_out/model/trash_of_day_service.dart';
 
 import '../model/trash_info.dart';
 import '../model/trash_of_day.dart';
-import '../modelAndController/trashOfDay_model.dart';
 // import '../modelAndController/trash_model.dart';
 // import '../repository/trashList_boxRepository.dart';
 // import '../typeAdapter/trash.dart';
@@ -32,9 +30,11 @@ class _State extends ConsumerState<TrashListView> {
         padding: EdgeInsets.zero,
         icon: const Icon(Icons.add),
         onPressed: () {
-          showMaterialModalBottomSheet(
-            context: context,
-            builder: (_) => const TrashDetailView(null),
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              fullscreenDialog: true,
+              builder: (_) => const TrashDetailView(null),
+            ),
           );
         },
       ),
@@ -134,8 +134,6 @@ class _State extends ConsumerState<TrashListView> {
   Widget buildTrashOfDayCard(
     TrashOfDay trashOfDay,
   ) {
-    final trashOfDayViewModelWatch =
-        ref.watch(trashOfDayViewModelProvider); //必要
     return Expanded(
       child: Card(
         elevation: commonElevation,
@@ -221,16 +219,15 @@ class _State extends ConsumerState<TrashListView> {
       onDismissed: (_) async {
         trashInfoListServiceNotifier.delete(trashInfo);
         ref.invalidate(trashInfoListServiceProvider);
-        // await trashModel.deleteTrash(hiveKey);
-        // await trashOfDayViewModelRead.setTotalTrashType();
+        ref.invalidate(trashOfDayListServiceProvider);
       },
       child: Card(
         elevation: commonElevation,
         child: Container(
           decoration: BoxDecoration(
-              gradient: cardGradient,
-              borderRadius: BorderRadius.circular(10.0)),
-          // width: (isMonitor) ? 280 : double.infinity,
+            gradient: cardGradient,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
           padding: const EdgeInsets.all(0.0),
           child: ListTile(
             title: Text(
