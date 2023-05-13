@@ -14,6 +14,7 @@ class TrashNotificationModel {
     print('created Notification');
   }
 
+  //通知のスケジュールを登録する
   Future<void> createNotification() async {
     // await AwesomeNotifications().createNotification(
     //   content: NotificationContent(

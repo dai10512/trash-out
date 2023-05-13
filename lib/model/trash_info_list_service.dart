@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:trash_out/model/trash_info.dart';
 
+import '../util/shared_key.dart';
 import '../util/util.dart';
 
 part 'trash_info_list_service.g.dart';
@@ -55,6 +56,4 @@ class TrashInfoListService extends _$TrashInfoListService {
   }
 }
 
-class SharedKey {
-  static const trashInfoList = 'trashInfoList';
-}
+
