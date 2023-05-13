@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:trash_out/model/trash_info_list_service.dart';
+import 'package:trash_out/model/trash_of_day_service.dart';
 
 import '../model/trash_info.dart';
+import '../model/trash_of_day.dart';
 import '../modelAndController/trashOfDay_model.dart';
 // import '../modelAndController/trash_model.dart';
 // import '../repository/trashList_boxRepository.dart';
@@ -72,7 +74,7 @@ class _State extends ConsumerState<TrashListView> {
           children: [
             const SizedBox(height: 15),
             buildHeadline('収集ゴミの案内'),
-            buildTrashOfDaySection(context),
+            buildTrashOfDaySection(),
             const SizedBox(height: 15),
             buildHeadline('収集ゴミのリスト'),
             buildTrashListSection(),
@@ -93,19 +95,44 @@ class _State extends ConsumerState<TrashListView> {
     );
   }
 
-  Widget buildTrashOfDaySection(context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        buildTrashOfDayCard(0),
-        const SizedBox(width: 7),
-        buildTrashOfDayCard(1),
-      ],
+  Widget buildTrashOfDaySection() {
+    final asyncValue = ref.watch(trashOfDayListServiceProvider);
+    return asyncValue.when(
+      loading: () {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+      error: (e, __) {
+        return Text(e.toString());
+      },
+      data: (trashOfDayList) {
+        if (trashOfDayList == null) {
+          return const Text('なんか変だよ');
+        }
+        if ((trashOfDayList).isEmpty) {
+          return const Text('なんか変だよ');
+        }
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            buildTrashOfDayCard(trashOfDayList[0]!),
+            const SizedBox(width: 7),
+            buildTrashOfDayCard(trashOfDayList[1]!),
+          ],
+        );
+        // return ListView.builder(
+        //     scrollDirection: Axis.vertical,
+        //     itemCount: trashOfDayList.length,
+        //     itemBuilder: (context, index) {
+        //       return buildTrashOfDayCard(trashOfDayList[index]!);
+        //     });
+      },
     );
   }
 
   Widget buildTrashOfDayCard(
-    int whichDay,
+    TrashOfDay trashOfDay,
   ) {
     final trashOfDayViewModelWatch =
         ref.watch(trashOfDayViewModelProvider); //必要
@@ -120,7 +147,7 @@ class _State extends ConsumerState<TrashListView> {
           child: Column(
             children: [
               Text(
-                formatWhichDay(whichDay),
+                trashOfDay.targetDay.label,
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall!
@@ -129,31 +156,20 @@ class _State extends ConsumerState<TrashListView> {
               const SizedBox(height: 5),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: FutureBuilder(
-                  future: whichDay == 0
-                      ? trashOfDayViewModelWatch.getTotalTrashTypeOfToday()
-                      : trashOfDayViewModelWatch.getTotalTrashTypeOfTomorrow(),
-                  builder: (context, snapshot) {
-                    return FittedBox(
-                      child: snapshot.hasData
-                          ? Text(
-                              snapshot.data.toString(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall!
-                                  .copyWith(color: cardTextColor),
-                              textAlign: TextAlign.center,
-                            )
-                          : Text(
-                              "無し",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall!
-                                  .copyWith(color: Colors.blueGrey[700]),
-                            ),
-                    );
-                  },
-                ),
+                // child: FutureBuilder(
+                //   future: whichDay == 0
+                //       ? trashOfDayViewModelWatch.getTotalTrashTypeOfToday()
+                //       : trashOfDayViewModelWatch.getTotalTrashTypeOfTomorrow(),
+                //   builder: (context, snapshot) {
+                child: FittedBox(
+                    child: Text(
+                  trashOfDay.trashType,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineSmall!
+                      .copyWith(color: cardTextColor),
+                  textAlign: TextAlign.center,
+                )),
               ),
             ],
           ),
@@ -224,13 +240,18 @@ class _State extends ConsumerState<TrashListView> {
               style: TextStyle(color: cardTextColor),
             ),
             subtitle: Text(
-              '${formatWeeksOfMonth(trashInfo.weeksOfMonth)}  /  ${formatWeekdays(trashInfo.daysOfWeek)}',
+              '${formatWeeksOfMonth(trashInfo.weeksOfMonth)}'
+              '/'
+              '${formatWeekdays(trashInfo.daysOfWeek)}',
               style: TextStyle(color: cardTextColor),
             ),
             onTap: () {
-              showModalBottomSheet(
-                  context: context,
-                  builder: (context) => TrashDetailView(trashInfo));
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  fullscreenDialog: true,
+                  builder: (_) => TrashDetailView(trashInfo),
+                ),
+              );
             },
           ),
         ),
