@@ -12,7 +12,7 @@ import 'typeAdapter/notificationSetting.dart';
 import 'typeAdapter/trash.dart';
 import 'typeAdapter/trashOfDay.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _init();
   runApp(

@@ -121,12 +121,6 @@ class _State extends ConsumerState<TrashListView> {
             buildTrashOfDayCard(trashOfDayList[1]!),
           ],
         );
-        // return ListView.builder(
-        //     scrollDirection: Axis.vertical,
-        //     itemCount: trashOfDayList.length,
-        //     itemBuilder: (context, index) {
-        //       return buildTrashOfDayCard(trashOfDayList[index]!);
-        //     });
       },
     );
   }
@@ -154,11 +148,6 @@ class _State extends ConsumerState<TrashListView> {
               const SizedBox(height: 5),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                // child: FutureBuilder(
-                //   future: whichDay == 0
-                //       ? trashOfDayViewModelWatch.getTotalTrashTypeOfToday()
-                //       : trashOfDayViewModelWatch.getTotalTrashTypeOfTomorrow(),
-                //   builder: (context, snapshot) {
                 child: FittedBox(
                     child: Text(
                   trashOfDay.trashType,
@@ -201,8 +190,6 @@ class _State extends ConsumerState<TrashListView> {
             padding: EdgeInsets.zero,
             itemCount: trashInfoList.length,
             itemBuilder: (context, index) {
-              // final trash = trashInfoList[index];
-              // final hiveKey = trashListBoxRepository.box.keyAt(index);
               return _buildSlidableListTile(trashInfoList[index]!);
             },
           ),
